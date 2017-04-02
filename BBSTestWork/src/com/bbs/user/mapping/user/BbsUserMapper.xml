@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbs.user.mapping.user.BbsUserMapper" >
+  <resultMap id="BaseResultMap" type="com.bbs.user.bean.BbsUser" >
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="USER_LOGINNUMBER" property="userLoginnumber" jdbcType="VARCHAR" />
+    <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR" />
+    <result column="USER_BORN_DATE" property="userBornDate" jdbcType="DATE" />
+    <result column="USER_PICTURE" property="userPicture" jdbcType="VARCHAR" />
+    <result column="USER_ADDRESS" property="userAddress" jdbcType="VARCHAR" />
+    <result column="USER_LXDH" property="userLxdh" jdbcType="VARCHAR" />
+    <result column="USER_EMAIL" property="userEmail" jdbcType="VARCHAR" />
+    <result column="USER_POINT" property="userPoint" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="USER_REGISTER_DATE" property="userRegisterDate" jdbcType="DATE" />
+    <result column="USER_QUESTION_ONE" property="userQuestionOne" jdbcType="VARCHAR" />
+    <result column="USER_QUESTION_TWO" property="userQuestionTwo" jdbcType="VARCHAR" />
+    <result column="USER_QUESTION_THREE" property="userQuestionThree" jdbcType="VARCHAR" />
+    <result column="QUESTION_ONE_ANSWER" property="questionOneAnswer" jdbcType="VARCHAR" />
+    <result column="QUESTION_TWO_ANSWER" property="questionTwoAnswer" jdbcType="VARCHAR" />
+    <result column="QUESTION_THREE_ANSWER" property="questionThreeAnswer" jdbcType="VARCHAR" />
+    <result column="USER_STATE" property="userState" jdbcType="VARCHAR" />
+    <result column="USER_YN_VIP" property="userYnVip" jdbcType="VARCHAR" />
+    <result column="USER_ROLE" property="userRole" jdbcType="VARCHAR" />
+    <result column="USER_YN_VIP_ENDDATE" property="userYnVipEnddate" jdbcType="DATE" />
+    <result column="RES01" property="res01" jdbcType="VARCHAR" />
+    <result column="RES02" property="res02" jdbcType="VARCHAR" />
+    <result column="RES03" property="res03" jdbcType="VARCHAR" />
+    <result column="RES04" property="res04" jdbcType="VARCHAR" />
+    <result column="RES05" property="res05" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USER_ID,USER_NAME, USER_LOGINNUMBER,USER_PASSWORD,USER_BORN_DATE,USER_PICTURE, 
+    USER_ADDRESS, USER_LXDH, USER_EMAIL, USER_POINT, DEL_FLAG, USER_REGISTER_DATE, USER_QUESTION_ONE, 
+    USER_QUESTION_TWO, USER_QUESTION_THREE, QUESTION_ONE_ANSWER, QUESTION_TWO_ANSWER, 
+    QUESTION_THREE_ANSWER, USER_STATE, USER_YN_VIP, USER_ROLE, USER_YN_VIP_ENDDATE, RES01, 
+    RES02, RES03, RES04, RES05
+  </sql>
+  
+  <select id="getUserByNumber"  resultType="BbsUser">
+        SELECT 
+			<include refid="Base_Column_List"/>
+		FROM T_BBS_USER 
+		<where>
+		  DEL_FLAG=#{delFlag}
+		   <if test="userPassword != null and userPassword != '' and userLoginnumber != null and userLoginnumber != ''">
+		   and  USER_PASSWORD = #{userPassword}
+		   and ( USER_LOGINNUMBER = #{userLoginnumber} or USER_LXDH= #{userLoginnumber} )
+		   </if>
+		</where>	
+  </select>
+   
+    <select id="getUserByNumberOrLxdh"  resultType="BbsUser">
+        SELECT 
+			<include refid="Base_Column_List"/>
+		FROM T_BBS_USER 
+		<where>
+		 DEL_FLAG=#{delFlag}
+		   <if test="userLoginnumber != null and userLoginnumber != ''">
+		    AND  USER_LOGINNUMBER = #{userLoginnumber}
+		   </if>
+		   <if test="userLxdh !=null and userLxdh !=''">
+		    AND  USER_LXDH=#{userLxdh}
+		   </if>
+		</where>	
+  </select>
+  <insert id="insert" parameterType="com.bbs.user.bean.BbsUser" >
+    <selectKey keyProperty="userId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
+    insert into T_BBS_USER(USER_ID, USER_NAME, USER_LOGINNUMBER,USER_PASSWORD, USER_BORN_DATE, USER_PICTURE, USER_ADDRESS, USER_LXDH, USER_EMAIL, USER_POINT, DEL_FLAG, USER_REGISTER_DATE, 
+    USER_QUESTION_ONE, USER_QUESTION_TWO, USER_QUESTION_THREE, 
+    QUESTION_ONE_ANSWER, QUESTION_TWO_ANSWER, QUESTION_THREE_ANSWER, 
+    USER_STATE, USER_YN_VIP, USER_ROLE, 
+    USER_YN_VIP_ENDDATE, RES01, RES02, 
+    RES03, RES04, RES05
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userLoginnumber,jdbcType=VARCHAR}, 
+    #{userPassword,jdbcType=VARCHAR}, #{userBornDate,jdbcType=DATE}, #{userPicture,jdbcType=VARCHAR}, 
+    #{userAddress,jdbcType=VARCHAR}, #{userLxdh,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, 
+    #{userPoint,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, #{userRegisterDate,jdbcType=DATE}, 
+    #{userQuestionOne,jdbcType=VARCHAR}, #{userQuestionTwo,jdbcType=VARCHAR}, #{userQuestionThree,jdbcType=VARCHAR}, 
+    #{questionOneAnswer,jdbcType=VARCHAR}, #{questionTwoAnswer,jdbcType=VARCHAR}, #{questionThreeAnswer,jdbcType=VARCHAR}, 
+    #{userState,jdbcType=VARCHAR}, #{userYnVip,jdbcType=VARCHAR}, #{userRole,jdbcType=VARCHAR}, 
+    #{userYnVipEnddate,jdbcType=DATE}, #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, 
+    #{res03,jdbcType=VARCHAR}, #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="BbsUser" >
+    insert into T_BBS_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="userLoginnumber != null" >
+        USER_LOGINNUMBER,
+      </if>
+      <if test="userPassword != null" >
+        USER_PASSWORD,
+      </if>
+      <if test="userBornDate != null" >
+        USER_BORN_DATE,
+      </if>
+      <if test="userPicture != null" >
+        USER_PICTURE,
+      </if>
+      <if test="userAddress != null" >
+        USER_ADDRESS,
+      </if>
+      <if test="userLxdh != null" >
+        USER_LXDH,
+      </if>
+      <if test="userEmail != null" >
+        USER_EMAIL,
+      </if>
+      <if test="userPoint != null" >
+        USER_POINT,
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG,
+      </if>
+      <if test="userRegisterDate != null" >
+        USER_REGISTER_DATE,
+      </if>
+      <if test="userQuestionOne != null" >
+        USER_QUESTION_ONE,
+      </if>
+      <if test="userQuestionTwo != null" >
+        USER_QUESTION_TWO,
+      </if>
+      <if test="userQuestionThree != null" >
+        USER_QUESTION_THREE,
+      </if>
+      <if test="questionOneAnswer != null" >
+        QUESTION_ONE_ANSWER,
+      </if>
+      <if test="questionTwoAnswer != null" >
+        QUESTION_TWO_ANSWER,
+      </if>
+      <if test="questionThreeAnswer != null" >
+        QUESTION_THREE_ANSWER,
+      </if>
+      <if test="userState != null" >
+        USER_STATE,
+      </if>
+      <if test="userYnVip != null" >
+        USER_YN_VIP,
+      </if>
+      <if test="userRole != null" >
+        USER_ROLE,
+      </if>
+      <if test="userYnVipEnddate != null" >
+        USER_YN_VIP_ENDDATE,
+      </if>
+      <if test="res01 != null" >
+        RES01,
+      </if>
+      <if test="res02 != null" >
+        RES02,
+      </if>
+      <if test="res03 != null" >
+        RES03,
+      </if>
+      <if test="res04 != null" >
+        RES04,
+      </if>
+      <if test="res05 != null" >
+        RES05,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userLoginnumber != null" >
+        #{userLoginnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null" >
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userBornDate != null" >
+        #{userBornDate,jdbcType=DATE},
+      </if>
+      <if test="userPicture != null" >
+        #{userPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddress != null" >
+        #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userLxdh != null" >
+        #{userLxdh,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null" >
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPoint != null" >
+        #{userPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="userRegisterDate != null" >
+        #{userRegisterDate,jdbcType=DATE},
+      </if>
+      <if test="userQuestionOne != null" >
+        #{userQuestionOne,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestionTwo != null" >
+        #{userQuestionTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestionThree != null" >
+        #{userQuestionThree,jdbcType=VARCHAR},
+      </if>
+      <if test="questionOneAnswer != null" >
+        #{questionOneAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="questionTwoAnswer != null" >
+        #{questionTwoAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="questionThreeAnswer != null" >
+        #{questionThreeAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="userState != null" >
+        #{userState,jdbcType=VARCHAR},
+      </if>
+      <if test="userYnVip != null" >
+        #{userYnVip,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null" >
+        #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="userYnVipEnddate != null" >
+        #{userYnVipEnddate,jdbcType=DATE},
+      </if>
+      <if test="res01 != null" >
+        #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        #{res05,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="BbsUser" >
+    update T_BBS_USER
+    <set >
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userLoginnumber != null" >
+        USER_LOGINNUMBER = #{userLoginnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null" >
+        USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userBornDate != null" >
+        USER_BORN_DATE = #{userBornDate,jdbcType=DATE},
+      </if>
+      <if test="userPicture != null" >
+        USER_PICTURE = #{userPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddress != null" >
+        USER_ADDRESS = #{userAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="userLxdh != null" >
+        USER_LXDH = #{userLxdh,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null" >
+        USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userPoint != null" >
+        USER_POINT = #{userPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="userRegisterDate != null" >
+        USER_REGISTER_DATE = #{userRegisterDate,jdbcType=DATE},
+      </if>
+      <if test="userQuestionOne != null" >
+        USER_QUESTION_ONE = #{userQuestionOne,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestionTwo != null" >
+        USER_QUESTION_TWO = #{userQuestionTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestionThree != null" >
+        USER_QUESTION_THREE = #{userQuestionThree,jdbcType=VARCHAR},
+      </if>
+      <if test="questionOneAnswer != null" >
+        QUESTION_ONE_ANSWER = #{questionOneAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="questionTwoAnswer != null" >
+        QUESTION_TWO_ANSWER = #{questionTwoAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="questionThreeAnswer != null" >
+        QUESTION_THREE_ANSWER = #{questionThreeAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="userState != null" >
+        USER_STATE = #{userState,jdbcType=VARCHAR},
+      </if>
+      <if test="userYnVip != null" >
+        USER_YN_VIP = #{userYnVip,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null" >
+        USER_ROLE = #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="userYnVipEnddate != null" >
+        USER_YN_VIP_ENDDATE = #{userYnVipEnddate,jdbcType=DATE},
+      </if>
+      <if test="res01 != null" >
+        RES01 = #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        RES02 = #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        RES03 = #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        RES04 = #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        RES05 = #{res05,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="BbsUser" >
+    update T_BBS_USER
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      USER_LOGINNUMBER = #{userLoginnumber,jdbcType=VARCHAR},
+      USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
+      USER_BORN_DATE = #{userBornDate,jdbcType=DATE},
+      USER_PICTURE = #{userPicture,jdbcType=VARCHAR},
+      USER_ADDRESS = #{userAddress,jdbcType=VARCHAR},
+      USER_LXDH = #{userLxdh,jdbcType=VARCHAR},
+      USER_EMAIL = #{userEmail,jdbcType=VARCHAR},
+      USER_POINT = #{userPoint,jdbcType=VARCHAR},
+      DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      USER_REGISTER_DATE = #{userRegisterDate,jdbcType=DATE},
+      USER_QUESTION_ONE = #{userQuestionOne,jdbcType=VARCHAR},
+      USER_QUESTION_TWO = #{userQuestionTwo,jdbcType=VARCHAR},
+      USER_QUESTION_THREE = #{userQuestionThree,jdbcType=VARCHAR},
+      QUESTION_ONE_ANSWER = #{questionOneAnswer,jdbcType=VARCHAR},
+      QUESTION_TWO_ANSWER = #{questionTwoAnswer,jdbcType=VARCHAR},
+      QUESTION_THREE_ANSWER = #{questionThreeAnswer,jdbcType=VARCHAR},
+      USER_STATE = #{userState,jdbcType=VARCHAR},
+      USER_YN_VIP = #{userYnVip,jdbcType=VARCHAR},
+      USER_ROLE = #{userRole,jdbcType=VARCHAR},
+      USER_YN_VIP_ENDDATE = #{userYnVipEnddate,jdbcType=DATE},
+      RES01 = #{res01,jdbcType=VARCHAR},
+      RES02 = #{res02,jdbcType=VARCHAR},
+      RES03 = #{res03,jdbcType=VARCHAR},
+      RES04 = #{res04,jdbcType=VARCHAR},
+      RES05 = #{res05,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>
