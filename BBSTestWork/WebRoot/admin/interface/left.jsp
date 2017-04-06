@@ -8,6 +8,11 @@
 		<link rel="shortcut icon" href="assets/ico/favicon.ico" type="image/x-icon" />
 		<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="assets/css/style.css" rel="stylesheet" />
+		<script type="text/javascript">
+		function returnIndex(){
+		  window.parent.returnIndex();
+		}
+		</script>
 	</head>
 	<body>
 			<div class="row">
@@ -29,61 +34,39 @@
 									</div>
 				                    <c:if test="${user.userRole =='1'}">
 									  <li>
-										  <a href="../big_getPageList.action" target="main">
-											  <i class="fa fa-font" aria-hidden="true"></i><span>大分类管理</span>
+										  <a href="${pageContext.request.contextPath}/bigSection/getAll.do" target="main">
+											  <i class="fa fa-font" aria-hidden="true"></i><span>大版块管理</span>
 										  </a>
 									  </li>
 									
 									  <li>
 										  <a href="../small_getPageList.action" target="main">
-											  <i class="fa fa-font" aria-hidden="true"></i><span>小分类管理</span>
+											  <i class="fa fa-font" aria-hidden="true"></i><span>小版块管理</span>
 										  </a>
 									  </li>
                                                                           <li>
 										  <a href="../user_getpageList.action" target="main">
-											  <i class="fa fa-font" aria-hidden="true"></i><span>普通用户管理</span>
+											  <i class="fa fa-font" aria-hidden="true"></i><span>用户管理</span>
 										  </a>
 									  </li>
 									  <li>
 										<a href="../user_getsalepageList.action" target="main">
-											<i class="fa fa-font" aria-hidden="true"></i><span>商家用户管理</span>
+											<i class="fa fa-font" aria-hidden="true"></i><span>帖子管理</span>
 										</a>
 									  </li>
                                       <li>                                  
 										  <a href='../store_getPageList.action?uid=' target="main">
-											  <i class="fa fa-font" aria-hidden="true"></i><span>店铺管理</span>
+											  <i class="fa fa-font" aria-hidden="true"></i><span>文件管理</span>
 										  </a>
 									  </li>
 									  <li>
 										  <a href="../../Selectconsume.jsp" target="main">
-											  <i class="fa fa-font" aria-hidden="true"></i><span>消费券管理</span>
+											  <i class="fa fa-font" aria-hidden="true"></i><span>系统公告</span>
 										  </a>
 									  </li>
                                    </c:if>
-									<c:if test="">
-									  <li>
-										<a href='../product_getPageList.action?uid=' target="main">
-											<i class="fa fa-font" aria-hidden="true"></i><span>商品管理</span>
-										</a>
-									</li>
-                                    <li>                                  
-										<a href='../store_getPageList.action?uid=' target="main">
-											<i class="fa fa-font" aria-hidden="true"></i><span>店铺管理</span>
-										</a>
-									</li>
-                                    <li>
-										<a href="../../consume.jsp" target="main">
-											<i class="fa fa-font" aria-hidden="true"></i><span>消费</span>
-										</a>
-									</li>
-									<li>
-										<a href='../book_selectfindByUid.action?uid=' target="main">
-											<i class="fa fa-font" aria-hidden="true"></i><span>退款管理</span>
-										</a>
-									</li>
-									</c:if>
                                        <li>
-										<a href="../../index.jsp" target="top">
+										<a onclick="javascript:returnIndex()" style="cursor:pointer" >
 											<i class="fa fa-font" aria-hidden="true"></i><span>返回主页</span>
 										</a>
 									</li>

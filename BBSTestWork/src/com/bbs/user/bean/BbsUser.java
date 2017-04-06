@@ -1,9 +1,9 @@
 package com.bbs.user.bean;
 
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import util.BaseEntity;
 public class BbsUser extends BaseEntity<BbsUser> {
     /**

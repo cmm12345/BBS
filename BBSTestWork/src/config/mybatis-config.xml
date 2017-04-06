@@ -40,7 +40,13 @@
 	<!-- 实体类,简称 -设置别名 -->
 	<typeAliases>
 		<typeAlias alias="BbsUser" type="com.bbs.user.bean.BbsUser" />
+		<typeAlias alias="BbsBigSection" type="com.bbs.user.bean.BbsBigSection" />
 	</typeAliases> 
+	
+	<!-- 插件配置 -->
+	<plugins>
+		<plugin interceptor="util.intercepter.PaginationInterceptor" />
+    </plugins>
 </configuration>  
 
 

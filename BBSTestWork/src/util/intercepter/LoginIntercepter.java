@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bbs.user.bean.BbsUser;
+
 	/**
 	*登录认证的拦截器
 	*/
@@ -33,13 +35,13 @@ import org.springframework.web.servlet.ModelAndView;
 		       //获取请求的URL
 		       String url=request.getRequestURI();
 		       //URL:login.jsp是公开的;这个demo是除了login.jsp是可以公开访问的，其它的URL都进行拦截控制
-		       if(url.indexOf("getUser.do")>=0||url.indexOf("beforeRegister.do")>=0||url.indexOf("addUser.do")>=0||url.indexOf("firstView.do")>=0){
+		       if(url.indexOf("getUser.do")>=0||url.indexOf("beforeRegister.do")>=0||url.indexOf("addUser.do")>=0||url.indexOf("firstView.do")>=0||url.indexOf("resetUser.do")>=0){
 		           return true;
 		        }
 				//获取Session
 				HttpSession session=request.getSession();
-				String username=(String)session.getAttribute("userName");
-				if(username!=null){
+				BbsUser bbsUser=(BbsUser)session.getAttribute("user");
+				if(bbsUser!=null){
 				   return true;
 				}
 				//不符合条件的，跳转到登录界面
