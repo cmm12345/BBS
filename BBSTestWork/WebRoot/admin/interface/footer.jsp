@@ -5,21 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-    <link href="http://fonts.useso.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css" />
-        
 		<!-- Favicon and touch icons -->
 		<link rel="shortcut icon" href="assets/ico/favicon.ico" type="image/x-icon" />
-
 		<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-		
-	
-		<!-- Theme CSS -->
-		<link href="assets/css/jquery.mmenu.css" rel="stylesheet" />
-		
-		<!-- Page CSS -->		
 		<link href="assets/css/style.css" rel="stylesheet" />
-		<link href="assets/css/add-ons.min.css" rel="stylesheet" />
 </head>
 <body>
 <div id="usage">

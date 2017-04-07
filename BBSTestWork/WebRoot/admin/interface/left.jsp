@@ -4,7 +4,6 @@
 <html>
 <head>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <link href="http://fonts.useso.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css" />
 		<link rel="shortcut icon" href="assets/ico/favicon.ico" type="image/x-icon" />
 		<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="assets/css/style.css" rel="stylesheet" />
