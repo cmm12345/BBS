@@ -51,20 +51,20 @@ function page(n,s){
 	$("#pageNo").val(n);
 	$("#pageSize").val(s);
 	$("#searchForm").submit();
-      	return false;
+    return false;
       }
 </script>
 </head>
 <body><br>
-		<form:form id="searchForm" modelAttribute="BbsBigSection" action="" method="post" class="" style="margin-bottom: 0px;">
+		<form id="searchForm"  action="${pageContext.request.contextPath}/bigSection/getAll.do" method="post" class="" style="margin-bottom: 0px;">
 				<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 				<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		</form:form>
+		</form>
 		   <div style="text-align:center;">
-			  <form id="add" action="bigSection.do" method="post" enctype="multipart/form-data">
+			  <form id="add" action="${pageContext.request.contextPath}/bigSection/insert.do" method="post" enctype="multipart/form-data">
 		                               版块名：<input type="text" id="bigSectionName" name="bigSectionName">
 		                              版块描述：<input type="text" id="bigSectionDescript" name="bigSectionDescript">
-		         <input type="button" onclick="check()" value="增加版块">
+		         <input type="button" onclick="addCheck()" value="增加版块">
 		      </form>
 		   </div><br><br>
 		  <div>
@@ -80,15 +80,15 @@ function page(n,s){
 			       </thead>
 			       <tbody>
 
-<c:forEach items="${page.list}" var="bigSectionList">
-<tr class="alter">
-<td>${bigSectionList.bigSectionId}</td>
-<td><input type="text" style="border:0px" value="${bigSectionList.bigSectionName}" id="bsname${bigSectionList.bigSectionId}"></td>
-<td><input type="text" style="border:0px"  value="${bigSectionList.bigSectionDescript}" id="bsname${bigSectionList.bigSectionId}"></td>
-<td><input type="button" onclick="deleteBigsort('${bigSectionList.bigSectionId}')" value="删除">
-    <input type="button" onclick="updateBigsort('${bigSectionList.bigSectionId}')" value="保存"></td>
-</tr>
-</c:forEach>
+			<c:forEach items="${page.list}" var="bigSectionList">
+				<tr class="alter">
+					<td>${bigSectionList.bigSectionId}</td>
+					<td><input type="text" style="border:0px" value="${bigSectionList.bigSectionName}" id="bsname${bigSectionList.bigSectionId}"></td>
+					<td><input type="text" style="border:0px"  value="${bigSectionList.bigSectionDescript}" id="bsname${bigSectionList.bigSectionId}"></td>
+					<td><input type="button" onclick="deleteBigsort('${bigSectionList.bigSectionId}')" value="删除">
+					    <input type="button" onclick="updateBigsort('${bigSectionList.bigSectionId}')" value="保存"></td>
+				</tr>
+			</c:forEach>
 		</tbody>
        </table>
          <div class="pagination">${page}</div>

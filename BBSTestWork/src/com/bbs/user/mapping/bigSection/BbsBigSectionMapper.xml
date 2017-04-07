@@ -33,7 +33,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY BIG_SECTION_ID ASC
+				ORDER BY CJSJ DESC
 			</otherwise>
 		</choose>
   </select>
