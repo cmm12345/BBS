@@ -40,8 +40,7 @@ public  class BbsBigSectionServiceImpl  implements BbsBigSectionService {
 	}
 	
 	public void update(BbsBigSection bbsBigSection) {
-
-		 bbsBigSectionMapper.updateByPrimaryKey(bbsBigSection);
+		 bbsBigSectionMapper.updateByPrimaryKeySelective(bbsBigSection);
 	}
 	public Page<BbsBigSection> findAll(Page<BbsBigSection> page,BbsBigSection bbsBigSection) {
 		bbsBigSection.setPage(page);

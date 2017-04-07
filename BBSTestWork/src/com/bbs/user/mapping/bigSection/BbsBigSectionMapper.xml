@@ -27,6 +27,9 @@
 		   <if test="bigSectionId != null and bigSectionId != ''">
 		    AND  BIG_SECTION_ID = #{bigSectionId}
 		   </if>
+		   <if test="res01 != null and res01 != ''">
+		    AND (BIG_SECTION_ID LIKE '%'||#{res01}||'%' or BIG_SECTION_NAME LIKE '%'||#{res01}||'%' or BIG_SECTION_DESCRIPT LIKE '%'||#{res01}||'%')
+		   </if>
 	</where>
 	<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -42,6 +45,7 @@
     where BIG_SECTION_ID = #{bigSectionId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.bbs.user.bean.BbsBigSection" >
+  <selectKey keyProperty="bigSectionId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
     insert into T_BBS_BIG_SECTION (BIG_SECTION_ID, BIG_SECTION_NAME, BIG_SECTION_DESCRIPT, 
       DEL_FLAG, CJSJ, RES01, 
       RES02, RES03, RES04, 
