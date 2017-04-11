@@ -15,6 +15,7 @@
 		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
+      <bean id="applicationContextHelper" class="util.ApplicationContextHelper"/>
 	<!-- 1. 数据源 : DriverManagerDataSource -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -69,7 +70,8 @@
      <tx:method name="del*" propagation="REQUIRED" /> 
      <tx:method name="update*" propagation="REQUIRED" /> 
      <tx:method name="add*" propagation="REQUIRED" />
-     <tx:method name="get*" propagation="REQUIRED" />  
+     <tx:method name="get*" propagation="REQUIRED" />
+     <tx:method name="ins*" propagation="REQUIRED" />  
      <tx:method name="*" rollback-for="Exception" /> 
    </tx:attributes> 
  </tx:advice> 

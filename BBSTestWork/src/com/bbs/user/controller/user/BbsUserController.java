@@ -33,11 +33,14 @@ public class BbsUserController {
 	 * @param request
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping("/getAllUser")
-	public String getAllUser(HttpServletRequest request){
-		List<BbsUser> findAll = this.bbsUserService.findAll();
+	public List<BbsUser> getAllUser(HttpServletRequest request){
+		BbsUser bbsUser=new BbsUser();
+		bbsUser.setDelFlag("0");
+		List<BbsUser> findAll =bbsUserService.findAll(bbsUser);
 		request.setAttribute("userList", findAll);
-		return "/allUser";
+		return findAll;
 	}
 	
 	/**
@@ -56,7 +59,7 @@ public class BbsUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("beforeRegister")
+	@RequestMapping("/beforeRegister")
 	public void beforeRegister(BbsUser bbsUser,HttpServletRequest request,HttpServletResponse response, HttpSession session){
 		bbsUser.setDelFlag("0");
 		BbsUser bbsUser2=bbsUserService.getUserByNumberOrLxdh(bbsUser);

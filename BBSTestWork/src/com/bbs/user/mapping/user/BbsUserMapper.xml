@@ -50,7 +50,16 @@
 		   </if>
 		</where>	
   </select>
-   
+  
+   <select id="findAllUser"  resultType="BbsUser">
+        SELECT 
+			<include refid="Base_Column_List"/>
+		FROM T_BBS_USER 
+		<where>
+		  DEL_FLAG=#{delFlag}
+		</where>	
+  </select>
+  
     <select id="getUserByNumberOrLxdh"  resultType="BbsUser">
         SELECT 
 			<include refid="Base_Column_List"/>

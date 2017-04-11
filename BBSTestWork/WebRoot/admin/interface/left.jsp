@@ -39,7 +39,7 @@
 									  </li>
 									
 									  <li>
-										  <a href="../small_getPageList.action" target="main">
+										  <a href="${pageContext.request.contextPath}/smallSection/getAll.do" target="main">
 											  <i class="fa fa-font" aria-hidden="true"></i><span>小版块管理</span>
 										  </a>
 									  </li>

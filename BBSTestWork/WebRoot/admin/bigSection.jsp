@@ -22,7 +22,20 @@
 		  window.wxc.xcConfirm("请将信息填写完整！", window.wxc.xcConfirm.typeEnum.info);
 		  return false;
 		}
-		 form.submit();
+		 $.ajax({
+               type:"GET",
+               async:false,
+               url:"${pageContext.request.contextPath}/bigSection/findListByName.do",
+               data:{bigSectionName:bigSectionName},
+               success:function(data){
+                      if('该版块已存在！'==data){
+                            window.wxc.xcConfirm("该版块已存在！", window.wxc.xcConfirm.typeEnum.info);
+                            return false;
+                      }else{
+                         form.submit();
+                      }
+              }
+        });
     }
     /*
     *保存
@@ -34,15 +47,31 @@
 		  window.wxc.xcConfirm("请将信息填写完整！", window.wxc.xcConfirm.typeEnum.info);
 		  return false;
 		}
-		$.ajax({
-         type:"GET",
-         async:false,
-         url:"${pageContext.request.contextPath}/bigSection/update.do",
-         data:{bigSectionId:bigSectionId,bigSectionName:bigSectionName,bigSectionDescript:bigSectionDescript},
-         success:function(){
-            window.wxc.xcConfirm("保存成功!", window.wxc.xcConfirm.typeEnum.success);
+		 $.ajax({
+               type:"GET",
+               async:false,
+               url:"${pageContext.request.contextPath}/bigSection/findListByName.do",
+               data:{bigSectionName:bigSectionName},
+               success:function(data){
+                      if('该版块已存在！'==data){
+                            window.wxc.xcConfirm("该版块已存在！", window.wxc.xcConfirm.typeEnum.info);
+                            return false;
+                      }else{
+                        $.ajax({
+					        type:"GET",
+					        async:false,
+					        url:"${pageContext.request.contextPath}/bigSection/update.do",
+					        data:{bigSectionId:bigSectionId,bigSectionName:bigSectionName,bigSectionDescript:bigSectionDescript},
+					        success:function(){
+					           window.wxc.xcConfirm("保存成功!", window.wxc.xcConfirm.typeEnum.success);
+					             }
+					       });
+                      }
               }
         });
+		
+		
+		
     }
 	/*
 	*查询

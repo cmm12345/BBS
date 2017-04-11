@@ -15,17 +15,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <title>Home</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/nprogress.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/font-awesome.min.css">
- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/xcConfirm.css"/>
-<link rel="apple-touch-icon-precomposed" href="${pageContext.request.contextPath}/images/icon.png">
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/favicon.ico">
-<script src="${pageContext.request.contextPath}/js/jquery-2.1.4.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/nprogress.js"></script>
-<script src="${pageContext.request.contextPath}/js/jquery.lazyload.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
+
 </head>
   
 <body class="user-select">

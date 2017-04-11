@@ -40,10 +40,18 @@
 			</otherwise>
 		</choose>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from T_BBS_BIG_SECTION
-    where BIG_SECTION_ID = #{bigSectionId,jdbcType=VARCHAR}
-  </delete>
+  
+    <select id="findList" resultType="BbsBigSection" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_BIG_SECTION
+    <where>
+		    DEL_FLAG=#{delFlag}
+		   <if test="bigSectionName != null and bigSectionName != ''">
+		    AND  BIG_SECTION_NAME = #{bigSectionName}
+		   </if>
+	</where>
+  </select>
   <insert id="insert" parameterType="com.bbs.user.bean.BbsBigSection" >
   <selectKey keyProperty="bigSectionId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
     insert into T_BBS_BIG_SECTION (BIG_SECTION_ID, BIG_SECTION_NAME, BIG_SECTION_DESCRIPT, 
@@ -51,82 +59,9 @@
       RES02, RES03, RES04, 
       RES05, RES06)
     values (#{bigSectionId,jdbcType=VARCHAR}, #{bigSectionName,jdbcType=VARCHAR}, #{bigSectionDescript,jdbcType=VARCHAR}, 
-      #{delFlag,jdbcType=VARCHAR}, #{cjsj,jdbcType=DATE}, #{res01,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=VARCHAR}, #{cjsj}, #{res01,jdbcType=VARCHAR}, 
       #{res02,jdbcType=VARCHAR}, #{res03,jdbcType=VARCHAR}, #{res04,jdbcType=VARCHAR}, 
       #{res05,jdbcType=VARCHAR}, #{res06,jdbcType=DATE})
-  </insert>
-  <insert id="insertSelective" parameterType="com.bbs.user.bean.BbsBigSection" >
-    insert into T_BBS_BIG_SECTION
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="bigSectionId != null" >
-        BIG_SECTION_ID,
-      </if>
-      <if test="bigSectionName != null" >
-        BIG_SECTION_NAME,
-      </if>
-      <if test="bigSectionDescript != null" >
-        BIG_SECTION_DESCRIPT,
-      </if>
-      <if test="delFlag != null" >
-        DEL_FLAG,
-      </if>
-      <if test="cjsj != null" >
-        CJSJ,
-      </if>
-      <if test="res01 != null" >
-        RES01,
-      </if>
-      <if test="res02 != null" >
-        RES02,
-      </if>
-      <if test="res03 != null" >
-        RES03,
-      </if>
-      <if test="res04 != null" >
-        RES04,
-      </if>
-      <if test="res05 != null" >
-        RES05,
-      </if>
-      <if test="res06 != null" >
-        RES06,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="bigSectionId != null" >
-        #{bigSectionId,jdbcType=VARCHAR},
-      </if>
-      <if test="bigSectionName != null" >
-        #{bigSectionName,jdbcType=VARCHAR},
-      </if>
-      <if test="bigSectionDescript != null" >
-        #{bigSectionDescript,jdbcType=VARCHAR},
-      </if>
-      <if test="delFlag != null" >
-        #{delFlag,jdbcType=VARCHAR},
-      </if>
-      <if test="cjsj != null" >
-        #{cjsj,jdbcType=DATE},
-      </if>
-      <if test="res01 != null" >
-        #{res01,jdbcType=VARCHAR},
-      </if>
-      <if test="res02 != null" >
-        #{res02,jdbcType=VARCHAR},
-      </if>
-      <if test="res03 != null" >
-        #{res03,jdbcType=VARCHAR},
-      </if>
-      <if test="res04 != null" >
-        #{res04,jdbcType=VARCHAR},
-      </if>
-      <if test="res05 != null" >
-        #{res05,jdbcType=VARCHAR},
-      </if>
-      <if test="res06 != null" >
-        #{res06,jdbcType=DATE},
-      </if>
-    </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.bbs.user.bean.BbsBigSection" >
     update T_BBS_BIG_SECTION
@@ -162,20 +97,6 @@
         RES06 = #{res06,jdbcType=DATE},
       </if>
     </set>
-    where BIG_SECTION_ID = #{bigSectionId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.bbs.user.bean.BbsBigSection" >
-    update T_BBS_BIG_SECTION
-    set BIG_SECTION_NAME = #{bigSectionName,jdbcType=VARCHAR},
-      BIG_SECTION_DESCRIPT = #{bigSectionDescript,jdbcType=VARCHAR},
-      DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
-      CJSJ = #{cjsj,jdbcType=DATE},
-      RES01 = #{res01,jdbcType=VARCHAR},
-      RES02 = #{res02,jdbcType=VARCHAR},
-      RES03 = #{res03,jdbcType=VARCHAR},
-      RES04 = #{res04,jdbcType=VARCHAR},
-      RES05 = #{res05,jdbcType=VARCHAR},
-      RES06 = #{res06,jdbcType=DATE}
     where BIG_SECTION_ID = #{bigSectionId,jdbcType=VARCHAR}
   </update>
 </mapper>

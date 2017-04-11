@@ -1,7 +1,9 @@
 package com.bbs.user.controller.bigSection;
 
 
+import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import util.Page;
 
@@ -35,14 +39,43 @@ public class BbsBigSectionController {
 		request.setAttribute("page", findAll);
 		return "/admin/bigSection";
 	}
+	/**
+	 * 获取所有用户列表
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("findList")
+	public List<BbsBigSection> findList(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection){
+		bbsBigSection.setDelFlag("0");
+		List<BbsBigSection> findAll = bbsBigSectionService.findList(bbsBigSection);
+		return findAll;
+	}
 	
+	/**
+	 * 获取所有用户列表
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/findListByName", method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public String findListByName(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection){
+		bbsBigSection.setDelFlag("0");
+		List<BbsBigSection> findAll = bbsBigSectionService.findList(bbsBigSection);
+		String message="";
+		if(findAll!=null&&findAll.size()>0){
+			message = "该版块已存在！";
+		}
+		return message;
+	}
 	/**
 	 * 新增大版块
 	 * @param request
 	 * @return
+	 * @throws ParseException 
 	 */
 	@RequestMapping("/insert")
-	public String insert(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection){
+	public String insert(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection) throws ParseException{
 		if(StringUtils.isNotEmpty(bbsBigSection.getBigSectionId())){
 			bbsBigSectionService.update(bbsBigSection);
 		}else{

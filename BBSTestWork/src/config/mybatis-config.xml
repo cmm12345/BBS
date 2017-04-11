@@ -41,6 +41,7 @@
 	<typeAliases>
 		<typeAlias alias="BbsUser" type="com.bbs.user.bean.BbsUser" />
 		<typeAlias alias="BbsBigSection" type="com.bbs.user.bean.BbsBigSection" />
+		<typeAlias alias="BbsSmallSection" type="com.bbs.user.bean.BbsSmallSection" />
 	</typeAliases> 
 	
 	<!-- 插件配置 -->

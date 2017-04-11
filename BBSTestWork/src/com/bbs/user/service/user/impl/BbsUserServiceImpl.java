@@ -21,8 +21,8 @@ public class BbsUserServiceImpl implements BbsUserService {
 	private BbsUserMapper bbsUserMapper;
 
 
-	public List<BbsUser> findAll() {
-		List<BbsUser> findAllList = bbsUserMapper.findAll();
+	public List<BbsUser> findAll(BbsUser bbsUser) {
+		List<BbsUser> findAllList = bbsUserMapper.findAllUser(bbsUser);
 		return findAllList;
 	}
 	/**

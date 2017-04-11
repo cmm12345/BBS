@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbs.user.mapping.smallSection.BbsSmallSectionMapper" >
+  <resultMap id="BaseResultMap" type="com.bbs.user.bean.BbsSmallSection" >
+    <id column="SMALL_SECTION_ID" property="smallSectionId" jdbcType="VARCHAR" />
+    <result column="BIG_SECTION_ID" property="bigSectionId" jdbcType="VARCHAR" />
+    <result column="SMALL_SECTION_NAME" property="smallSectionName" jdbcType="VARCHAR" />
+    <result column="CJSJ" property="cjsj" jdbcType="DATE" />
+    <result column="SMALL_SECTION_DESCRIPT" property="smallSectionDescript" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="RES01" property="res01" jdbcType="VARCHAR" />
+    <result column="RES02" property="res02" jdbcType="VARCHAR" />
+    <result column="RES03" property="res03" jdbcType="VARCHAR" />
+    <result column="RES04" property="res04" jdbcType="VARCHAR" />
+    <result column="RES05" property="res05" jdbcType="VARCHAR" />
+    <result column="RES06" property="res06" jdbcType="DATE" />
+    <result column="USERID" property="userid" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="BIG_SECTION_NAME" property="bigSectionName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SMALL_SECTION_ID, BIG_SECTION_ID, SMALL_SECTION_NAME, CJSJ, SMALL_SECTION_DESCRIPT, 
+    DEL_FLAG, RES01, RES02, RES03, RES04, RES05, RES06, USERID, USERNAME, BIG_SECTION_NAME
+  </sql>
+  <insert id="insert" parameterType="com.bbs.user.bean.BbsSmallSection" >
+  <selectKey keyProperty="smallSectionId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
+    insert into T_BBS_SMALL_SECTION (SMALL_SECTION_ID, BIG_SECTION_ID, SMALL_SECTION_NAME, 
+      CJSJ, SMALL_SECTION_DESCRIPT, DEL_FLAG, 
+      RES01, RES02, RES03, 
+      RES04, RES05, RES06, USERID, 
+      USERNAME, BIG_SECTION_NAME)
+    values (#{smallSectionId,jdbcType=VARCHAR}, #{bigSectionId,jdbcType=VARCHAR}, #{smallSectionName,jdbcType=VARCHAR}, 
+      #{cjsj}, #{smallSectionDescript,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, 
+      #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, #{res03,jdbcType=VARCHAR}, 
+      #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}, #{res06,jdbcType=DATE}, #{userid,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{bigSectionName,jdbcType=VARCHAR})
+  </insert>
+     <select id="findList" resultType="BbsSmallSection" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_SMALL_SECTION
+    <where>
+		    DEL_FLAG=#{delFlag}
+		   <if test="res01 != null and res01 != ''">
+		    AND (SMALL_SECTION_ID LIKE '%'||#{res01}||'%' or SMALL_SECTION_NAME LIKE '%'||#{res01}||'%' or SMALL_SECTION_DESCRIPT LIKE '%'||#{res01}||'%' or BIG_SECTION_NAME LIKE '%'||#{res01}||'%' or USERNAME LIKE '%'||#{res01}||'%')
+		   </if>
+	</where>
+	<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY CJSJ DESC
+			</otherwise>
+		</choose>
+  </select>
+  
+   <select id="selectSmallSectionList" resultType="BbsSmallSection" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_SMALL_SECTION
+    <where>
+		    DEL_FLAG=#{delFlag}
+		   <if test="smallSectionId != null and smallSectionId != ''">
+		    AND  SMAll_SECTION_ID = #{smallSectionId}
+		   </if>
+		   <if test="bigSectionId != null and bigSectionId != ''">
+		    AND  BIG_SECTION_ID = #{bigSectionId}
+		   </if>
+		   <if test="smallSectionName != null and smallSectionName != ''">
+		    AND  SMALL_SECTION_NAME= #{smallSectionName}
+		   </if>
+		   <if test="res01 != null and res01 != ''">
+		    AND (SMALL_SECTION_ID LIKE '%'||#{res01}||'%' or SMALL_SECTION_NAME LIKE '%'||#{res01}||'%' or SMALL_SECTION_DESCRIPT LIKE '%'||#{res01}||'%')
+		   </if>
+	</where>
+  </select>
+  
+  
+  
+  
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbs.user.bean.BbsSmallSection" >
+    update T_BBS_SMALL_SECTION
+    <set >
+      <if test="bigSectionId != null" >
+        BIG_SECTION_ID = #{bigSectionId,jdbcType=VARCHAR},
+      </if>
+      <if test="smallSectionName != null" >
+        SMALL_SECTION_NAME = #{smallSectionName,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null" >
+        CJSJ = #{cjsj,jdbcType=DATE},
+      </if>
+      <if test="smallSectionDescript != null" >
+        SMALL_SECTION_DESCRIPT = #{smallSectionDescript,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="res01 != null" >
+        RES01 = #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        RES02 = #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        RES03 = #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        RES04 = #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        RES05 = #{res05,jdbcType=VARCHAR},
+      </if>
+      <if test="res06 != null" >
+        RES06 = #{res06,jdbcType=DATE},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="bigSectionName != null" >
+        BIG_SECTION_NAME = #{bigSectionName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SMALL_SECTION_ID = #{smallSectionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

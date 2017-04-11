@@ -10,5 +10,5 @@ public interface BbsUserService {
 	BbsUser findById(String id);
 	BbsUser getUserByNumber(BbsUser user);
 	BbsUser getUserByNumberOrLxdh(BbsUser user);
-	List<BbsUser> findAll();
+	List<BbsUser> findAll(BbsUser bbsUser);
 }
