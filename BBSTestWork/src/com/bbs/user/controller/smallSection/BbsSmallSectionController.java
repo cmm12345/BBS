@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import util.Page;
 
 import com.bbs.user.bean.BbsSmallSection;
+import com.bbs.user.bean.BbsUser;
 import com.bbs.user.service.smallSection.BbsSmallSectionService;
+import com.bbs.user.service.user.BbsUserService;
 
 @Controller
 @RequestMapping("/smallSection")
@@ -26,6 +28,8 @@ public class BbsSmallSectionController {
 
 	@Autowired
 	private BbsSmallSectionService bbsSmallSectionService;
+	@Autowired
+	private BbsUserService bbsUserService;
 	
 	/**
 	 * 获取所有版块列表
@@ -67,16 +71,29 @@ public class BbsSmallSectionController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping("/insert")
-	public String insert(HttpServletRequest request,HttpServletResponse response,BbsSmallSection BbsSmallSection) throws ParseException{
-		if(StringUtils.isNotEmpty(BbsSmallSection.getSmallSectionId())){
-			bbsSmallSectionService.update(BbsSmallSection);
+	public String insert(HttpServletRequest request,HttpServletResponse response,BbsSmallSection bbsSmallSection) throws ParseException{
+		 BbsUser bbsUser=new BbsUser();
+		if(StringUtils.isNotEmpty(bbsSmallSection.getSmallSectionId())){
+			bbsSmallSectionService.update(bbsSmallSection);
+			if(!bbsSmallSection.getUserid().equals(bbsSmallSection.getRes01())){
+				BbsUser bbsUser2=new BbsUser();
+					bbsUser.setUserRole("1");
+					bbsUser.setUserId(bbsSmallSection.getUserid());
+					bbsUser2.setUserRole("0");
+					bbsUser2.setUserId(bbsSmallSection.getRes01());
+					bbsUserService.update(bbsUser);
+					bbsUserService.update(bbsUser2);
+			}
 		}else{
-		  BbsSmallSection.setCjsj(new Date());
-		  BbsSmallSection.setDelFlag("0");
-		  bbsSmallSectionService.insert(BbsSmallSection);
-		  BbsSmallSection.setSmallSectionId("");
-		  Page<BbsSmallSection> findAll = bbsSmallSectionService.findAll(new Page<BbsSmallSection>(request, response), BbsSmallSection);
-		  request.setAttribute("page", findAll);
+			  bbsSmallSection.setCjsj(new Date());
+			  bbsSmallSection.setDelFlag("0");
+			  bbsUser.setUserId(bbsSmallSection.getUserid());
+			  bbsUser.setUserRole("1");
+			  bbsUserService.update(bbsUser);
+			  bbsSmallSectionService.insert(bbsSmallSection);
+			  bbsSmallSection.setSmallSectionId("");
+			  Page<BbsSmallSection> findAll = bbsSmallSectionService.findAll(new Page<BbsSmallSection>(request, response), bbsSmallSection);
+			  request.setAttribute("page", findAll);
 		}
 		return "/admin/smallSection";
 	}

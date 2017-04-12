@@ -57,9 +57,11 @@
 		FROM T_BBS_USER 
 		<where>
 		  DEL_FLAG=#{delFlag}
+		  <if test="userRole !=null and userRole !=''">
+		    AND  USER_ROLE=#{userRole}
+		   </if>
 		</where>	
   </select>
-  
     <select id="getUserByNumberOrLxdh"  resultType="BbsUser">
         SELECT 
 			<include refid="Base_Column_List"/>

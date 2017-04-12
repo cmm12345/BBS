@@ -38,6 +38,7 @@ public class BbsUserController {
 	public List<BbsUser> getAllUser(HttpServletRequest request){
 		BbsUser bbsUser=new BbsUser();
 		bbsUser.setDelFlag("0");
+		bbsUser.setUserRole("0");
 		List<BbsUser> findAll =bbsUserService.findAll(bbsUser);
 		request.setAttribute("userList", findAll);
 		return findAll;

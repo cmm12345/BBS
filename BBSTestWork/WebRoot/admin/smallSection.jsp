@@ -83,7 +83,7 @@ $(document).ready(function() {
   /*
   *保存
   */
-function updateSmallSection(smallSectionId){
+function updateSmallSection(smallSectionId,Name,uid){
       var smallSectionName =$("#smallName"+smallSectionId).val();
       var smallSectionDescript =$("#descript"+smallSectionId).val();
       var bigSection=$("#sectionId"+smallSectionId).val();
@@ -94,29 +94,36 @@ function updateSmallSection(smallSectionId){
 		  window.wxc.xcConfirm("请将信息填写完整！", window.wxc.xcConfirm.typeEnum.info);
 		  return false;
 		}
-		 $.ajax({
+		var str="";
+		if(smallSectionName!=Name){
+		    $.ajax({
              type:"GET",
              async:false,
              url:"${pageContext.request.contextPath}/smallSection/getList.do",
              data:{smallSectionName:smallSectionName,bigSectionId:bigSection},
              success:function(data){
-                    if('该版块已存在！'==data){
-                          window.wxc.xcConfirm("该版块已存在！", window.wxc.xcConfirm.typeEnum.info);
-                          return false;
-                    }else{
-                       $.ajax({
-		               type:"GET",
-		               async:false,
-		               url:"${pageContext.request.contextPath}/smallSection/update.do",
-		               data:{smallSectionId:smallSectionId,smallSectionName:smallSectionName,smallSectionDescript:smallSectionDescript,bigSectionName:bigSectionName,username:userName,bigSectionId:bigSection,userid:userId},
-		               success:function(){
-		                   window.wxc.xcConfirm("保存成功!", window.wxc.xcConfirm.typeEnum.success);
-		              }
-		        });
-      
-                    }
-            }
-		      });
+             str=data;
+             }
+             });
+		}
+	       if('该版块已存在！'==str){
+               window.wxc.xcConfirm("该版块已存在！", window.wxc.xcConfirm.typeEnum.info);
+               return false;
+            }else{
+                  $.ajax({
+	               type:"GET",
+	               async:false,
+	               url:"${pageContext.request.contextPath}/smallSection/insert.do",
+	               data:{smallSectionId:smallSectionId,smallSectionName:smallSectionName,smallSectionDescript:smallSectionDescript,bigSectionName:bigSectionName,username:userName,bigSectionId:bigSection,userid:userId,res01:uid},
+	               success:function(){
+			                window.wxc.xcConfirm("保存成功!", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+				             query();
+			                 }
+			                 });
+	              }
+	        });
+	        }  
+     
 
   }
 	/*
@@ -125,7 +132,6 @@ function updateSmallSection(smallSectionId){
 	function query(){
 	   $("#searchForm").submit();
 	}
-
    /*
 	*删除
 	*/
@@ -278,7 +284,7 @@ function setAllUser(id,uid){
 								
 								<td><fmt:formatDate value="${smallSectionList.cjsj}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 								<td><input type="button" onclick="deleteSmallSection('${smallSectionList.smallSectionId}')" value="删除">
-								    <input type="button" onclick="updateSmallSection('${smallSectionList.smallSectionId}')" value="保存"></td>
+								    <input type="button" onclick="updateSmallSection('${smallSectionList.smallSectionId}','${smallSectionList.smallSectionName}','${smallSectionList.userid}')" value="保存"></td>
 							</tr>
 						</c:forEach>
 		          </tbody>

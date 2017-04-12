@@ -84,7 +84,17 @@
 	*删除
 	*/
 	function deleteBigSection(bigSectionId){
-	     var option = {
+	 $.ajax({
+         type:"GET",
+         async:false,
+         url:"${pageContext.request.contextPath}/smallSection/getList.do",
+         data:{bigSectionId:bigSectionId},
+         success:function(data){
+             if('该版块已存在！'==data){
+                window.wxc.xcConfirm("该版块下存在小版块，不能删除！", window.wxc.xcConfirm.typeEnum.info);
+                return false;
+             }else{
+	             var option = {
 						title: "提示信息",
 						btn: parseInt("0011",2),
 						onOk: function(){
@@ -96,14 +106,18 @@
 							         success:function(){
 							             window.wxc.xcConfirm("删除成功！", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
 							             query();
+						                         }
+						                      });
 						                 }
-						                 });
+						            });
 							             
-							              }
-							        });
-						}
-					}
-					window.wxc.xcConfirm("确定删除该记录吗？", "custom", option);
+							          }
+							      }
+							      	window.wxc.xcConfirm("确定删除该记录吗？", "custom", option); 
+							    }
+                }
+                });
+             
 	         }
 	   
       /*
