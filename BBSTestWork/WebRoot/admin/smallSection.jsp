@@ -46,6 +46,10 @@ $(document).ready(function() {
            $("#userId").append(html);
               }
         });
+        <c:forEach items="${page.list}" var="smallSectionList">
+            setAllSmallSection('${smallSectionList.smallSectionId}','${smallSectionList.bigSectionId}');
+            setAllUser('${smallSectionList.smallSectionId}','${smallSectionList.userid}');
+        </c:forEach>
 	});
  /*
  *新增
@@ -185,8 +189,8 @@ function setTableUserName(selectTag){
 }
 
 function setAllSmallSection(id,bid){
-       var opt=document.getElementById("sectionId"+id);
-	   if(opt.options.length==1){
+       /* var opt=document.getElementById("sectionId"+id);
+	   if(opt.options.length==1){ */
 	        var html="";
 	       for(var i=0;i<bigSectionData.length;i++){
 	       if(bigSectionData[i].bigSectionId==bid){
@@ -196,22 +200,21 @@ function setAllSmallSection(id,bid){
 	          }
 	           }
  	         $("#sectionId"+id).append(html);
- 	        }
+ 	        
      }
 function setAllUser(id,uid){
-       var opt=document.getElementById("user"+id);
+    /*    var opt=document.getElementById("user"+id);
        if(opt.options.length==1){
-        $("#user"+id).html('');
+        $("#user"+id).html(''); */
          var html="";
          for(var i=0;i<userData.length;i++){
-           if(userData[i].userRole!='2'||userData[i].userId!=uid){
+           if(userData[i].userRole!='2'&userData[i].userId!=uid){
                html+="<option value='"+userData[i].userId+"'>"+userData[i].userName+"</option>";
            }else{
               continue;
             }
            }
         $("#user"+id).append(html);
-     }
   }
 </script>
 </head>
@@ -257,7 +260,7 @@ function setAllUser(id,uid){
 								<td><input type="text" class="inputStyle" style="border:0px" value="${smallSectionList.smallSectionName}" id="smallName${smallSectionList.smallSectionId}"></td>
 								<td><input type="text" class="inputStyle" style="border:0px"  value="${smallSectionList.smallSectionDescript}" id="descript${smallSectionList.smallSectionId}"></td>
 								
-								<td><select style="width:100%;height:auto" id="sectionId${smallSectionList.smallSectionId}" name="bigSectionId" onchange="setTableBigSectionName(this)" onclick="setAllSmallSection('${smallSectionList.smallSectionId}','${smallSectionList.bigSectionId}')">
+								<td><select style="width:100%;height:auto" id="sectionId${smallSectionList.smallSectionId}" name="bigSectionId" onchange="setTableBigSectionName(this)" >
 								         <option value="${smallSectionList.bigSectionId}">${smallSectionList.bigSectionName}</option>
 			                         </select> 
 			                         <div style="display:none">
@@ -265,7 +268,7 @@ function setAllUser(id,uid){
 			                         </div>
 			                         </td>
 								
-								<td><select style="width:100%;height:auto" id="user${smallSectionList.smallSectionId}" name="userid" onchange="setTableUserName(this)" onclick="setAllUser('${smallSectionList.smallSectionId}','${smallSectionList.userid}')">
+								<td><select style="width:100%;height:auto" id="user${smallSectionList.smallSectionId}" name="userid" onchange="setTableUserName(this)">
 								             <option value="${smallSectionList.userid}">${smallSectionList.username}</option>
 			                         </select> 
 			                         <div style="display:none">
