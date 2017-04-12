@@ -9,29 +9,36 @@ import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.bbs.user.bean.BbsBigSection;
+import com.bbs.user.bean.BbsSmallSection;
+import com.bbs.user.bean.BbsUser;
 import com.bbs.user.service.bigSection.BbsBigSectionService;
+import com.bbs.user.service.smallSection.BbsSmallSectionService;
+import com.bbs.user.service.user.BbsUserService;
 
 public class InitListener implements ServletContextListener{
-	@Autowired
-	private BbsBigSectionService bbsBigSectionService;
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		
-		/*//初始化大板块
+		BbsBigSectionService bbsBigSectionService=WebApplicationContextUtils.getWebApplicationContext(event.getServletContext()).getBean(BbsBigSectionService.class);
+		BbsSmallSectionService bbsSmallSectionService=WebApplicationContextUtils.getWebApplicationContext(event.getServletContext()).getBean(BbsSmallSectionService.class);
+		BbsUserService bbsUserService=WebApplicationContextUtils.getWebApplicationContext(event.getServletContext()).getBean(BbsUserService.class);
+		//初始化大板块
 		BbsBigSection bbsBigSection=new BbsBigSection();
 		bbsBigSection.setDelFlag("0");
 		List<BbsBigSection> bigSectionList=bbsBigSectionService.findList(bbsBigSection);
-		 event.getServletContext().setAttribute("bigSectionList",bigSectionList);*/
-		/*//初始化小版块
+		 event.getServletContext().setAttribute("bigSectionList",bigSectionList);
+		//初始化小版块
 		BbsSmallSection bbsSmallSection=new BbsSmallSection();
 		bbsSmallSection.setDelFlag("0");
-		 Page<BbsSmallSection> smallSectionPage=new BbsSmallSectionServiceImpl().findAll(null,bbsSmallSection);
-		 event.getServletContext().setAttribute("smallSectionPage",smallSectionPage);*/
+		List<BbsSmallSection> smallSection=bbsSmallSectionService.findList(bbsSmallSection);
+		event.getServletContext().setAttribute("smallSection",smallSection);
+		/*//初始化用户
+		BbsUser bbsUser=new BbsUser();
+		bbsUser.setDelFlag("0");
+		List<BbsUser> bbsUserList=bbsUserService.findAll(bbsUser);
+		event.getServletContext().setAttribute("bbsUserList",bbsUserList);*/
 	}
 
 	
