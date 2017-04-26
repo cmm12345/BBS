@@ -16,9 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import util.Page;
 import util.UserCommonTools;
 
+import com.bbs.user.bean.BbsSystemMessage;
 import com.bbs.user.bean.BbsUser;
+import com.bbs.user.service.systemMessage.BbsSystemMessageService;
 import com.bbs.user.service.user.BbsUserService;
 
 @Controller
@@ -27,7 +30,8 @@ public class BbsUserController {
 
 	@Autowired
 	private BbsUserService bbsUserService;
-	
+	@Autowired
+	private BbsSystemMessageService bbsSystemMessageService;
 	/**
 	 * 获取所有用户列表
 	 * @param request
@@ -39,20 +43,31 @@ public class BbsUserController {
 		BbsUser bbsUser=new BbsUser();
 		bbsUser.setDelFlag("0");
 		bbsUser.setUserRole("0");
+		bbsUser.setUserState("0");
 		List<BbsUser> findAll =bbsUserService.findAll(bbsUser);
 		request.setAttribute("userList", findAll);
 		return findAll;
 	}
-	
 	/**
-	 * 跳转到添加用户界面
+	 * 获取所有用户列表,后台管理
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/toAddUser")
-	public String toAddUser(HttpServletRequest request){
-		
-		return "/addUser";
+	@RequestMapping("/getAllUserList")
+	public String getAllUserList(HttpServletRequest request,HttpServletResponse response,BbsUser bbsUser){
+		bbsUser.setDelFlag("0");
+		if(StringUtils.isNotEmpty(bbsUser.getRes01())){
+			if(bbsUser.getRes01().contains("版主")){
+				bbsUser.setUserRole("1");
+			}
+			if(bbsUser.getRes01().contains("普通用户")){
+				bbsUser.setUserRole("0");
+			}
+		}
+		Page<BbsUser> findAll = bbsUserService.findList(new Page<BbsUser>(request, response), bbsUser);
+		request.setAttribute("page", findAll);
+		request.setAttribute("userList", findAll);
+		return "admin/user";
 	}
 	/**
 	 * 跳转到添加用户界面
@@ -109,20 +124,31 @@ public class BbsUserController {
 	}
 	
 	/**
-	 *编辑用户
+	 *禁言
 	 * @param user
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/updateUser")
-	public String updateUser(BbsUser user,HttpServletRequest request){
-		if(bbsUserService.update(user)){
-			user = bbsUserService.findById(user.getUserId());
-			request.setAttribute("user", user);
-			return "redirect:/user/getAllUser";
+	@ResponseBody
+	@RequestMapping("/forbidUser")
+	public void updateUser(BbsUser user,HttpServletRequest request){
+		bbsUserService.update(user);
+		String str="";
+		if("0".equals(user.getUserState())){
+			str="您于"+new Date()+"被管理员解除禁言，现在可以发表您的观点啦";
 		}else{
-			return "/error";
+			str="您于"+new Date()+"被管理员禁言，现在账号处于冻结状态，如有疑问请联系管理员";
 		}
+		BbsSystemMessage bbsSystemMessage=new BbsSystemMessage();
+		bbsSystemMessage.setCjsj(new Date());
+		bbsSystemMessage.setMessageContains(str);
+		bbsSystemMessage.setDelFlag("0");
+		bbsSystemMessage.setMessageNamae("账号变动信息");
+		bbsSystemMessage.setRes01(user.getUserId());
+		bbsSystemMessage.setRes02("0");
+		bbsSystemMessage.setRes03("0");
+		//将信息反馈给用户
+		bbsSystemMessageService.insert(bbsSystemMessage);
 	}
 	/**
 	 *注销

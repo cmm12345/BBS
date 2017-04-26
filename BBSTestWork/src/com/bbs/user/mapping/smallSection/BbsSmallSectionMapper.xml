@@ -70,6 +70,9 @@
 		   <if test="smallSectionName != null and smallSectionName != ''">
 		    AND  SMALL_SECTION_NAME= #{smallSectionName}
 		   </if>
+		   <if test="bigSectionName != null and bigSectionName != ''">
+		    AND  BIG_SECTION_NAME= #{bigSectionName}
+		   </if>
 		   <if test="res01 != null and res01 != ''">
 		    AND (SMALL_SECTION_ID LIKE '%'||#{res01}||'%' or SMALL_SECTION_NAME LIKE '%'||#{res01}||'%' or SMALL_SECTION_DESCRIPT LIKE '%'||#{res01}||'%')
 		   </if>

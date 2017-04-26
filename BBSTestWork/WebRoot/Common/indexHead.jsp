@@ -42,11 +42,24 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
  function managerFunction(){
  window.location.href="${pageContext.request.contextPath}/admin/interface/default.jsp";
  }
+ 
+ function showContains(id){
+     $("#smallSection"+id).show();
+ }
+ function hideContains(id){
+ var ss=document.getElementById("smallSection"+id);
+ ss.style.display="none";
+ }
+ //查询小栏目下的所有帖子
+ function findNoteList(smallSectionId,bigSectionId){
+ var url="${pageContext.request.contextPath}/note/findNoteList.do?smallSectionId="+smallSectionId+"&bigSectionId="+bigSectionId;
+      $("#noteListIframe").attr("src",url);
+ }
 </script>
 </head>
-<body class="user-select">
-<header class="header">
-<nav class="navbar navbar-default" id="navbar">
+<body>
+<header>
+<nav class="navbar navbar-default">
 <div class="container">
   <div class="header-topbar hidden-xs link-border">
 	<ul class="site-nav topmenu">
@@ -80,17 +93,21 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
 	          <iframe name="hczzCbajYearListIframe" id="Iframe" frameborder="0" width="200" height="300" scrolling="yes" 
 		           marginwidth="0" marginheight="0" src="login.jsp" ></iframe>
 	        </div>
-	<ul class="nav navbar-nav navbar-right">
-	  <li><a data-cont="木庄网络博客" title="木庄网络博客" href="${pageContext.request.contextPath}/Common/firstView.do">首页</a></li>
-	  <li><a data-cont="列表页" title="列表页" href="list.html">列表页</a></li>
-	  <li><a data-cont="详细页" title="详细页" href="show.html">详细页</a></li>
-	  <li><a data-cont="404" title="404" href="404.html">404</a></li>
-	  <li><a data-cont="MZ-NetBolg主题" title="MZ-NetBolg主题" href="#" >MZ-NetBolg主题</a></li>
-	  <li><a data-cont="IT技术笔记" title="IT技术笔记" href="#" >IT技术笔记</a></li>
-	  <li><a data-cont="源码分享" title="源码分享" href="#" >源码分享</a></li>
-	  <li><a data-cont="靠谱网赚" title="靠谱网赚" href="#" >靠谱网赚</a></li>
-	  <li><a data-cont="资讯分享" title="资讯分享" href="#" >资讯分享</a></li>
+	<ul class="nav navbar-nav navbar-right" >
+	  <li><a data-cont="首页" title="首页" href="${pageContext.request.contextPath}/index.jsp" >首页</a>
+	<c:forEach items="${bigSectionList}" var="bigSectionList">
+	  <li ><a data-cont="${bigSectionList.bigSectionName}"   title="${bigSectionList.bigSectionName}" href="${pageContext.request.contextPath}/Common/firstView.do" onmouseover="showContains('${bigSectionList.bigSectionId}')" >${bigSectionList.bigSectionName}</a>
+	      <div id="smallSection${bigSectionList.bigSectionId}" onmouseup="hideContains('${bigSectionList.bigSectionId}')"  style="position:absolute;z-index:999;background:#FFFFFF;display:none;width:100px;height:110%">
+	          <c:forEach items="${smallSectionList}" var="smallSectionList">
+		          <c:if test="${smallSectionList.bigSectionId==bigSectionList.bigSectionId}">
+		           <a style="margin-left:20px;" title="${smallSectionList.smallSectionName}" href="javascript:findNoteList('${smallSectionList.smallSectionId}','${smallSectionList.bigSectionId}')">${smallSectionList.smallSectionName}</a><br>
+		          </c:if>
+	          </c:forEach>
+	      </div>
+	 </li>
+	</c:forEach>
 	</ul>
+	
   </div>
 </div>
 </nav>

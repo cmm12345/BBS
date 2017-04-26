@@ -35,7 +35,7 @@ import com.bbs.user.bean.BbsUser;
 		       //获取请求的URL
 		       String url=request.getRequestURI();
 		       //URL:login.jsp是公开的;这个demo是除了login.jsp是可以公开访问的，其它的URL都进行拦截控制
-		       if(url.indexOf("getUser.do")>=0||url.indexOf("beforeRegister.do")>=0||url.indexOf("addUser.do")>=0||url.indexOf("firstView.do")>=0||url.indexOf("resetUser.do")>=0){
+		       if(url.indexOf("getUser.do")>=0||url.indexOf("beforeRegister.do")>=0||url.indexOf("addUser.do")>=0||url.indexOf("firstView.do")>=0||url.indexOf("resetUser.do")>=0||url.indexOf("findHotNoteList.do")>=0||url.indexOf("findNoteList.do")>=0){
 		           return true;
 		        }
 				//获取Session

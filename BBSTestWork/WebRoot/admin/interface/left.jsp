@@ -44,7 +44,7 @@
 										  </a>
 									  </li>
                                                                           <li>
-										  <a href="../user_getpageList.action" target="main">
+										  <a href="${pageContext.request.contextPath}/user/getAllUserList.do" target="main">
 											  <i class="fa fa-font" aria-hidden="true"></i><span>用户管理</span>
 										  </a>
 									  </li>

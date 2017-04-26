@@ -42,6 +42,10 @@
 		<typeAlias alias="BbsUser" type="com.bbs.user.bean.BbsUser" />
 		<typeAlias alias="BbsBigSection" type="com.bbs.user.bean.BbsBigSection" />
 		<typeAlias alias="BbsSmallSection" type="com.bbs.user.bean.BbsSmallSection" />
+		<typeAlias alias="BbsSystemMessage" type="com.bbs.user.bean.BbsSystemMessage" />
+		<typeAlias alias="BbsNote" type="com.bbs.user.bean.BbsNote" />
+		<typeAlias alias="BbsReplyNote" type="com.bbs.user.bean.BbsReplyNote" />
+		<typeAlias alias="BbsFile" type="com.bbs.user.bean.BbsFile" />
 	</typeAliases> 
 	
 	<!-- 插件配置 -->

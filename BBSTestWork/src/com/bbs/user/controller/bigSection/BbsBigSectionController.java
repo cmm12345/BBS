@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import util.Page;
 
 import com.bbs.user.bean.BbsBigSection;
+import com.bbs.user.bean.BbsSmallSection;
 import com.bbs.user.service.bigSection.BbsBigSectionService;
+import com.bbs.user.service.smallSection.BbsSmallSectionService;
 
 @Controller
 @RequestMapping("/bigSection")
@@ -26,7 +28,8 @@ public class BbsBigSectionController {
 
 	@Autowired
 	private BbsBigSectionService bbsBigSectionService;
-	
+	@Autowired
+	private BbsSmallSectionService bbsSmallSectionService;
 	/**
 	 * 获取所有用户列表
 	 * @param request
@@ -97,6 +100,16 @@ public class BbsBigSectionController {
 	@RequestMapping("/update")
 	public void update(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection){
 			bbsBigSectionService.update(bbsBigSection);
+			BbsSmallSection bbsSmallSection=new BbsSmallSection();
+			bbsSmallSection.setDelFlag("0");
+			bbsSmallSection.setBigSectionId(bbsBigSection.getBigSectionId());
+			List<BbsSmallSection> list=bbsSmallSectionService.findList(bbsSmallSection);
+			for(BbsSmallSection bbsSmallSection2:list){
+				if(!bbsSmallSection2.getBigSectionName().equals(bbsBigSection.getBigSectionName())){
+					bbsSmallSection2.setBigSectionName(bbsBigSection.getBigSectionName());
+					bbsSmallSectionService.update(bbsSmallSection2);
+				}
+			}
 	}
 	/**
 	 *删除大版块

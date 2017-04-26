@@ -2,10 +2,13 @@ package com.bbs.user.service.user.impl;
 
 import java.util.List;
 
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import util.Page;
 
 import com.bbs.user.bean.BbsUser;
 import com.bbs.user.mapping.user.BbsUserMapper;
@@ -54,7 +57,11 @@ public class BbsUserServiceImpl implements BbsUserService {
 
 		return bbsUserMapper.updateByPrimaryKeySelective(bbsUser);
 	}
-	
+	public Page<BbsUser> findList(Page<BbsUser> page,BbsUser bbsUser) {
+		bbsUser.setPage(page);
+		page.setList(bbsUserMapper.findAllUser(bbsUser));
+		return page;
+	}
 	
 
 }

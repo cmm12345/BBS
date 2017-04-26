@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 </head>
   
-<body class="user-select">
+<body>
 <div id="content" style="width: 1200px;margin: 0 auto;align:center">
 	<jsp:include page="Common/indexHead.jsp"></jsp:include>
 </div>
