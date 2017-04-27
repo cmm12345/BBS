@@ -2,6 +2,7 @@ package com.bbs.user.controller.smallSection;
 
 
 import java.text.ParseException;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import util.Page;
 
@@ -95,6 +99,7 @@ public class BbsSmallSectionController {
 			  Page<BbsSmallSection> findAll = bbsSmallSectionService.findAll(new Page<BbsSmallSection>(request, response), bbsSmallSection);
 			  request.setAttribute("page", findAll);
 		}
+		findSmallSectionList();
 		return "/admin/smallSection";
 	}
 	
@@ -106,6 +111,7 @@ public class BbsSmallSectionController {
 	@RequestMapping("/update")
 	public void update(HttpServletRequest request,HttpServletResponse response,BbsSmallSection BbsSmallSection){
 			bbsSmallSectionService.update(BbsSmallSection);
+			findSmallSectionList();
 	}
 	/**
 	 *删除大版块
@@ -116,5 +122,18 @@ public class BbsSmallSectionController {
 	public void delete(HttpServletRequest request,HttpServletResponse response,BbsSmallSection BbsSmallSection){
 		BbsSmallSection.setDelFlag("1");
 		bbsSmallSectionService.update(BbsSmallSection);
+		findSmallSectionList();
 	}
+	
+	public void findSmallSectionList(){
+		BbsSmallSection bbsSmallSection=new BbsSmallSection();
+		bbsSmallSection.setDelFlag("0");
+		List<BbsSmallSection> findAll = bbsSmallSectionService.findList(bbsSmallSection);
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 request2.getSession().removeAttribute("smallSectionList");
+		 request2.getSession().setAttribute("smallSectionList", findAll);
+	}
+	
+	
 }

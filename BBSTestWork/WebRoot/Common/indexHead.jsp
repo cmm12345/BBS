@@ -55,6 +55,19 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
  var url="${pageContext.request.contextPath}/note/findNoteList.do?smallSectionId="+smallSectionId+"&bigSectionId="+bigSectionId;
       $("#noteListIframe").attr("src",url);
  }
+ 
+ 
+  //查询大栏目下的所有帖子
+ function findNoteByBigSectionId(bigSectionId){
+ var url="${pageContext.request.contextPath}/note/findNoteList.do?bigSectionId="+bigSectionId;
+      $("#noteListIframe").attr("src",url);
+ }
+ 
+ //进入上传文件界面、
+ function uploadFile(){
+     var url="${pageContext.request.contextPath}/Common/uploadFile.jsp";
+      $("#noteListIframe").attr("src",url);
+ }
 </script>
 </head>
 <body>
@@ -89,15 +102,11 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
 		<button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
 		</span> </div>
 	</form>
-	<div id="IframeDiv" name="hczzCbajYearListDiv" style="display:none">
-	          <iframe name="hczzCbajYearListIframe" id="Iframe" frameborder="0" width="200" height="300" scrolling="yes" 
-		           marginwidth="0" marginheight="0" src="login.jsp" ></iframe>
-	        </div>
 	<ul class="nav navbar-nav navbar-right" >
-	  <li><a data-cont="首页" title="首页" href="${pageContext.request.contextPath}/index.jsp" >首页</a>
+	  <li><a data-cont="首页" title="首页" href="${pageContext.request.contextPath}/index.jsp" >首页</a></li>
 	<c:forEach items="${bigSectionList}" var="bigSectionList">
-	  <li ><a data-cont="${bigSectionList.bigSectionName}"   title="${bigSectionList.bigSectionName}" href="${pageContext.request.contextPath}/Common/firstView.do" onmouseover="showContains('${bigSectionList.bigSectionId}')" >${bigSectionList.bigSectionName}</a>
-	      <div id="smallSection${bigSectionList.bigSectionId}" onmouseup="hideContains('${bigSectionList.bigSectionId}')"  style="position:absolute;z-index:999;background:#FFFFFF;display:none;width:100px;height:110%">
+	  <li ><a data-cont="${bigSectionList.bigSectionName}"   title="${bigSectionList.bigSectionName}" href="javaScript:findNoteByBigSectionId('${bigSectionList.bigSectionId}')" onmouseover="showContains('${bigSectionList.bigSectionId}')" >${bigSectionList.bigSectionName}</a>
+	      <div id="smallSection${bigSectionList.bigSectionId}" onmouseup="hideContains('${bigSectionList.bigSectionId}')"  style="position:absolute;z-index:999;background:#FFFFFF;display:none;width:100px;height:100%">
 	          <c:forEach items="${smallSectionList}" var="smallSectionList">
 		          <c:if test="${smallSectionList.bigSectionId==bigSectionList.bigSectionId}">
 		           <a style="margin-left:20px;" title="${smallSectionList.smallSectionName}" href="javascript:findNoteList('${smallSectionList.smallSectionId}','${smallSectionList.bigSectionId}')">${smallSectionList.smallSectionName}</a><br>
@@ -106,8 +115,9 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
 	      </div>
 	 </li>
 	</c:forEach>
+	<li><a data-cont="文件上传" title="文件上传" href="javaScript:uploadFile()" >文件上传</a></li>
+	<li><a data-cont="文件下载" title="文件下载" href="${pageContext.request.contextPath}/file/getFileList.do" >文件下载</a></li>
 	</ul>
-	
   </div>
 </div>
 </nav>

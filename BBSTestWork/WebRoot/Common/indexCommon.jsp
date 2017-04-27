@@ -16,14 +16,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="keywords" content="">
 <meta name="description" content="">
 <script type="text/javascript">
-   function alertFunction(){
-    window.wxc.xcConfirm("请先登录！", window.wxc.xcConfirm.typeEnum.info);
+   function alertFunction(str){
+    window.wxc.xcConfirm(str, window.wxc.xcConfirm.typeEnum.info);
     
    }
 
    function findNoteByIdFunction(noteId){
-      $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId)
+   var userString='${user.userId}';
+      $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId+"&userString="+userString);
    }
+  
 </script>
 </head>
   

@@ -44,8 +44,10 @@ public class BbsUserServiceImpl implements BbsUserService {
 	}
 
 	public BbsUser findById(String id) {
-		
-		BbsUser user = bbsUserMapper.selectByPrimaryKey(id);
+		BbsUser bbsUser2=new BbsUser();
+		bbsUser2.setDelFlag("0");
+		bbsUser2.setUserId(id);
+		BbsUser user = bbsUserMapper.selectUserById(bbsUser2);
 		return user;
 	}
 

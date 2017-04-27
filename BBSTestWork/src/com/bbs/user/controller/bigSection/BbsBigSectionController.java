@@ -8,12 +8,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import util.Page;
 
@@ -43,7 +45,7 @@ public class BbsBigSectionController {
 		return "/admin/bigSection";
 	}
 	/**
-	 * 获取所有用户列表
+	 * 获取所有版块列表
 	 * @param request
 	 * @return
 	 */
@@ -55,6 +57,15 @@ public class BbsBigSectionController {
 		return findAll;
 	}
 	
+	public void findBigSectionList(){
+		BbsBigSection bbsBigSection=new BbsBigSection();
+		bbsBigSection.setDelFlag("0");
+		List<BbsBigSection> findAll = bbsBigSectionService.findList(bbsBigSection);
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 request2.getSession().removeAttribute("bigSectionList");
+		 request2.getSession().setAttribute("bigSectionList", findAll);
+	}
 	/**
 	 * 获取所有用户列表
 	 * @param request
@@ -79,16 +90,13 @@ public class BbsBigSectionController {
 	 */
 	@RequestMapping("/insert")
 	public String insert(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection) throws ParseException{
-		if(StringUtils.isNotEmpty(bbsBigSection.getBigSectionId())){
-			bbsBigSectionService.update(bbsBigSection);
-		}else{
 		  bbsBigSection.setCjsj(new Date());
 		  bbsBigSection.setDelFlag("0");
 		  bbsBigSectionService.insert(bbsBigSection);
 		  bbsBigSection.setBigSectionId("");
 		  Page<BbsBigSection> findAll = bbsBigSectionService.findAll(new Page<BbsBigSection>(request, response), bbsBigSection);
 		  request.setAttribute("page", findAll);
-		}
+		  findBigSectionList();
 		return "/admin/bigSection";
 	}
 	
@@ -110,6 +118,7 @@ public class BbsBigSectionController {
 					bbsSmallSectionService.update(bbsSmallSection2);
 				}
 			}
+			findBigSectionList();
 	}
 	/**
 	 *删除大版块
@@ -120,5 +129,6 @@ public class BbsBigSectionController {
 	public void delete(HttpServletRequest request,HttpServletResponse response,BbsBigSection bbsBigSection){
 		bbsBigSection.setDelFlag("1");
 		bbsBigSectionService.update(bbsBigSection);
+		findBigSectionList();
 	}
 }

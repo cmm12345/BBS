@@ -10,7 +10,7 @@ public interface BbsUserMapper {
 
     void insertSelective(BbsUser bbsUser);
 
-    BbsUser selectByPrimaryKey(String userId);
+    BbsUser selectUserById(BbsUser bbsUser);
     
     List<BbsUser> findAllUser(BbsUser bbsUser);
 

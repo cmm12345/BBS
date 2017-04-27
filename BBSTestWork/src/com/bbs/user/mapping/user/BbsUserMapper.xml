@@ -93,6 +93,17 @@
 		   </if>
 		</where>	
   </select>
+  <select id="selectUserById"  resultType="BbsUser">
+        SELECT 
+			<include refid="Base_Column_List"/>
+		FROM T_BBS_USER 
+		<where>
+		 DEL_FLAG=#{delFlag}
+		   <if test="userId != null and userId != ''">
+		    AND  USER_ID = #{userId}
+		   </if>
+		</where>	
+  </select>
   <insert id="insert" parameterType="com.bbs.user.bean.BbsUser" >
     <selectKey keyProperty="userId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
     insert into T_BBS_USER(USER_ID, USER_NAME, USER_LOGINNUMBER,USER_PASSWORD, USER_BORN_DATE, USER_PICTURE, USER_ADDRESS, USER_LXDH, USER_EMAIL, USER_POINT, DEL_FLAG, USER_REGISTER_DATE, 
