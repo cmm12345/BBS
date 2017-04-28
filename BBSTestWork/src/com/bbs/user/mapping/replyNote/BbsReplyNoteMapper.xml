@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbs.user.mapping.replyNote.BbsReplyNoteMapper" >
+  <resultMap id="BaseResultMap" type="com.bbs.user.bean.BbsReplyNote" >
+    <id column="REPLY_ID" property="replyId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="NOTE_ID" property="noteId" jdbcType="VARCHAR" />
+    <result column="REPLY_CONTAINS" property="replyContains" jdbcType="VARCHAR" />
+    <result column="REPLY_DATE" property="replyDate" jdbcType="DATE" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="RES01" property="res01" jdbcType="VARCHAR" />
+    <result column="RES02" property="res02" jdbcType="VARCHAR" />
+    <result column="RES03" property="res03" jdbcType="VARCHAR" />
+    <result column="RES04" property="res04" jdbcType="VARCHAR" />
+    <result column="RES05" property="res05" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    REPLY_ID, USER_ID, NOTE_ID, REPLY_CONTAINS, REPLY_DATE, DEL_FLAG, RES01, RES02, RES03, 
+    RES04, RES05
+  </sql>
+  <sql id="inner_Column_List" >
+    a.REPLY_ID, a.USER_ID, a.NOTE_ID, a.REPLY_CONTAINS, a.REPLY_DATE, a.DEL_FLAG,t.USER_NAME RES01, a.RES02, a.RES03, 
+    a.RES04, a.RES05
+  </sql>
+  
+  
+  <select id="findList" resultType="BbsReplyNote" >
+    select 
+    <include refid="inner_Column_List" /> 
+    from T_BBS_REPLY_NOTE a,T_BBS_USER t
+    <where> 
+    a.USER_ID=t.USER_ID AND 
+    a.DEL_FLAG= #{delFlag}
+        <if test="noteId != null and noteId != ''">
+		    AND  a.NOTE_ID = #{noteId}
+        </if>
+        <if test="res01 != null and res01 != ''">
+		    AND  a.res01 = #{res01}
+        </if>
+         <if test="res02 != null and res02 != ''">
+		    AND  a.res02 = #{res02}
+        </if>
+    </where>
+  </select>
+  
+  
+  
+  <insert id="insert" parameterType="com.bbs.user.bean.BbsReplyNote" >
+  <selectKey keyProperty="replyId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
+    insert into T_BBS_REPLY_NOTE (REPLY_ID, USER_ID, NOTE_ID, 
+      REPLY_CONTAINS, REPLY_DATE, DEL_FLAG, 
+      RES01, RES02, RES03, 
+      RES04, RES05)
+    values (#{replyId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{noteId,jdbcType=VARCHAR}, 
+      #{replyContains,jdbcType=VARCHAR}, #{replyDate}, #{delFlag,jdbcType=VARCHAR}, 
+      #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, #{res03,jdbcType=VARCHAR}, 
+      #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbs.user.bean.BbsReplyNote" >
+    update T_BBS_REPLY_NOTE
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="noteId != null" >
+        NOTE_ID = #{noteId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyContains != null" >
+        REPLY_CONTAINS = #{replyContains,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        REPLY_DATE = #{replyDate,jdbcType=DATE},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="res01 != null" >
+        RES01 = #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        RES02 = #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        RES03 = #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        RES04 = #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        RES05 = #{res05,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where REPLY_ID = #{replyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

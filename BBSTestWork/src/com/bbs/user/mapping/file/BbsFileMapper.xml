@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbs.user.mapping.file.BbsFileMapper" >
+  <resultMap id="BaseResultMap" type="com.bbs.user.bean.BbsFile" >
+    <id column="FILE_ID" property="fileId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+    <result column="FILE_URL" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="FILE_DESCRIPT" property="fileDescript" jdbcType="VARCHAR" />
+    <result column="FILE_TYPE" property="fileType" jdbcType="VARCHAR" />
+    <result column="CJSJ" property="cjsj" jdbcType="DATE" />
+    <result column="FILE_POINT" property="filePoint" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="RES01" property="res01" jdbcType="VARCHAR" />
+    <result column="RES02" property="res02" jdbcType="VARCHAR" />
+    <result column="RES03" property="res03" jdbcType="VARCHAR" />
+    <result column="RES04" property="res04" jdbcType="VARCHAR" />
+    <result column="RES05" property="res05" jdbcType="VARCHAR" />
+    <result column="RES06" property="res06" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    FILE_ID, USER_ID, FILE_NAME, FILE_URL, FILE_DESCRIPT, FILE_TYPE, CJSJ, FILE_POINT, 
+    DEL_FLAG, RES01, RES02, RES03, RES04, RES05, RES06
+  </sql>
+  <select id="selectByPrimaryKey" resultType="BbsFile">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_FILE
+    where FILE_ID = #{fileId,jdbcType=VARCHAR} AND DEL_FLAG=${0}
+  </select>
+  
+  <select id="findHotFileList" resultType="BbsFile">
+   select <include refid="Base_Column_List" /> 
+   from(
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_FILE where DEL_FLAG=${0}
+    AND RES02=${1}
+    AND FILE_TYPE=${1}  order by CJSJ desc) WHERE ROWNUM &lt;=${10}
+  </select>
+  
+   <select id="selectFileList" resultType="BbsFile">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_FILE
+    <where>
+    DEL_FLAG=${0}
+    AND RES02=${1}
+    AND FILE_TYPE=${1}
+    </where>
+    <choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY CJSJ DESC
+			</otherwise>
+		</choose>
+  </select>
+  
+  
+  
+  
+  
+  
+  <insert id="insert" parameterType="com.bbs.user.bean.BbsFile" >
+  <selectKey keyProperty="fileId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
+    insert into T_BBS_FILE (FILE_ID, USER_ID, FILE_NAME, 
+      FILE_URL, FILE_DESCRIPT, FILE_TYPE, 
+      CJSJ, FILE_POINT, DEL_FLAG, 
+      RES01, RES02, RES03, 
+      RES04, RES05, RES06)
+    values (#{fileId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR}, #{fileDescript,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR}, 
+      #{cjsj}, #{filePoint,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, 
+      #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, #{res03,jdbcType=VARCHAR}, 
+      #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}, #{res06})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbs.user.bean.BbsFile" >
+    update T_BBS_FILE
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        FILE_URL = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDescript != null" >
+        FILE_DESCRIPT = #{fileDescript,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        FILE_TYPE = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null" >
+        CJSJ = #{cjsj,jdbcType=DATE},
+      </if>
+      <if test="filePoint != null" >
+        FILE_POINT = #{filePoint,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="res01 != null" >
+        RES01 = #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        RES02 = #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        RES03 = #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        RES04 = #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        RES05 = #{res05,jdbcType=VARCHAR},
+      </if>
+      <if test="res06 != null" >
+        RES06 = #{res06},
+      </if>
+    </set>
+    where FILE_ID = #{fileId,jdbcType=VARCHAR}
+  </update>
+</mapper>

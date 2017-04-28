@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbs.user.mapping.note.BbsNoteMapper" >
+  <resultMap id="BaseResultMap" type="com.bbs.user.bean.BbsNote" >
+    <id column="NOTE_ID" property="noteId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="NOTE_NAME" property="noteName" jdbcType="VARCHAR" />
+    <result column="BIG_SECTION_ID" property="bigSectionId" jdbcType="VARCHAR" />
+    <result column="SMALL_SECTION_ID" property="smallSectionId" jdbcType="VARCHAR" />
+    <result column="NOTE_CONTAINS" property="noteContains" jdbcType="VARCHAR" />
+    <result column="NOTE_DATE" property="noteDate" jdbcType="DATE" />
+    <result column="NOTE_STATE" property="noteState" jdbcType="VARCHAR" />
+    <result column="NOTE_BZ" property="noteBz" jdbcType="VARCHAR" />
+    <result column="NOTE_DZS" property="noteDzs" jdbcType="VARCHAR" />
+    <result column="NOTE_ANSWER_NUM" property="noteAnswerNum" jdbcType="VARCHAR" />
+    <result column="NOTE_YN_HOT" property="noteYnHot" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="RES01" property="res01" jdbcType="VARCHAR" />
+    <result column="RES02" property="res02" jdbcType="VARCHAR" />
+    <result column="RES03" property="res03" jdbcType="VARCHAR" />
+    <result column="RES04" property="res04" jdbcType="VARCHAR" />
+    <result column="RES05" property="res05" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    NOTE_ID, USER_ID, NOTE_NAME, BIG_SECTION_ID, SMALL_SECTION_ID, NOTE_CONTAINS, NOTE_DATE, 
+    NOTE_STATE, NOTE_BZ, NOTE_DZS, NOTE_ANSWER_NUM, NOTE_YN_HOT, DEL_FLAG, RES01, RES02, 
+    RES03, RES04, RES05
+  </sql>
+  <select id="selectByPrimaryKey" resultType="BbsNote" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_NOTE
+    where NOTE_ID = #{noteId}
+  </select>
+  <select id="selectNoteList" resultType="BbsNote">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_NOTE
+  <where>
+   <if test="smallSectionId != null and smallSectionId != ''">
+		    AND  SMALL_SECTION_ID = #{smallSectionId}
+    </if>
+    <if test="bigSectionId != null and bigSectionId != ''">
+		    AND BIG_SECTION_ID = #{bigSectionId}
+    </if>
+  </where>    
+    <choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY NOTE_DATE DESC
+			</otherwise>
+		</choose>
+  </select>
+  <select id="findList" resultType="BbsNote">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_NOTE
+  </select>
+  <select id="findHotList" resultType="BbsNote">
+   select <include refid="Base_Column_List" /> 
+   from(
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_NOTE  order by NOTE_DZS desc) WHERE ROWNUM &lt;=${10}
+  </select>
+  <insert id="insert" parameterType="com.bbs.user.bean.BbsNote" >
+   <selectKey keyProperty="noteId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
+    insert into T_BBS_NOTE (NOTE_ID, USER_ID, NOTE_NAME, 
+      BIG_SECTION_ID, SMALL_SECTION_ID, NOTE_CONTAINS, 
+      NOTE_DATE, NOTE_STATE, NOTE_BZ, 
+      NOTE_DZS, NOTE_ANSWER_NUM, NOTE_YN_HOT, 
+      DEL_FLAG, RES01, RES02, 
+      RES03, RES04, RES05
+      )
+    values (#{noteId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{noteName,jdbcType=VARCHAR}, 
+      #{bigSectionId,jdbcType=VARCHAR}, #{smallSectionId,jdbcType=VARCHAR}, #{noteContains,jdbcType=VARCHAR}, 
+      #{noteDate}, #{noteState,jdbcType=VARCHAR}, #{noteBz,jdbcType=VARCHAR}, 
+      #{noteDzs,jdbcType=VARCHAR}, #{noteAnswerNum,jdbcType=VARCHAR}, #{noteYnHot,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=VARCHAR}, #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, 
+      #{res03,jdbcType=VARCHAR}, #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.bbs.user.bean.BbsNote" >
+    update T_BBS_NOTE
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="noteName != null" >
+        NOTE_NAME = #{noteName,jdbcType=VARCHAR},
+      </if>
+      <if test="bigSectionId != null" >
+        BIG_SECTION_ID = #{bigSectionId,jdbcType=VARCHAR},
+      </if>
+      <if test="smallSectionId != null" >
+        SMALL_SECTION_ID = #{smallSectionId,jdbcType=VARCHAR},
+      </if>
+      <if test="noteContains != null" >
+        NOTE_CONTAINS = #{noteContains,jdbcType=VARCHAR},
+      </if>
+      <if test="noteDate != null" >
+        NOTE_DATE = #{noteDate,jdbcType=DATE},
+      </if>
+      <if test="noteState != null" >
+        NOTE_STATE = #{noteState,jdbcType=VARCHAR},
+      </if>
+      <if test="noteBz != null" >
+        NOTE_BZ = #{noteBz,jdbcType=VARCHAR},
+      </if>
+      <if test="noteDzs != null" >
+        NOTE_DZS = #{noteDzs,jdbcType=VARCHAR},
+      </if>
+      <if test="noteAnswerNum != null" >
+        NOTE_ANSWER_NUM = #{noteAnswerNum,jdbcType=VARCHAR},
+      </if>
+      <if test="noteYnHot != null" >
+        NOTE_YN_HOT = #{noteYnHot,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="res01 != null" >
+        RES01 = #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        RES02 = #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        RES03 = #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        RES04 = #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        RES05 = #{res05,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where NOTE_ID = #{noteId,jdbcType=VARCHAR}
+  </update>
+</mapper>

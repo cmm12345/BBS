@@ -20,12 +20,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     window.wxc.xcConfirm(str, window.wxc.xcConfirm.typeEnum.info);
     
    }
-
+   function confirmFunction(str,url){
+      var option = {
+		title: "提示信息",
+		btn: parseInt("0011",2),
+		onOk: function(){
+			     window.location.href=url;         
+			      }
+			      }
+       window.wxc.xcConfirm(str, "custom", option); 
+   }
    function findNoteByIdFunction(noteId){
    var userString='${user.userId}';
       $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId+"&userString="+userString);
    }
-  
+   function findFileByIdFunction(fileId){
+   var userString='${user.userId}';
+      $("#noteListIframe").attr("src","${pageContext.request.contextPath}/file/findFileById.do?fileId="+fileId+"&userString="+userString);
+   }
 </script>
 </head>
   
@@ -71,50 +83,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </div>
 </div>
 <div class="widget widget_hot">
-	  <h3>最新评论文章</h3>
-	  <ul>            
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-			<li><a title="用DTcms做一个独立博客网站（响应式模板）" href="#" ><span class="thumbnail">
-				<img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="用DTcms做一个独立博客网站（响应式模板）"  style="display: block;">
-			</span><span class="text">用DTcms做一个独立博客网站（响应式模板）</span><span class="muted"><i class="glyphicon glyphicon-time"></i>
-				2016-11-01
-			</span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>88</span></a></li>
-
-	  </ul>
+	  <h3>最新上传文件</h3>
+	  <iframe name="fileListIframe" id="fileListIframe" frameborder="0"  width="200%" height="86%" scrolling="yes" 
+		           marginwidth="0" marginheight="0" src="${pageContext.request.contextPath}/file/findHotFileList.do" ></iframe>
+	  
  </div>
  <div class="widget widget_sentence">    
 	<a href="#" target="_blank" rel="nofollow" title="学习资料论坛" >

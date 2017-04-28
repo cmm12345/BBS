@@ -22,6 +22,13 @@ $(document).ready(function() {
  function loginFunction(){
 window.location.href="${pageContext.request.contextPath}/userView/login.jsp"; 
  }
+ //登录超时
+ function loginTimeOut(){
+    window.wxc.xcConfirm("登录超时！请重新登录", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+	              loginFunction();
+						                         }
+						                      });
+ }
  //注册
  function registerFunction(){
  window.location.href="${pageContext.request.contextPath}/userView/register.jsp";
@@ -67,6 +74,16 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
  function uploadFile(){
      var url="${pageContext.request.contextPath}/Common/uploadFile.jsp";
       $("#noteListIframe").attr("src",url);
+ }
+ 
+ //获取所有文件
+ function  getFileList(){
+    if('${user.userId}'==''){
+    alertFunction("请先登录！");
+    return false;
+    }
+    var url="${pageContext.request.contextPath}/file/findFileList.do";
+    $("#noteListIframe").attr("src",url);
  }
 </script>
 </head>
@@ -116,7 +133,7 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
 	 </li>
 	</c:forEach>
 	<li><a data-cont="文件上传" title="文件上传" href="javaScript:uploadFile()" >文件上传</a></li>
-	<li><a data-cont="文件下载" title="文件下载" href="${pageContext.request.contextPath}/file/getFileList.do" >文件下载</a></li>
+	<li><a data-cont="文件下载" title="文件下载" href="javascript:getFileList()" >文件下载</a></li>
 	</ul>
   </div>
 </div>

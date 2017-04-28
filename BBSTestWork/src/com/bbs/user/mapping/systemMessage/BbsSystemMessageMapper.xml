@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bbs.user.mapping.systemMessage.BbsSystemMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.bbs.user.bean.BbsSystemMessage" >
+    <id column="MESSAGE_ID" property="messageId" jdbcType="VARCHAR" />
+    <result column="MESSAGE_NAMAE" property="messageNamae" jdbcType="VARCHAR" />
+    <result column="MESSAGE_CONTAINS" property="messageContains" jdbcType="VARCHAR" />
+    <result column="CJSJ" property="cjsj" jdbcType="DATE" />
+    <result column="SEE_MESSAGE_USER" property="seeMessageUser" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="RES01" property="res01" jdbcType="VARCHAR" />
+    <result column="RES02" property="res02" jdbcType="VARCHAR" />
+    <result column="RES03" property="res03" jdbcType="VARCHAR" />
+    <result column="RES04" property="res04" jdbcType="VARCHAR" />
+    <result column="RES05" property="res05" jdbcType="VARCHAR" />
+    <result column="RES06" property="res06" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    MESSAGE_ID, MESSAGE_NAMAE, MESSAGE_CONTAINS, CJSJ, SEE_MESSAGE_USER, DEL_FLAG, RES01, 
+    RES02, RES03, RES04, RES05, RES06
+  </sql>
+  <select id="selectByPrimaryKey" resultType="BbsSystemMessage">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_SYSTEM_MESSAGE
+    where MESSAGE_ID = #{messageId,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="selectSystemMessageList" resultType="BbsSystemMessage">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_SYSTEM_MESSAGE
+     <choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY CJSJ DESC
+			</otherwise>
+		</choose>
+  </select>
+  
+  
+  <insert id="insert" parameterType="com.bbs.user.bean.BbsSystemMessage" >
+  <selectKey keyProperty="messageId" resultType="String" order="BEFORE"> SELECT my_seq.nextval FROM DUAL</selectKey>
+    insert into T_BBS_SYSTEM_MESSAGE (MESSAGE_ID, MESSAGE_NAMAE, MESSAGE_CONTAINS, 
+      CJSJ, SEE_MESSAGE_USER, DEL_FLAG, 
+      RES01, RES02, RES03, 
+      RES04, RES05, RES06)
+    values (#{messageId,jdbcType=VARCHAR}, #{messageNamae,jdbcType=VARCHAR}, #{messageContains,jdbcType=VARCHAR}, 
+      #{cjsj}, #{seeMessageUser,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, 
+      #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, #{res03,jdbcType=VARCHAR}, 
+      #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}, #{res06,jdbcType=DATE})
+  </insert>
+ 
+  <update id="deleteByPrimaryKey" parameterType="com.bbs.user.bean.BbsSystemMessage" >
+    update T_BBS_SYSTEM_MESSAGE
+    <set >
+      <if test="messageNamae != null" >
+        MESSAGE_NAMAE = #{messageNamae,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContains != null" >
+        MESSAGE_CONTAINS = #{messageContains,jdbcType=VARCHAR},
+      </if>
+      <if test="cjsj != null" >
+        CJSJ = #{cjsj,jdbcType=DATE},
+      </if>
+      <if test="seeMessageUser != null" >
+        SEE_MESSAGE_USER = #{seeMessageUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="res01 != null" >
+        RES01 = #{res01,jdbcType=VARCHAR},
+      </if>
+      <if test="res02 != null" >
+        RES02 = #{res02,jdbcType=VARCHAR},
+      </if>
+      <if test="res03 != null" >
+        RES03 = #{res03,jdbcType=VARCHAR},
+      </if>
+      <if test="res04 != null" >
+        RES04 = #{res04,jdbcType=VARCHAR},
+      </if>
+      <if test="res05 != null" >
+        RES05 = #{res05,jdbcType=VARCHAR},
+      </if>
+      <if test="res06 != null" >
+        RES06 = #{res06,jdbcType=DATE},
+      </if>
+    </set>
+    where MESSAGE_ID = #{messageId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>
