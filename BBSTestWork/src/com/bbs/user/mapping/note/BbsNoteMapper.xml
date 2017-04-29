@@ -26,6 +26,11 @@
     NOTE_STATE, NOTE_BZ, NOTE_DZS, NOTE_ANSWER_NUM, NOTE_YN_HOT, DEL_FLAG, RES01, RES02, 
     RES03, RES04, RES05
   </sql>
+   <sql id="inner_Column_List" >
+    a.NOTE_ID, a.USER_ID, a.NOTE_NAME, a.BIG_SECTION_ID, a.SMALL_SECTION_ID, a.NOTE_CONTAINS, a.NOTE_DATE, 
+    a.NOTE_STATE, a.NOTE_BZ, a.NOTE_DZS, a.NOTE_ANSWER_NUM, a.NOTE_YN_HOT,a.DEL_FLAG,t.USER_NAME RES01, a.RES02, 
+    a.RES03, a.RES04, a.RES05
+  </sql>
   <select id="selectByPrimaryKey" resultType="BbsNote" >
     select 
     <include refid="Base_Column_List" />
@@ -34,14 +39,21 @@
   </select>
   <select id="selectNoteList" resultType="BbsNote">
     select 
-    <include refid="Base_Column_List" />
-    from T_BBS_NOTE
+    <include refid="inner_Column_List" />
+    from T_BBS_NOTE a,T_BBS_USER t
   <where>
+            a.USER_ID=t.USER_ID and a.DEL_FLAG=${0}
    <if test="smallSectionId != null and smallSectionId != ''">
 		    AND  SMALL_SECTION_ID = #{smallSectionId}
     </if>
     <if test="bigSectionId != null and bigSectionId != ''">
 		    AND BIG_SECTION_ID = #{bigSectionId}
+    </if>
+    <if test="userId != null and userId != ''">
+		    AND USER_ID = #{userId}
+    </if>
+    <if test="res01 != null and res01 != ''">
+	 AND (NOTE_NAME LIKE '%'||#{res01}||'%' or NOTE_CONTAINS LIKE '%'||#{res01}||'%' or NOTE_DATE LIKE '%'||#{res01}||'%' or NOTE_BZ LIKE '%'||#{res01}||'%')
     </if>
   </where>    
     <choose>

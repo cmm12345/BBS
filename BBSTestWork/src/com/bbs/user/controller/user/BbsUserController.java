@@ -1,5 +1,6 @@
 package com.bbs.user.controller.user;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import util.Page;
 import util.UserCommonTools;
@@ -99,7 +102,22 @@ public class BbsUserController {
 	 * @return
 	 */
 	@RequestMapping("/addUser")
-	public String addUser(BbsUser bbsUser,HttpServletRequest request,HttpSession session){
+	public String addUser(@RequestParam(value="upload",required=false)MultipartFile file,BbsUser bbsUser,HttpServletRequest request,HttpSession session){
+		 String path=request.getSession().getServletContext().getRealPath("/upload");
+		 String fileName="";
+		 if(StringUtils.isNotEmpty(file.getOriginalFilename())){
+		     fileName=file.getOriginalFilename();
+		  File targetFile=new File(path,fileName);
+			if(!targetFile.exists()){
+			  targetFile.mkdirs();
+			   }
+			try{
+			  file.transferTo(targetFile);
+			}catch(Exception e){
+			  e.printStackTrace();
+			}
+			bbsUser.setUserPicture("upload/"+fileName);
+		 }
 		if(StringUtils.isNoneEmpty(bbsUser.getUserPassword())){
 		 if(StringUtils.isEmpty(bbsUser.getUserId())){
 			bbsUser.setUserRegisterDate(new Date());
@@ -111,12 +129,12 @@ public class BbsUserController {
 			//密码MD5加密
 			bbsUser.setUserPassword(UserCommonTools.getMD5String(bbsUser.getUserPassword()));
 			bbsUserService.insert(bbsUser);
-			request.setAttribute("user", bbsUser);
+			session.setAttribute("user", bbsUser);
 		 }else{
 			bbsUserService.update(bbsUser);
-			request.setAttribute("user", bbsUser);
+			session.setAttribute("user", bbsUser);
 		 }
-		 return "/userView/index";
+		 return "/userView/loginSuccess";
 		}else{
 			return "/userView/login";
 		}
@@ -183,7 +201,7 @@ public class BbsUserController {
 			        	   return "/userView/login";
 			           }else{
 			                session.setAttribute("user", bbsUser);
-			                return "/index";
+			                return "/userView/loginSuccess";
 			           }
 			    }
 		   }else{

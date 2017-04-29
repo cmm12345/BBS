@@ -79,6 +79,20 @@
 	</where>
   </select>
   
+     <select id="selectSmallSectionById" resultType="BbsSmallSection" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BBS_SMALL_SECTION
+    <where>
+		    DEL_FLAG=#{delFlag}
+		   <if test="smallSectionId != null and smallSectionId != ''">
+		    AND  SMAll_SECTION_ID = #{smallSectionId}
+		   </if>
+		    <if test="userid != null and userid != ''">
+		    AND  USERID = #{userid}
+		   </if>
+	</where>
+  </select>
   
   
   

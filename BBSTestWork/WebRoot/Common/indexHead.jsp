@@ -20,7 +20,8 @@ $(document).ready(function() {
 	});
 //登录
  function loginFunction(){
-window.location.href="${pageContext.request.contextPath}/userView/login.jsp"; 
+  var url="${pageContext.request.contextPath}/userView/login.jsp";
+      $("#noteListIframe").attr("src",url);
  }
  //登录超时
  function loginTimeOut(){
@@ -29,9 +30,17 @@ window.location.href="${pageContext.request.contextPath}/userView/login.jsp";
 						                         }
 						                      });
  }
+  //登录注册成功
+ function loginSucccess(){
+    window.wxc.xcConfirm("登录成功", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+	              window.location.href="${pageContext.request.contextPath}/index.jsp"; 
+						                         }
+						                      });
+ }
  //注册
  function registerFunction(){
- window.location.href="${pageContext.request.contextPath}/userView/register.jsp";
+ var url="${pageContext.request.contextPath}/userView/register.jsp";
+      $("#noteListIframe").attr("src",url);
  }
  //注销
  function resetFunction(){

@@ -24,7 +24,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 
 $(document).ready(function() {
-
+    if('${state}'!=''){
+       $("#comment").hide();
+       $("#respond").hide();
+    }
 
 });
 function checkForm(){
@@ -37,15 +40,14 @@ function checkForm(){
 }
 
 //下载
-function downloadFile(filePoint,userId,userPoint,fileUrl){
-
-   if(filePoint>userPoint){
+function downloadFile(filePoint,userId,userPoint,fileUrl,fileId,res01){
+   if(parseInt(filePoint)>parseInt(userPoint)){
      window.parent.alertFunction("对不起积分不足！请充值");
      return false;
    }
-   var url="${pageContext.request.contextPath}/file/downloadFile.do?fileName="+fileUrl;
+   var url="${pageContext.request.contextPath}/file/downloadFile.do?fileName="+fileUrl+"&userId="+userId+"&filePoint="+filePoint+"&userPoint="+userPoint+"&fileId="+fileId+"&res01="+res01;
    var str="确定下载吗？将扣除您的积分"+filePoint+"分";
-   window.parent.confirmFunction(str,url);
+   window.parent.confirmFunction(str,url,fileId);
 }
 
 </script>
@@ -60,7 +62,7 @@ function downloadFile(filePoint,userId,userPoint,fileUrl){
 	<div class="article-meta"> <span class="item article-meta-time">
 	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="上传时间" data-original-title=""><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${file.cjsj}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
 	  </span> 
-	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载积分"><i class="glyphicon glyphicon-shopping-cart"></i>${file.res01}</a></span>
+	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载积分"><i class="glyphicon glyphicon-shopping-cart"></i>${file.filePoint}</a></span>
 	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载次数"><i class="glyphicon glyphicon-download-alt"></i>${file.res01}</a></span>
 	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> ${file.res03}</span> </div>
 
@@ -85,7 +87,7 @@ function downloadFile(filePoint,userId,userPoint,fileUrl){
   
   <div class="title" id="comment">
 	<h3>评论</h3>
-	<h3 style="float:right"><font size="2px" color="blue"><a href="javaScript:downloadFile('${file.filePoint}','${user.userId }','${user.userPoint }','${file.fileUrl }')">点击下载</a></font></h3>
+	<h3 style="float:right"><font size="2px" color="blue"><a href="javaScript:downloadFile('${file.filePoint}','${user.userId }','${user.userPoint }','${file.fileUrl }','${file.fileId }','${file.res01 }')">点击下载</a></font></h3>
   </div>
   <div id="respond">
 		<form id="comment-form" name="comment-form" action="${pageContext.request.contextPath}/note/replySave.do" method="POST">

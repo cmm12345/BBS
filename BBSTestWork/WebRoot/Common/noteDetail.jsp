@@ -24,10 +24,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 
 $(document).ready(function() {
-
+  
 
 });
+//发帖
 function checkForm(){
+
+  if('${user.userName}'==''){
+     window.parent.alertFunction("请先登录！");
+     return false;
+  }
+   var userState='${user.userState}';
+     if(userState=='1'){
+     window.parent.alertFunction("您被管理员禁言！不能发帖");
+     return false;
+     } 
   if($("#replyContains").val()==''){
      window.parent.alertFunction("请填写评论内容！");
 		return false;
@@ -105,7 +116,7 @@ function deleteReply(replyId,noteId){
   <c:forEach items="${replyNoteList}" var="replyNoteList">
   <article class="article-content">
   	<c:if test="${bbsNote2.userId==user.userId||replyNoteList.userId==user.userId}">
-  	<a href="javascript:deleteReply('${replyNoteList.replyId}','${bbsNote2.noteId}')">删除</a>
+  	<span id="isDelete"><a href="javascript:deleteReply('${replyNoteList.replyId}','${bbsNote2.noteId}')">删除</a></span>
   	</c:if>
   	
   	<time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=""><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${replyNoteList.replyDate}" pattern="yyyy-MM-dd HH:mm:ss"/> <p>由${replyNoteList.res01 }回复:</p>

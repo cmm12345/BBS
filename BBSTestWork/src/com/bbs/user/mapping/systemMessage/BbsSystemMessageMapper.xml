@@ -14,10 +14,11 @@
     <result column="RES04" property="res04" jdbcType="VARCHAR" />
     <result column="RES05" property="res05" jdbcType="VARCHAR" />
     <result column="RES06" property="res06" jdbcType="DATE" />
+     <result column="RES07" property="res07" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     MESSAGE_ID, MESSAGE_NAMAE, MESSAGE_CONTAINS, CJSJ, SEE_MESSAGE_USER, DEL_FLAG, RES01, 
-    RES02, RES03, RES04, RES05, RES06
+    RES02, RES03, RES04, RES05, RES06,RES07
   </sql>
   <select id="selectByPrimaryKey" resultType="BbsSystemMessage">
     select 
@@ -30,6 +31,15 @@
     select 
     <include refid="Base_Column_List" />
     from T_BBS_SYSTEM_MESSAGE
+    <where>
+    DEL_FLAG=${0}
+    <if test="res04 != null and res04 != ''">
+	 AND (MESSAGE_NAMAE LIKE '%'||#{res01}||'%' or MESSAGE_CONTAINS LIKE '%'||#{res01}||'%' )
+    </if>
+     <if test="res02 != null and res02 != ''">
+	 AND RES02= #{res02}
+    </if>
+    </where>
      <choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -46,14 +56,14 @@
     insert into T_BBS_SYSTEM_MESSAGE (MESSAGE_ID, MESSAGE_NAMAE, MESSAGE_CONTAINS, 
       CJSJ, SEE_MESSAGE_USER, DEL_FLAG, 
       RES01, RES02, RES03, 
-      RES04, RES05, RES06)
+      RES04, RES05, RES06,RES07)
     values (#{messageId,jdbcType=VARCHAR}, #{messageNamae,jdbcType=VARCHAR}, #{messageContains,jdbcType=VARCHAR}, 
       #{cjsj}, #{seeMessageUser,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, 
       #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, #{res03,jdbcType=VARCHAR}, 
-      #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}, #{res06,jdbcType=DATE})
+      #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}, #{res06,jdbcType=DATE},#{res07,jdbcType=VARCHAR})
   </insert>
  
-  <update id="deleteByPrimaryKey" parameterType="com.bbs.user.bean.BbsSystemMessage" >
+  <update id="updateByPrimaryKey" parameterType="com.bbs.user.bean.BbsSystemMessage" >
     update T_BBS_SYSTEM_MESSAGE
     <set >
       <if test="messageNamae != null" >
@@ -63,7 +73,7 @@
         MESSAGE_CONTAINS = #{messageContains,jdbcType=VARCHAR},
       </if>
       <if test="cjsj != null" >
-        CJSJ = #{cjsj,jdbcType=DATE},
+        CJSJ = #{cjsj},
       </if>
       <if test="seeMessageUser != null" >
         SEE_MESSAGE_USER = #{seeMessageUser,jdbcType=VARCHAR},
@@ -88,6 +98,9 @@
       </if>
       <if test="res06 != null" >
         RES06 = #{res06,jdbcType=DATE},
+      </if>
+       <if test="res07 != null" >
+        RES06 = #{res07,jdbcType=VARCHAR},
       </if>
     </set>
     where MESSAGE_ID = #{messageId,jdbcType=VARCHAR}

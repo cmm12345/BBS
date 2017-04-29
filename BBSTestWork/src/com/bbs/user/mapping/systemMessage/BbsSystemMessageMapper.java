@@ -5,11 +5,11 @@ import java.util.List;
 import com.bbs.user.bean.BbsSystemMessage;
 
 public interface BbsSystemMessageMapper {
-    int deleteByPrimaryKey(BbsSystemMessage bbsSystemMessage);
+    int updateByPrimaryKey(BbsSystemMessage bbsSystemMessage);
 
     int insert(BbsSystemMessage record);
 
-    BbsSystemMessage selectByPrimaryKey(BbsSystemMessage bbsSystemMessage);
+    BbsSystemMessage selectByPrimaryId(BbsSystemMessage bbsSystemMessage);
     List<BbsSystemMessage> selectSystemMessageList(BbsSystemMessage bbsSystemMessage);
     
 }

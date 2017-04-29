@@ -89,7 +89,7 @@
 		    AND  USER_LOGINNUMBER = #{userLoginnumber}
 		   </if>
 		   <if test="userLxdh !=null and userLxdh !=''">
-		    AND  USER_LXDH=#{userLxdh}
+		    AND  USER_LXDH = #{userLxdh}
 		   </if>
 		</where>	
   </select>

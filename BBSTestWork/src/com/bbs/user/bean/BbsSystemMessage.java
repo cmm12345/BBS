@@ -32,7 +32,7 @@ public class BbsSystemMessage extends BaseEntity<BbsSystemMessage>{
     private String res05;
 
     private Date res06;
-
+    private String res07;
     public String getMessageId() {
         return messageId;
     }
@@ -128,4 +128,13 @@ public class BbsSystemMessage extends BaseEntity<BbsSystemMessage>{
     public void setRes06(Date res06) {
         this.res06 = res06;
     }
+
+	public String getRes07() {
+		return res07;
+	}
+
+	public void setRes07(String res07) {
+		this.res07 = res07;
+	}
+    
 }

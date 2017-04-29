@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 	$(document).ready(function() {
 	     if('${message}'!=''){
-	      window.wxc.xcConfirm('${message}', window.wxc.xcConfirm.typeEnum.info);
+	      window.parent.alertFunction('${message}');
 	      <%session.removeAttribute("message");%>
 	     } 
 	});
@@ -31,23 +31,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	*/
 	function loginCheck(){
 	   if($("#userLoginnumber").val()==''||$("#userPassword").val()==''||$("#imageCode").val()==''){
-	   window.wxc.xcConfirm("请将信息填写完整！", window.wxc.xcConfirm.typeEnum.info);
+	   window.parent.alertFunction("请将信息填写完整！");
 	   return false;
 	   }
 	  $("#loginForm").submit();
 	}
 </script>
     </head>
-<body style="background:url(${pageContext.request.contextPath}/images/827970.jpg)">
-        <div class="page-container">
+<body >
+      <div style="width:830px;height:680px;"><br>
             <h1>登录</h1>
             <form id="loginForm" action="${pageContext.request.contextPath}/user/getUser.do" method="post">
-                <input type="text" id="userLoginnumber" name="userLoginnumber" placeholder="请输入登录账号或手机号">
-                <input type="password" id="userPassword" name="userPassword"  placeholder="请输入密码">
+                <input type="text" id="userLoginnumber" name="userLoginnumber" placeholder="请输入登录账号或手机号"><br>
+                <input type="password" id="userPassword" name="userPassword"  placeholder="请输入密码"><br>
                 <input type="text" name="imageCode" id="imageCode" style="width:200px;" placeholder="请输入验证码">
                 <img  onclick="this.src='image.jsp?'+Date.parse(''+(new Date()));" title="换一张试试" name="randImage" 
 							id="randImage" src="${pageContext.request.contextPath}/userView/image.jsp" border="1" 
-							/>
+							/><br>
                 <button type="button" onclick="loginCheck()">登录</button>
             </form>
             <div class="connect">

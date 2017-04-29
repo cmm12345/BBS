@@ -34,8 +34,13 @@ function checkLogin(noteId){
 //发帖
 function addNote(smallSectionId,bigSectionId){
      var userName='${user.userName}';
+     var userState='${user.userState}';
      if(userName==''){
      window.parent.alertFunction("请先登录再发帖！");
+     return false;
+     } 
+     if(userState=='1'){
+     window.parent.alertFunction("您被管理员禁言！不能发帖");
      return false;
      } 
         window.location.href="${pageContext.request.contextPath}/Common/topicAdd.jsp?smallSectionId="+smallSectionId+"&bigSectionId="+bigSectionId;

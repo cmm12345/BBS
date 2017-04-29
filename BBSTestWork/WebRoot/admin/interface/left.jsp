@@ -31,7 +31,15 @@
 										 <c:if test="${user.userRole =='2'}">管理员：</c:if>
 										${user.userName}</font></small>
 									</div>
-				                    <c:if test="${user.userRole =='1'}">
+									
+									<c:if test="${user.userRole =='1'||user.userRole =='2'}">
+									 <li>
+										<a href="${pageContext.request.contextPath}/note/findNoteList.do?isAdmin=isAdmin&userString=${user.userId}&userRole=${user.userRole}" target="main">
+											<i class="fa fa-font" aria-hidden="true"></i><span>帖子管理</span>
+										</a>
+									  </li>
+									  </c:if>
+				                    <c:if test="${user.userRole =='2'}">
 									  <li>
 										  <a href="${pageContext.request.contextPath}/bigSection/getAll.do" target="main">
 											  <i class="fa fa-font" aria-hidden="true"></i><span>大版块管理</span>
@@ -48,18 +56,13 @@
 											  <i class="fa fa-font" aria-hidden="true"></i><span>用户管理</span>
 										  </a>
 									  </li>
-									  <li>
-										<a href="../user_getsalepageList.action" target="main">
-											<i class="fa fa-font" aria-hidden="true"></i><span>帖子管理</span>
-										</a>
-									  </li>
                                       <li>                                  
-										  <a href='../store_getPageList.action?uid=' target="main">
+										  <a href="${pageContext.request.contextPath}/file/findFileList.do?isAdmin=isAdmin" target="main">
 											  <i class="fa fa-font" aria-hidden="true"></i><span>文件管理</span>
 										  </a>
 									  </li>
 									  <li>
-										  <a href="../../Selectconsume.jsp" target="main">
+										  <a href="${pageContext.request.contextPath}/system/findSystemMessageList.do?isAdmin=isAdmin" target="main">
 											  <i class="fa fa-font" aria-hidden="true"></i><span>系统公告</span>
 										  </a>
 									  </li>

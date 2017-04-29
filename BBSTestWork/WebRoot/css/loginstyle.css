@@ -12,7 +12,7 @@ body {
     background: #f8f8f8;
     font-family: 'PT Sans', Helvetica, Arial, sans-serif;
     text-align: center;
-    color: #fff;
+    color:#000000;
 }
 
 .page-container {
@@ -25,12 +25,6 @@ h1 {
     text-shadow: 0 1px 4px rgba(0,0,0,.2);
 }
 
-form {
-    position: relative;
-    width: 400px;
-    margin: 5px auto 0 auto;
-    text-align: center;
-}
 
 input {
     width: 270px;

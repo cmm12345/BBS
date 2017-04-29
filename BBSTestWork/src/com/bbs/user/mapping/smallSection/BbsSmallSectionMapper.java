@@ -10,4 +10,5 @@ public interface BbsSmallSectionMapper {
     List<BbsSmallSection> selectSmallSectionList(BbsSmallSection bbsSmallSection);
     List<BbsSmallSection> findList(BbsSmallSection bbsSmallSection);
     int updateByPrimaryKeySelective(BbsSmallSection record);
+    BbsSmallSection selectSmallSectionById(BbsSmallSection bbsSmallSection);
 }

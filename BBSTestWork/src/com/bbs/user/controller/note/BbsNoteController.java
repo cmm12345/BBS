@@ -11,16 +11,23 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import util.Page;
 
 import com.bbs.user.bean.BbsFile;
 import com.bbs.user.bean.BbsNote;
 import com.bbs.user.bean.BbsReplyNote;
+import com.bbs.user.bean.BbsSmallSection;
+import com.bbs.user.bean.BbsSystemMessage;
 import com.bbs.user.bean.BbsUser;
 import com.bbs.user.service.file.BbsFileService;
 import com.bbs.user.service.note.BbsNoteService;
 import com.bbs.user.service.replyNote.ReplyNoteService;
+import com.bbs.user.service.smallSection.BbsSmallSectionService;
+import com.bbs.user.service.systemMessage.BbsSystemMessageService;
 import com.bbs.user.service.user.BbsUserService;
 
 @Controller
@@ -36,6 +43,10 @@ public class BbsNoteController {
 	
 	@Autowired
 	private BbsFileService bbsFileService;
+	@Autowired
+	private BbsSystemMessageService bbsSystemMessageService;
+	@Autowired
+	private BbsSmallSectionService bbsSmallSectionService;
 	/**
 	 * 获取帖子前20点赞数的用于前台显示
 	 * @param request
@@ -53,12 +64,26 @@ public class BbsNoteController {
 	 * @return
 	 */
 	@RequestMapping("/findNoteList")
-	public String findNoteList(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote){
+	public String findNoteList(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String isAdmin,String userString,String userRole){
+		//如果是后台过来的
+		String smallSectionIdString="";
+		if(StringUtils.isNotEmpty(userString)&!userRole.equals("2")){
+			BbsSmallSection bbsSmallSection=new BbsSmallSection();
+			bbsSmallSection.setDelFlag("0");
+			bbsSmallSection.setUserid(userString);
+			BbsSmallSection bbsSmallSection2=bbsSmallSectionService.selectSmallSectionById(bbsSmallSection);
+			smallSectionIdString=bbsSmallSection2.getSmallSectionId();
+		}
+		bbsNote.setSmallSectionId(smallSectionIdString);
 		Page<BbsNote> findAll = bbsNoteService.findAll(new Page<BbsNote>(request, response), bbsNote);
 		request.setAttribute("page", findAll);
 		request.setAttribute("smallSectionId", bbsNote.getSmallSectionId());
 		request.setAttribute("bigSectionId", bbsNote.getBigSectionId());
-		return "Common/indexPageListIframe";
+		if(StringUtils.isNotEmpty(isAdmin)){
+			return "admin/noteList";
+		}else{
+		    return "Common/indexPageListIframe";
+		}
 	}
 	
 	/**
@@ -67,7 +92,7 @@ public class BbsNoteController {
 	 * @return
 	 */
 	@RequestMapping("/findNoteById")
-	public String findNoteById(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String userString){
+	public String findNoteById(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String userString,String state){
 		BbsNote bbsNote2 = bbsNoteService.findNoteById(bbsNote);
 		String str="wdz";
 		if(StringUtils.isNotEmpty(bbsNote2.getRes02())){
@@ -83,7 +108,12 @@ public class BbsNoteController {
 		List<BbsReplyNote> bbsReplyNoteList=replyNoteService.findList(bbsReplyNote);
 		request.setAttribute("replyNoteList", bbsReplyNoteList);
 		request.setAttribute("bbsNote2", bbsNote2);
+		request.setAttribute("state", state);
+		if("isAdmin".equals(state)){
+			return "admin/noteDetail";
+		}else{
 		return "Common/noteDetail";
+		}
 	}
 	/**
 	 * 发帖
@@ -106,7 +136,53 @@ public class BbsNoteController {
 		request.setAttribute("page", findAll);
 		return "Common/indexPageListIframe";
 	}
-	
+	/**
+	 * 修改,设置热度贴
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/update")
+	public void update(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String toolStyle,String reasonStr){
+		BbsNote bbsNote2=bbsNoteService.findNoteById(bbsNote);
+		String str="";
+		if(toolStyle.equals("delete")){
+			bbsNote2.setDelFlag("1");
+			bbsNoteService.update(bbsNote2);
+			BbsUser bbsUser=bbsUserService.findById(bbsNote2.getUserId());
+			if(Integer.parseInt(bbsUser.getUserPoint())<=2){
+				bbsUser.setUserPoint("0");
+			}else{
+				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())-2));
+			}
+			bbsUserService.update(bbsUser);
+			str="您的帖子被管理员删除，删除原因是"+reasonStr+"您的积分被扣除2分";
+		}
+		if(toolStyle.equals("setNoteHot")){
+			bbsNote2.setNoteYnHot("1");
+			bbsNoteService.update(bbsNote2);
+			BbsUser bbsUser=bbsUserService.findById(bbsNote2.getUserId());
+	        bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
+			bbsUserService.update(bbsUser);
+			str="您的帖子被管理员设为热度贴,您的积分被加2分";
+		}
+		if(toolStyle.equals("returnNoteHot")){
+			bbsNote2.setNoteYnHot("0");
+			bbsNoteService.update(bbsNote2);
+		}
+		if(StringUtils.isNotEmpty(str)){
+			BbsSystemMessage bbsSystemMessage=new BbsSystemMessage();
+			bbsSystemMessage.setCjsj(new Date());
+			bbsSystemMessage.setMessageContains(str);
+			bbsSystemMessage.setDelFlag("0");
+			bbsSystemMessage.setMessageNamae("账号变动信息");
+			bbsSystemMessage.setRes01(bbsNote2.getUserId());
+			bbsSystemMessage.setRes02("0");
+			bbsSystemMessage.setRes03("0");
+		
+		bbsSystemMessageService.insert(bbsSystemMessage);
+		}
+		
+	}
 	/**
 	 * 回帖
 	 * @param request
@@ -140,6 +216,11 @@ public class BbsNoteController {
 		BbsUser bbsUser=bbsUserService.findById(bbsReplyNote.getUserId());
 		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
 		bbsUserService.update(bbsUser);
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 BbsUser bbsUser2=bbsUserService.findById(bbsReplyNote.getUserId());
+		 request2.getSession().removeAttribute("user");
+		 request2.getSession().setAttribute("user", bbsUser2);
 		List<BbsReplyNote> bbsReplyNoteList=replyNoteService.findList(bbsReplyNote);
 		request.setAttribute("replyNoteList", bbsReplyNoteList);
 		if("yes".equals(sfFile)){

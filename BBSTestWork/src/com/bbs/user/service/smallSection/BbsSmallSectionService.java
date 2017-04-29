@@ -14,4 +14,5 @@ public interface BbsSmallSectionService {
 	void update(BbsSmallSection bbsSmallSection);
 	Page<BbsSmallSection> findAll(Page<BbsSmallSection> page,BbsSmallSection bbsSmallSection);
 	List<BbsSmallSection> findList(BbsSmallSection bbsSmallSection);
+	BbsSmallSection selectSmallSectionById(BbsSmallSection bbsSmallSection);
 }

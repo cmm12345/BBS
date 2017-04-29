@@ -38,4 +38,8 @@ public  class BbsSmallSectionServiceImpl  implements BbsSmallSectionService {
 		List<BbsSmallSection> list=bbsSmallSectionMapper.selectSmallSectionList(bbsSmallSection);
 		return list;
 	}
+	public BbsSmallSection selectSmallSectionById(BbsSmallSection bbsSmallSection){
+		
+		return bbsSmallSectionMapper.selectSmallSectionById(bbsSmallSection);
+	}
 }

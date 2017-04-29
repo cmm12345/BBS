@@ -20,12 +20,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     window.wxc.xcConfirm(str, window.wxc.xcConfirm.typeEnum.info);
     
    }
-   function confirmFunction(str,url){
+   function confirmFunction(str,url,fileId){
       var option = {
 		title: "提示信息",
 		btn: parseInt("0011",2),
 		onOk: function(){
-			     window.location.href=url;         
+			     window.location.href=url;  
 			      }
 			      }
        window.wxc.xcConfirm(str, "custom", option); 
@@ -38,19 +38,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    var userString='${user.userId}';
       $("#noteListIframe").attr("src","${pageContext.request.contextPath}/file/findFileById.do?fileId="+fileId+"&userString="+userString);
    }
+   
+   //搜索
+   function searchList(str){
+       var searchContains=$("#searchContains").val();
+        if(searchContains==''){
+           alertFunction("请输入搜索内容！");
+           return false;
+           }
+       if(str=='noteList'){
+         $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteList.do?res01="+searchContains);  
+       }else{
+           if('${user.userName}'==''){
+           alertFunction("请先登录！");
+           return false;
+           }
+       $("#noteListIframe").attr("src","${pageContext.request.contextPath}/file/findFileList.do?res04="+searchContains);
+       
+       }
+   
+   }
 </script>
 </head>
   
 <body>
 <section class="container">
 <div class="content-wrap">
- <iframe name="noteListIframe" id="noteListIframe" frameborder="0"  width="100%" height="200%" scrolling="yes" 
+ <iframe name="noteListIframe" id="noteListIframe" frameborder="0"  width="100%" height="160%" scrolling="yes" 
 		           marginwidth="0" marginheight="0" src="${pageContext.request.contextPath}/note/findHotNoteList.do" ></iframe>
 
 </div>
 <aside class="sidebar">
 <div class="fixed">
-  <div class="widget widget-tabs">
+
+
+
+<!--   <div class="widget widget-tabs">
 	<ul class="nav nav-tabs" role="tablist">
 	  <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab" data-toggle="tab" >统计信息</a></li>
 	  <li role="presentation"><a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" >联系站长</a></li>
@@ -71,13 +94,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <a href="#" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title=""  data-original-title="#"></a></h2>
 	  </div>
 	</div>
-  </div>
+  </div> -->
+  
+  
+  
+  
   <div class="widget widget_search">
 	<form class="navbar-form" action="/Search" method="post">
 	  <div class="input-group">
-		<input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
+		<input type="text" name="searchContains" id="searchContains"  class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
 		<span class="input-group-btn">
-		<button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+		<input type="button" class="btn btn-default btn-search" name="search" onclick="searchList('noteList')"  value="搜索帖子">
+		<input type="button" class="btn btn-default btn-search" name="search" onclick="searchList('fileList')" value="搜索文件">
 		</span> </div>
 	</form>
   </div>
@@ -90,16 +118,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  </div>
  <div class="widget widget_sentence">    
 	<a href="#" target="_blank" rel="nofollow" title="学习资料论坛" >
-	<img style="width: 100%" src="images//201610241224221511.jpg" alt="学习资料论坛" ></a>    
- </div>
- <div class="widget widget_sentence">    
-	<a href="#" target="_blank" rel="nofollow" title="MZ-NetBlog主题" >
-	<img style="width: 100%" src="images/ad.jpg" alt="MZ-NetBlog主题" ></a>    
+	<img style="width: 100%" src="${pageContext.request.contextPath}/images/1112857.jpg" alt="学习资料论坛" ></a>    
  </div>
 <div class="widget widget_sentence">
   <h3>友情链接</h3>
   <div class="widget-sentence-link">
-	<a href="#" title="网站建设" target="_blank" >学习资料论坛</a>&nbsp;&nbsp;&nbsp;
+	<a href="https://www.baidu.com/" title="网站建设" target="_blank" >学习资料论坛</a>&nbsp;&nbsp;&nbsp;
   </div>
 </div>
 </aside>

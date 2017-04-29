@@ -30,10 +30,10 @@ public  class BbsSystemMessageServiceImpl  implements BbsSystemMessageService {
 		page.setList(bbsSystemMessageMapper.selectSystemMessageList(bbsSystemMessage));
 		return page;
 	}
-	public void deleteByPrimaryKey(BbsSystemMessage bbsSystemMessage) {
-		bbsSystemMessageMapper.deleteByPrimaryKey(bbsSystemMessage);
+	public void updateByPrimaryKey(BbsSystemMessage bbsSystemMessage) {
+		bbsSystemMessageMapper.updateByPrimaryKey(bbsSystemMessage);
 	}
-	public  BbsSystemMessage selectByPrimaryKey(BbsSystemMessage bbsSystemMessage){
-		return bbsSystemMessageMapper.selectByPrimaryKey(bbsSystemMessage);
+	public  BbsSystemMessage selectByPrimaryId(BbsSystemMessage bbsSystemMessage){
+		return bbsSystemMessageMapper.selectByPrimaryId(bbsSystemMessage);
 	}
 }
