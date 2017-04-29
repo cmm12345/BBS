@@ -28,6 +28,10 @@ $(document).ready(function() {
        $("#comment").hide();
        $("#respond").hide();
     }
+    if('${message}'!=''){
+    window.parent.alertFunction("您下载的文件不存在！");
+    
+    }
 
 });
 function checkForm(){
@@ -46,8 +50,17 @@ function downloadFile(filePoint,userId,userPoint,fileUrl,fileId,res01){
      return false;
    }
    var url="${pageContext.request.contextPath}/file/downloadFile.do?fileName="+fileUrl+"&userId="+userId+"&filePoint="+filePoint+"&userPoint="+userPoint+"&fileId="+fileId+"&res01="+res01;
-   var str="确定下载吗？将扣除您的积分"+filePoint+"分";
-   window.parent.confirmFunction(str,url,fileId);
+   var userDate='${user.userYnVipEnddate}';
+   userDate = eval('new Date(' + userDate.replace(/\d+(?=[^]+$)/, 
+   function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
+	  var date1=new Date();
+	  var str="";
+	if(-userDate.getTime()<date1.getTime()){
+	str="确定下载吗？您是vip用户将免费下载";
+	}else{
+	str="确定下载吗？将扣除您的积分"+filePoint+"分";
+	}
+   window.parent.confirmFunction(str,url,fileId); 
 }
 
 </script>

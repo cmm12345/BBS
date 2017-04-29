@@ -58,14 +58,23 @@ $(document).ready(function() {
  function managerFunction(){
  window.location.href="${pageContext.request.contextPath}/admin/interface/default.jsp";
  }
- 
+ //显示小栏目
  function showContains(id){
      $("#smallSection"+id).show();
  }
- function hideContains(id){
+ //小栏隐藏目
+  function hideContains(id){
  var ss=document.getElementById("smallSection"+id);
  ss.style.display="none";
  }
+ //隐藏/显示个人中心
+ function showMyContains(){
+ $("#myContains").show();
+ }
+ function hideMyContains(){
+ $("#myContains").hide();
+ }
+ 
  //查询小栏目下的所有帖子
  function findNoteList(smallSectionId,bigSectionId){
  var url="${pageContext.request.contextPath}/note/findNoteList.do?smallSectionId="+smallSectionId+"&bigSectionId="+bigSectionId;
@@ -94,6 +103,13 @@ $(document).ready(function() {
     var url="${pageContext.request.contextPath}/file/findFileList.do";
     $("#noteListIframe").attr("src",url);
  }
+ 
+ 
+ //进入个人中心
+ function userCenter(userId){
+  var url="${pageContext.request.contextPath}/userView/userCenter.jsp";
+    $("#noteListIframe").attr("src",url);
+ }
 </script>
 </head>
 <body>
@@ -106,16 +122,34 @@ $(document).ready(function() {
 	    <li><a href="javascript:loginFunction()" >登录</a></li>
 		<li><a href="javascript:registerFunction()" rel="nofollow" >注册</a></li>
 	</c:if>
-	<c:if test="${user!=null }">
-	    <li><a href="javascript:managerFunction()" >${user.userName }</a></li>
+	<c:choose>
+	    <c:when test="${user.userRole == '1' }"><li> 版主  ：</li></c:when> 
+	    <c:when test="${user.userRole == '2' }"><li> 管理员 ：</li></c:when> 
+	</c:choose>
+	<c:if test="${user!=null && user.userRole=='1'}">
+	 <li onmouseover="showMyContains()"><a href="javascript:managerFunction()" >${user.userName }</a></li>
 		<li><a href="javascript:resetFunction()" >注销</a></li>
-	</c:if>
-		<li><a href="#" title="RSS订阅" >
-			<i class="fa fa-rss">
-			</i> RSS订阅
-		</a></li>
+    </c:if>
+    <c:if test="${user!=null && user.userRole=='0'}">
+	 <li onmouseover="showMyContains()"><a >${user.userName }</a></li>
+		<li><a href="javascript:resetFunction()" >注销</a></li>
+    </c:if>
+    <c:if test="${user!=null && user.userRole=='2'}">
+	 <li><a href="javascript:managerFunction()" >${user.userName }</a></li>
+		<li><a href="javascript:resetFunction()" >注销</a></li>
+    </c:if>
 	</ul>
 			 勤记录 懂分享</div>
+			 <c:if test="${user.userRole!=2 }">
+			  <div id="myContains" onmouseleave="hideMyContains()"  style="display:none;margin-left:1050px;position:absolute;z-index:999;background:#FFFFE0;width:100px;height:120%">
+			  
+		           <span><a style="margin-left:8px;" title="" href="javaScript:userCenter('${user.userId }')"><i class="glyphicon glyphicon-user"></i>&nbsp;个人中心</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userVipCenter('${user.userId }"><i class="glyphicon glyphicon-heart"></i>&nbsp;会员中心</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userNoteCenter('${user.userId }"><i class="glyphicon glyphicon-file"></i>&nbsp;我的帖子</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userFileCenter('${user.userId }"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;我的文件</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userMessageCenter('${user.userId }"><i class="glyphicon glyphicon-bell"></i>&nbsp;消息中心</a></span><br>
+	          </div>
+	           </c:if>
   <div class="navbar-header">
 	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar" aria-expanded="false"> <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
 	<h1 class="logo hvr-bounce-in"><a href="#" title="Share Your View"><img src="${pageContext.request.contextPath}/images/1101.jpg" Style="hight:600px;width:100px" alt="Share Your View"></a></h1>
@@ -132,7 +166,7 @@ $(document).ready(function() {
 	  <li><a data-cont="首页" title="首页" href="${pageContext.request.contextPath}/index.jsp" >首页</a></li>
 	<c:forEach items="${bigSectionList}" var="bigSectionList">
 	  <li ><a data-cont="${bigSectionList.bigSectionName}"   title="${bigSectionList.bigSectionName}" href="javaScript:findNoteByBigSectionId('${bigSectionList.bigSectionId}')" onmouseover="showContains('${bigSectionList.bigSectionId}')" >${bigSectionList.bigSectionName}</a>
-	      <div id="smallSection${bigSectionList.bigSectionId}" onmouseup="hideContains('${bigSectionList.bigSectionId}')"  style="position:absolute;z-index:999;background:#FFFFFF;display:none;width:100px;height:100%">
+	      <div id="smallSection${bigSectionList.bigSectionId}" onmouseleave="hideContains('${bigSectionList.bigSectionId}')"  style="position:absolute;z-index:999;background:#FFFFFF;display:none;width:100px;height:100%">
 	          <c:forEach items="${smallSectionList}" var="smallSectionList">
 		          <c:if test="${smallSectionList.bigSectionId==bigSectionList.bigSectionId}">
 		           <a style="margin-left:20px;" title="${smallSectionList.smallSectionName}" href="javascript:findNoteList('${smallSectionList.smallSectionId}','${smallSectionList.bigSectionId}')">${smallSectionList.smallSectionName}</a><br>
@@ -141,8 +175,10 @@ $(document).ready(function() {
 	      </div>
 	 </li>
 	</c:forEach>
+	
 	<li><a data-cont="文件上传" title="文件上传" href="javaScript:uploadFile()" >文件上传</a></li>
 	<li><a data-cont="文件下载" title="文件下载" href="javascript:getFileList()" >文件下载</a></li>
+	<li></li>
 	</ul>
   </div>
 </div>

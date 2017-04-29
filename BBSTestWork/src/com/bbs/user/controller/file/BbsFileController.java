@@ -106,6 +106,7 @@ public class BbsFileController {
 	String path=request.getServletContext().getRealPath(fileName);
 	File file=new File(path);
 	HttpHeaders headers=new HttpHeaders();
+	if(file.exists()){
 	String fileName2=new String(fileName.substring(7, fileName.length()).getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题
 	headers.setContentDispositionFormData("attachment",fileName2);
 	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -114,14 +115,26 @@ public class BbsFileController {
 	bbsFile.setFileId(fileId);
 	bbsFile.setRes01(String.valueOf(Integer.parseInt(res01)+1));
 	bbsFileService.update(bbsFile);
+	BbsUser bbsUser3=bbsUserService.findById(userId);
 	BbsUser bbsUser=new BbsUser();
-	bbsUser.setUserId(userId);
-	bbsUser.setUserPoint(String.valueOf(Integer.parseInt(userPoint)-Integer.parseInt(filePoint)));
-	bbsUserService.update(bbsUser);
+	if(bbsUser3.getUserYnVip().equals("1")){
+		if(bbsUser3.getUserYnVipEnddate().getTime()<new Date().getTime()){
+			bbsUser.setUserId(userId);
+			bbsUser.setUserPoint(String.valueOf(Integer.parseInt(userPoint)-Integer.parseInt(filePoint)));
+			bbsUserService.update(bbsUser);
+		}
+	}else{
+		bbsUser.setUserId(userId);
+		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(userPoint)-Integer.parseInt(filePoint)));
+		bbsUserService.update(bbsUser);
+	}
 	bbsUser.setDelFlag("0");
 	BbsUser bbsUser2=bbsUserService.findById(userId);
 	request.getSession().removeAttribute("user");
 	request.getSession().setAttribute("user", bbsUser2);
+	}else{
+		request.setAttribute("message","下载的文件不存在！");
+	}
 	return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
 	headers,HttpStatus.CREATED);
 	}

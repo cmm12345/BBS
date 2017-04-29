@@ -3,6 +3,8 @@ package com.bbs.user.controller.user;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -119,7 +121,6 @@ public class BbsUserController {
 			bbsUser.setUserPicture("upload/"+fileName);
 		 }
 		if(StringUtils.isNoneEmpty(bbsUser.getUserPassword())){
-		 if(StringUtils.isEmpty(bbsUser.getUserId())){
 			bbsUser.setUserRegisterDate(new Date());
 			bbsUser.setUserPoint("0");
 			bbsUser.setDelFlag("0");
@@ -130,17 +131,89 @@ public class BbsUserController {
 			bbsUser.setUserPassword(UserCommonTools.getMD5String(bbsUser.getUserPassword()));
 			bbsUserService.insert(bbsUser);
 			session.setAttribute("user", bbsUser);
-		 }else{
-			bbsUserService.update(bbsUser);
-			session.setAttribute("user", bbsUser);
-		 }
 		 return "/userView/loginSuccess";
 		}else{
 			return "/userView/login";
 		}
 		
 	}
+	/**
+	 *save
+	 * @param user
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/insertUser")
+	public String save(@RequestParam(value="upload",required=false)MultipartFile file,BbsUser bbsUser,HttpServletRequest request,HttpSession session){
+		 String path=request.getSession().getServletContext().getRealPath("/upload");
+		 String fileName="";
+		 if(StringUtils.isNotEmpty(file.getOriginalFilename())){
+		     fileName=file.getOriginalFilename();
+		  File targetFile=new File(path,fileName);
+			if(!targetFile.exists()){
+			  targetFile.mkdirs();
+			   }
+			try{
+			  file.transferTo(targetFile);
+			}catch(Exception e){
+			  e.printStackTrace();
+			}
+			bbsUser.setUserPicture("upload/"+fileName);
+		 }
+		
+			bbsUserService.update(bbsUser);
+			BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+ 		   bbsUser2.setRes02(sdf.format(bbsUser.getUserBornDate()));
+			session.setAttribute("user", bbsUser2);
+		 return "/userView/userCenter";
+		
+	}
 	
+	/**
+	 *充值
+	 * @param user
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/addPoint")
+	public String addPoint(BbsUser bbsUser,HttpServletRequest request,HttpSession session,String anum){
+			 bbsUser=bbsUserService.findById(bbsUser.getUserId());
+			 bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(anum)));
+			bbsUserService.update(bbsUser);
+			BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+ 		   bbsUser2.setRes02(sdf.format(bbsUser.getUserBornDate()));
+			session.setAttribute("user", bbsUser2);
+		 return "/userView/userCenter";
+		
+	}
+	
+	/**
+	 *修改密码
+	 * @param user
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/updatePassword")
+	public String updatePassword(BbsUser bbsUser,HttpServletRequest request,HttpSession session,String newPassword){
+		    String passwordString=UserCommonTools.getMD5String(bbsUser.getUserPassword());
+			 bbsUser=bbsUserService.findById(bbsUser.getUserId());
+			if(!bbsUser.getUserPassword().equals(passwordString)){
+				request.setAttribute("message", "密码不正确");
+				return "/userView/updatePassword";
+			}else{
+				bbsUser.setUserPassword(UserCommonTools.getMD5String(newPassword));
+				bbsUserService.update(bbsUser);
+				BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
+				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	 		    bbsUser2.setRes02(sdf.format(bbsUser.getUserBornDate()));
+				session.setAttribute("user", bbsUser2);
+				request.setAttribute("message", "修改成功");
+			 return "/userView/userCenter";
+				
+			}
+	}
 	/**
 	 *禁言
 	 * @param user
@@ -184,6 +257,7 @@ public class BbsUserController {
 	 * @param id
 	 * @param request
 	 * @return
+	 * @throws ParseException 
 	 */
 	@RequestMapping("/getUser")
 	public String getUserByNumber(BbsUser user,String imageCode,HttpServletRequest request,Model model,HttpSession session){
@@ -191,15 +265,17 @@ public class BbsUserController {
 		   if(StringUtils.isNotEmpty(imageCode)){
 			   user.setUserPassword(UserCommonTools.getMD5String(user.getUserPassword()));
 			    if(!imageCode.equals(sRand)){
-			    	 session.setAttribute("message", "验证码错误！");
+			    	request.setAttribute("message", "验证码错误！");
 			    	return "/userView/login";
 			    }else{
 			    	   user.setDelFlag("0");
 			           BbsUser bbsUser=bbsUserService.getUserByNumber(user);
 			          if(bbsUser==null){
-			        	  session.setAttribute("message", "账号密码错误！");
+			        	  request.setAttribute("message", "账号密码错误！");
 			        	   return "/userView/login";
 			           }else{
+			        	   SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			    		   bbsUser.setRes02(sdf.format(bbsUser.getUserBornDate()));
 			                session.setAttribute("user", bbsUser);
 			                return "/userView/loginSuccess";
 			           }
@@ -210,4 +286,37 @@ public class BbsUserController {
 		   
 		
 	}
+	
+	/**
+	 * 根据账号查询单个用户
+	 * @param id
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/findUserById")
+	public String findUserById(BbsUser user,HttpServletRequest request,Model model,HttpSession session){
+		   BbsUser bbsUser=bbsUserService.findById(user.getUserId());
+		   SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		   bbsUser.setRes02(sdf.format(bbsUser.getUserBornDate()));
+		   session.removeAttribute("user");
+		   session.setAttribute("user", bbsUser);
+		return "userView/userCenter";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

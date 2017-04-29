@@ -67,14 +67,14 @@ public class BbsNoteController {
 	public String findNoteList(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String isAdmin,String userString,String userRole){
 		//如果是后台过来的
 		String smallSectionIdString="";
-		if(StringUtils.isNotEmpty(userString)&!userRole.equals("2")){
+		if(StringUtils.isNotEmpty(userString)&!"2".equals(userRole)){
 			BbsSmallSection bbsSmallSection=new BbsSmallSection();
 			bbsSmallSection.setDelFlag("0");
 			bbsSmallSection.setUserid(userString);
 			BbsSmallSection bbsSmallSection2=bbsSmallSectionService.selectSmallSectionById(bbsSmallSection);
 			smallSectionIdString=bbsSmallSection2.getSmallSectionId();
+			bbsNote.setSmallSectionId(smallSectionIdString);
 		}
-		bbsNote.setSmallSectionId(smallSectionIdString);
 		Page<BbsNote> findAll = bbsNoteService.findAll(new Page<BbsNote>(request, response), bbsNote);
 		request.setAttribute("page", findAll);
 		request.setAttribute("smallSectionId", bbsNote.getSmallSectionId());
