@@ -51,12 +51,16 @@ function downloadFile(filePoint,userId,userPoint,fileUrl,fileId,res01){
    }
    var url="${pageContext.request.contextPath}/file/downloadFile.do?fileName="+fileUrl+"&userId="+userId+"&filePoint="+filePoint+"&userPoint="+userPoint+"&fileId="+fileId+"&res01="+res01;
    var userDate='${user.userYnVipEnddate}';
+   var str="";
+   if(userDate!=''){
    userDate = eval('new Date(' + userDate.replace(/\d+(?=[^]+$)/, 
    function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
 	  var date1=new Date();
-	  var str="";
 	if(-userDate.getTime()<date1.getTime()){
 	str="确定下载吗？您是vip用户将免费下载";
+	}else{
+	str="确定下载吗？将扣除您的积分"+filePoint+"分";
+	}
 	}else{
 	str="确定下载吗？将扣除您的积分"+filePoint+"分";
 	}

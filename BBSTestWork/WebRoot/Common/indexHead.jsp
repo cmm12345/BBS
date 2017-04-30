@@ -110,6 +110,11 @@ $(document).ready(function() {
   var url="${pageContext.request.contextPath}/userView/userCenter.jsp";
     $("#noteListIframe").attr("src",url);
  }
+ //进入会员中心
+ function userVipCenter(userId){
+    var url="${pageContext.request.contextPath}/userView/userVipCenter.jsp";
+    $("#noteListIframe").attr("src",url);
+ }
 </script>
 </head>
 <body>
@@ -124,7 +129,8 @@ $(document).ready(function() {
 	</c:if>
 	<c:choose>
 	    <c:when test="${user.userRole == '1' }"><li> 版主  ：</li></c:when> 
-	    <c:when test="${user.userRole == '2' }"><li> 管理员 ：</li></c:when> 
+	    <c:when test="${user.userRole == '2' }"><li> 管理员 ：</li></c:when>
+	    <c:when test="${user.userRole == '0' }"><li> 欢迎 ：</li></c:when>  
 	</c:choose>
 	<c:if test="${user!=null && user.userRole=='1'}">
 	 <li onmouseover="showMyContains()"><a href="javascript:managerFunction()" >${user.userName }</a></li>
@@ -144,10 +150,10 @@ $(document).ready(function() {
 			  <div id="myContains" onmouseleave="hideMyContains()"  style="display:none;margin-left:1050px;position:absolute;z-index:999;background:#FFFFE0;width:100px;height:120%">
 			  
 		           <span><a style="margin-left:8px;" title="" href="javaScript:userCenter('${user.userId }')"><i class="glyphicon glyphicon-user"></i>&nbsp;个人中心</a></span><br>
-		            <span><a style="margin-left:8px;" title="" href="javaScript:userVipCenter('${user.userId }"><i class="glyphicon glyphicon-heart"></i>&nbsp;会员中心</a></span><br>
-		            <span><a style="margin-left:8px;" title="" href="javaScript:userNoteCenter('${user.userId }"><i class="glyphicon glyphicon-file"></i>&nbsp;我的帖子</a></span><br>
-		            <span><a style="margin-left:8px;" title="" href="javaScript:userFileCenter('${user.userId }"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;我的文件</a></span><br>
-		            <span><a style="margin-left:8px;" title="" href="javaScript:userMessageCenter('${user.userId }"><i class="glyphicon glyphicon-bell"></i>&nbsp;消息中心</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userVipCenter('${user.userId }')"><i class="glyphicon glyphicon-heart"></i>&nbsp;会员中心</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userNoteCenter('${user.userId }')"><i class="glyphicon glyphicon-file"></i>&nbsp;我的帖子</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userFileCenter('${user.userId }')"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;我的文件</a></span><br>
+		            <span><a style="margin-left:8px;" title="" href="javaScript:userMessageCenter('${user.userId }')"><i class="glyphicon glyphicon-bell"></i>&nbsp;消息中心</a></span><br>
 	          </div>
 	           </c:if>
   <div class="navbar-header">

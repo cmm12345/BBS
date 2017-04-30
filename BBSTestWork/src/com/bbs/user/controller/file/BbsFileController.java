@@ -3,6 +3,7 @@ package com.bbs.user.controller.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -130,6 +131,8 @@ public class BbsFileController {
 	}
 	bbsUser.setDelFlag("0");
 	BbsUser bbsUser2=bbsUserService.findById(userId);
+	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+	bbsUser.setRes02(sdf.format(bbsUser2.getUserBornDate()));
 	request.getSession().removeAttribute("user");
 	request.getSession().setAttribute("user", bbsUser2);
 	}else{
@@ -211,6 +214,8 @@ public class BbsFileController {
 		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
 		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
 		 BbsUser bbsUser2=bbsUserService.findById(bbsFile.getUserId());
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
 		 request2.getSession().removeAttribute("user");
 		 request2.getSession().setAttribute("user", bbsUser2);
 		return "/Common/uploadFile";

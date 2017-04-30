@@ -2,7 +2,7 @@ package com.bbs.user.controller.smallSection;
 
 
 import java.text.ParseException;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -87,6 +87,8 @@ public class BbsSmallSectionController {
 					bbsUser2.setUserId(bbsSmallSection.getRes01());
 					bbsUserService.update(bbsUser);
 					bbsUserService.update(bbsUser2);
+					refreshUser(bbsSmallSection.getUserid());
+					refreshUser(bbsSmallSection.getRes01());
 			}
 		}else{
 			  bbsSmallSection.setCjsj(new Date());
@@ -134,6 +136,14 @@ public class BbsSmallSectionController {
 		 request2.getSession().removeAttribute("smallSectionList");
 		 request2.getSession().setAttribute("smallSectionList", findAll);
 	}
-	
+	public void refreshUser(String userId){
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 BbsUser bbsUser2=bbsUserService.findById(userId);
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
+		 request2.getSession().removeAttribute("user");
+		 request2.getSession().setAttribute("user", bbsUser2);
+	}
 	
 }

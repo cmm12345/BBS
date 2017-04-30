@@ -1,6 +1,7 @@
 package com.bbs.user.controller.note;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -132,6 +133,7 @@ public class BbsNoteController {
 		BbsUser bbsUser=bbsUserService.findById(bbsNote.getUserId());
 		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+3));
 		bbsUserService.update(bbsUser);
+		refreshUser(bbsUser.getUserId());
 		Page<BbsNote> findAll = bbsNoteService.findAll(new Page<BbsNote>(request, response), bbsNote);
 		request.setAttribute("page", findAll);
 		return "Common/indexPageListIframe";
@@ -156,6 +158,7 @@ public class BbsNoteController {
 			}
 			bbsUserService.update(bbsUser);
 			str="您的帖子被管理员删除，删除原因是"+reasonStr+"您的积分被扣除2分";
+			refreshUser(bbsUser.getUserId());
 		}
 		if(toolStyle.equals("setNoteHot")){
 			bbsNote2.setNoteYnHot("1");
@@ -164,6 +167,7 @@ public class BbsNoteController {
 	        bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
 			bbsUserService.update(bbsUser);
 			str="您的帖子被管理员设为热度贴,您的积分被加2分";
+			refreshUser(bbsUser.getUserId());
 		}
 		if(toolStyle.equals("returnNoteHot")){
 			bbsNote2.setNoteYnHot("0");
@@ -216,11 +220,7 @@ public class BbsNoteController {
 		BbsUser bbsUser=bbsUserService.findById(bbsReplyNote.getUserId());
 		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
 		bbsUserService.update(bbsUser);
-		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
-		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
-		 BbsUser bbsUser2=bbsUserService.findById(bbsReplyNote.getUserId());
-		 request2.getSession().removeAttribute("user");
-		 request2.getSession().setAttribute("user", bbsUser2);
+		refreshUser(bbsReplyNote.getUserId());
 		List<BbsReplyNote> bbsReplyNoteList=replyNoteService.findList(bbsReplyNote);
 		request.setAttribute("replyNoteList", bbsReplyNoteList);
 		if("yes".equals(sfFile)){
@@ -279,5 +279,15 @@ public class BbsNoteController {
         bbsNote2.setNoteAnswerNum(String.valueOf(Integer.parseInt(bbsNote2.getNoteAnswerNum())-1));		
         bbsNoteService.update(bbsNote2);
 		
+	}
+	
+	public void refreshUser(String userId){
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 BbsUser bbsUser2=bbsUserService.findById(userId);
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
+		 request2.getSession().removeAttribute("user");
+		 request2.getSession().setAttribute("user", bbsUser2);
 	}
 }

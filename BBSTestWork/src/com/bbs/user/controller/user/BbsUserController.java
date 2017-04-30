@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import util.Page;
@@ -130,6 +134,8 @@ public class BbsUserController {
 			//密码MD5加密
 			bbsUser.setUserPassword(UserCommonTools.getMD5String(bbsUser.getUserPassword()));
 			bbsUserService.insert(bbsUser);
+			 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+  		   bbsUser.setRes02(sdf.format(bbsUser.getUserBornDate()));
 			session.setAttribute("user", bbsUser);
 		 return "/userView/loginSuccess";
 		}else{
@@ -160,12 +166,8 @@ public class BbsUserController {
 			}
 			bbsUser.setUserPicture("upload/"+fileName);
 		 }
-		
 			bbsUserService.update(bbsUser);
-			BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
- 		   bbsUser2.setRes02(sdf.format(bbsUser.getUserBornDate()));
-			session.setAttribute("user", bbsUser2);
+			refreshUser(bbsUser.getUserId());
 		 return "/userView/userCenter";
 		
 	}
@@ -181,10 +183,7 @@ public class BbsUserController {
 			 bbsUser=bbsUserService.findById(bbsUser.getUserId());
 			 bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(anum)));
 			bbsUserService.update(bbsUser);
-			BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
- 		   bbsUser2.setRes02(sdf.format(bbsUser.getUserBornDate()));
-			session.setAttribute("user", bbsUser2);
+			refreshUser(bbsUser.getUserId());
 		 return "/userView/userCenter";
 		
 	}
@@ -205,15 +204,37 @@ public class BbsUserController {
 			}else{
 				bbsUser.setUserPassword(UserCommonTools.getMD5String(newPassword));
 				bbsUserService.update(bbsUser);
-				BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
-				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-	 		    bbsUser2.setRes02(sdf.format(bbsUser.getUserBornDate()));
-				session.setAttribute("user", bbsUser2);
+				refreshUser(bbsUser.getUserId());
 				request.setAttribute("message", "修改成功");
 			 return "/userView/userCenter";
 				
 			}
 	}
+	/**
+	 * 成为会员或续费
+	 */
+	@RequestMapping("/changeVip")
+	public String  changeVip(BbsUser user,HttpServletRequest request,String str){
+		BbsUser bbsUser=bbsUserService.findById(user.getUserId());
+		Calendar cal=Calendar.getInstance();
+		if("1".equals(bbsUser.getUserYnVip())){
+			if(bbsUser.getUserYnVipEnddate().getTime()>=new Date().getTime()){
+				cal.setTime(bbsUser.getUserYnVipEnddate());
+				cal.add(cal.MONTH,Integer.parseInt(str));// 目前時間加str個月 
+			}else{
+			cal.add(Calendar.MONTH,Integer.parseInt(str));// 目前時間加str個月   
+			}
+		}else{
+		    cal.add(Calendar.MONTH,Integer.parseInt(str));// 目前時間加str個月   
+		}
+		bbsUser.setUserYnVip("1");
+		bbsUser.setUserYnVipEnddate(cal.getTime());
+		bbsUserService.update(bbsUser);
+		refreshUser(bbsUser.getUserId());
+		return "/userView/userVipCenter";
+	}
+	
+	
 	/**
 	 *禁言
 	 * @param user
@@ -224,6 +245,7 @@ public class BbsUserController {
 	@RequestMapping("/forbidUser")
 	public void updateUser(BbsUser user,HttpServletRequest request){
 		bbsUserService.update(user);
+		refreshUser(user.getUserId());
 		String str="";
 		if("0".equals(user.getUserState())){
 			str="您于"+new Date()+"被管理员解除禁言，现在可以发表您的观点啦";
@@ -303,20 +325,14 @@ public class BbsUserController {
 		return "userView/userCenter";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void refreshUser(String userId){
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 BbsUser bbsUser2=bbsUserService.findById(userId);
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
+		 request2.getSession().removeAttribute("user");
+		 request2.getSession().setAttribute("user", bbsUser2);
+	}
 	
 }

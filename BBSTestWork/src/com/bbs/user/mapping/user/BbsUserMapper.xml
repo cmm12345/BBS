@@ -120,7 +120,7 @@
     #{userQuestionOne,jdbcType=VARCHAR}, #{userQuestionTwo,jdbcType=VARCHAR}, #{userQuestionThree,jdbcType=VARCHAR}, 
     #{questionOneAnswer,jdbcType=VARCHAR}, #{questionTwoAnswer,jdbcType=VARCHAR}, #{questionThreeAnswer,jdbcType=VARCHAR}, 
     #{userState,jdbcType=VARCHAR}, #{userYnVip,jdbcType=VARCHAR}, #{userRole,jdbcType=VARCHAR}, 
-    #{userYnVipEnddate,jdbcType=DATE}, #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, 
+    #{userYnVipEnddate}, #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, 
     #{res03,jdbcType=VARCHAR}, #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}
       )
   </insert>
@@ -399,7 +399,7 @@
       USER_STATE = #{userState,jdbcType=VARCHAR},
       USER_YN_VIP = #{userYnVip,jdbcType=VARCHAR},
       USER_ROLE = #{userRole,jdbcType=VARCHAR},
-      USER_YN_VIP_ENDDATE = #{userYnVipEnddate,jdbcType=DATE},
+      USER_YN_VIP_ENDDATE = #{userYnVipEnddate},
       RES01 = #{res01,jdbcType=VARCHAR},
       RES02 = #{res02,jdbcType=VARCHAR},
       RES03 = #{res03,jdbcType=VARCHAR},

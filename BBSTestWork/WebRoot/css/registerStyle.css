@@ -92,6 +92,7 @@ input:focus {
     -webkit-transition: all .2s;
     -ms-transition: all .2s;
 }
+
 .ss {
     cursor: pointer;
     width: 200px;
