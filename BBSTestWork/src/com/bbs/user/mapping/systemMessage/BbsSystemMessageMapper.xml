@@ -20,11 +20,11 @@
     MESSAGE_ID, MESSAGE_NAMAE, MESSAGE_CONTAINS, CJSJ, SEE_MESSAGE_USER, DEL_FLAG, RES01, 
     RES02, RES03, RES04, RES05, RES06,RES07
   </sql>
-  <select id="selectByPrimaryKey" resultType="BbsSystemMessage">
+  <select id="selectByPrimaryId" resultType="BbsSystemMessage">
     select 
     <include refid="Base_Column_List" />
     from T_BBS_SYSTEM_MESSAGE
-    where MESSAGE_ID = #{messageId,jdbcType=VARCHAR}
+    where MESSAGE_ID = #{messageId} AND DEL_FLAG=${0}
   </select>
   
    <select id="selectSystemMessageList" resultType="BbsSystemMessage">
@@ -38,6 +38,9 @@
     </if>
      <if test="res02 != null and res02 != ''">
 	 AND RES02= #{res02}
+    </if>
+    <if test="res01 != null and res01 != ''">
+	 AND (RES01= #{res01} or RES01=#{res05})
     </if>
     </where>
      <choose>

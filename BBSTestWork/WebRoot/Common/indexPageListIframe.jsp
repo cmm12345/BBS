@@ -17,6 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="keywords" content="">
 <meta name="description" content="">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+ <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/xcConfirm.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
 <script src="${pageContext.request.contextPath}/js/jquery-2.1.4.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
@@ -46,15 +47,24 @@ function addNote(smallSectionId,bigSectionId){
         window.location.href="${pageContext.request.contextPath}/Common/topicAdd.jsp?smallSectionId="+smallSectionId+"&bigSectionId="+bigSectionId;
 
 }
+    //删除
+   function deleteNote(noteId){
+  window.parent.deleteNote(noteId);
+   }
+
+//查询
+function  query(){
+$("#searchForm").submit();
+}
  /*
-		*分页
-		*/
-		function page(n,s){
-			$("#pageNo").val(n);
-			$("#pageSize").val(s);
-			$("#searchForm").submit();
-		    return false;
-		      }
+*分页
+*/
+function page(n,s){
+	$("#pageNo").val(n);
+	$("#pageSize").val(s);
+	$("#searchForm").submit();
+    return false;
+      }
 </script>
 </head>
   
@@ -63,9 +73,15 @@ function addNote(smallSectionId,bigSectionId){
  <form id="searchForm"  action="${pageContext.request.contextPath}/note/findNoteList.do" method="post" class="" style="margin-bottom: 0px;">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<input id="userId" name="userId" type="hidden" value="${user.userId}"/>
 </form>
 
-</div><div><a href="javaScript:addNote('${smallSectionId}','${bigSectionId }')" style="cursur:pointer;" ><img title="发帖" style="position:fixed;margin-left:700px;margin-top:30px;width:50px;height:50px;z-index:999" src="${pageContext.request.contextPath}/images/123.jpg"></div>
+</div><div>
+<c:if test="${bigSectionId!=null }">
+<a href="javaScript:addNote('${smallSectionId}','${bigSectionId }')" style="cursur:pointer;" ><img title="发帖" style="position:fixed;margin-left:700px;margin-top:30px;width:50px;height:50px;z-index:999" src="${pageContext.request.contextPath}/images/123.jpg"></div>
+</c:if>
+
+
   <div class="content">
   <c:forEach items="${page.list }" var="hotNoteList">
   <article class="excerpt " style="">
@@ -80,8 +96,12 @@ function addNote(smallSectionId,bigSectionId){
 			 <a class="comment" href="javaScript:checkLogin('${hotNoteList.noteId }')" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>${hotNoteList.noteAnswerNum}</a>
 		</p>
 		<p class="note" style="width:20px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${hotNoteList.noteContains}</p>
+	 <c:if test="${user.userId ==hotNoteList.userId }">
+	<a href="javaScript:deleteNote('${hotNoteList.noteId }')">删除</a>
+	 </c:if>
 	</article>
  </c:forEach>
+
   <div style="margin-left:20px" class="pagination">${page}</div>
   </div>
 </body>

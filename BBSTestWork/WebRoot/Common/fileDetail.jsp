@@ -104,7 +104,9 @@ function downloadFile(filePoint,userId,userPoint,fileUrl,fileId,res01){
   
   <div class="title" id="comment">
 	<h3>评论</h3>
+	<c:if test="${file.res02==1}">
 	<h3 style="float:right"><font size="2px" color="blue"><a href="javaScript:downloadFile('${file.filePoint}','${user.userId }','${user.userPoint }','${file.fileUrl }','${file.fileId }','${file.res01 }')">点击下载</a></font></h3>
+ </c:if>
   </div>
   <div id="respond">
 		<form id="comment-form" name="comment-form" action="${pageContext.request.contextPath}/note/replySave.do" method="POST">

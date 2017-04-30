@@ -46,11 +46,14 @@
     <where>
     DEL_FLAG=${0}
     AND FILE_TYPE=${1}
-    <if test="res02 != null and res02 != ''">
-     AND RES02=#{res02}
-    </if>
-    <if test="res02 == null or res02 == ''">
+    <if test="res02 == null and res02 != ''">
      AND (RES02= ${0} or RES02= ${1})
+    </if>
+    <if test="res04 != null and res04 != ''">
+     AND RES02= ${1}
+    </if>
+     <if test="userId != null and userId != ''">
+     AND USER_ID=#{userId}
     </if>
     <if test="res04 != null and res04 != ''">
 	 AND (FILE_NAME LIKE '%'||#{res04}||'%' or FILE_URL LIKE '%'||#{res04}||'%' or FILE_DESCRIPT LIKE '%'||#{res04}||'%')

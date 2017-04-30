@@ -36,6 +36,20 @@ $(document).ready(function() {
 	              window.location.href="${pageContext.request.contextPath}/index.jsp"; 
 						                         }
 						                      });
+						                      }
+						                        //登录注册成功
+ function updatePasswordSucccess(){
+    window.wxc.xcConfirm("修改成功", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+	              window.location.href="${pageContext.request.contextPath}/index.jsp"; 
+						                         }
+						                      });
+ }
+   //找回密码后修改密码
+ function updatePasswordFunction(message,userId,userPassword,userLoginNumber,questionOneAnswer,questionTwoAnswer,questionThreeAnswer){
+    window.wxc.xcConfirm(message, window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+	               $("#noteListIframe").attr("src","${pageContext.request.contextPath}/userView/updatePassword2.jsp?userId="+userId+"&userPassword="+userPassword+"&userLoginNumber="+userLoginNumber+"&questionOneAnswer="+questionOneAnswer+"&questionTwoAnswer="+questionTwoAnswer+"&questionThreeAnswer="+questionThreeAnswer); 
+						                         }
+						                      });
  }
  //注册
  function registerFunction(){
@@ -100,7 +114,7 @@ $(document).ready(function() {
     alertFunction("请先登录！");
     return false;
     }
-    var url="${pageContext.request.contextPath}/file/findFileList.do";
+    var url="${pageContext.request.contextPath}/file/findFileList.do?isAdmin=isHead";
     $("#noteListIframe").attr("src",url);
  }
  
@@ -115,6 +129,22 @@ $(document).ready(function() {
     var url="${pageContext.request.contextPath}/userView/userVipCenter.jsp";
     $("#noteListIframe").attr("src",url);
  }
+ //用户帖子
+ function userNoteCenter(userId){
+   var url="${pageContext.request.contextPath}/note/findNoteList.do?userId="+userId;
+    $("#noteListIframe").attr("src",url);
+ }
+ //用户文件
+ function userFileCenter(userId){
+  var url="${pageContext.request.contextPath}/file/findFileList.do?userId="+userId;
+    $("#noteListIframe").attr("src",url);
+ }
+ //消息中心
+ function userMessageCenter(userId){
+ var url="${pageContext.request.contextPath}/system/findSystemMessageList.do?res01="+userId+"&userString="+userId;
+    $("#noteListIframe").attr("src",url);
+ }
+
 </script>
 </head>
 <body>

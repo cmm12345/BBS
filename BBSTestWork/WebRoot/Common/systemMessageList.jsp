@@ -22,21 +22,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="${pageContext.request.contextPath}/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
 
 <script type="text/javascript">
-function checkLogin(fileId){
-  if('${user.userName}'==''){
-     window.parent.alertFunction("请先登录！");
-     return false;
-  }
-   window.parent.findFileByIdFunction(fileId);
+function checkLogin(messageId,res03){
+   window.parent.findMessageByIdFunction(messageId,res03);
 }
 //删除文件
-function deleteFile(fileId){
- window.parent.deleteFile(fileId);
+function deleteMessage(messageId){
+ window.parent.deleteMessage(messageId);
 }
 //查询
 function  query(){
 $("#searchForm").submit();
 }
+
  /*
 		*分页
 		*/
@@ -51,34 +48,31 @@ $("#searchForm").submit();
   
 <body>
 <div style="display:none">
- <form id="searchForm"  action="${pageContext.request.contextPath}/file/findFileList.do" method="post" class="" style="margin-bottom: 0px;">
+ <form id="searchForm"  action="${pageContext.request.contextPath}/system/findSystemMessageList.do?userString=${user.userId}" method="post" class="" style="margin-bottom: 0px;">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<input id="userId" name="userId" type="hidden" value="${user.userId}"/>
+		<input id="res01" name="res01" type="hidden" value="${user.userId}"/>
 </form>
 
 </div>
   <div class="content">
-  <c:forEach items="${page.list }" var="fileList">
+  <c:forEach items="${page.list }" var="messageList">
   <article class="excerpt " style="">
-  
-		<header><a class="cat" href="#" title="Blog主题" >文件主题<i></i></a>
-			<h2><a href="javaScript:checkLogin('${fileList.fileId }')" title="${fileList.fileName}" target="_blank" >${fileList.fileName}</a>
+        <c:if test="${messageList.res03==0 }">
+		<header><a class="cat" href="#" title="Blog主题" ><font color="red">未读</font><i></i></a>
+		</c:if>
+		 <c:if test="${messageList.res03==1 }">
+		<header><a class="cat" href="#" title="Blog主题" ><font color="blue">已读</font><i></i></a>
+		</c:if>
+			<h2><a href="javaScript:checkLogin('${messageList.messageId }','${messageList.res03 }')" title="${messageList.messageNamae}" target="_blank" >${messageList.messageNamae}</a>
 			</h2>
 		</header>
 		<p class="meta">
-			<time class="time"><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${fileList.cjsj}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
-			<a class="comment" href="" title="下载积分" target="_blank" ><i class="glyphicon glyphicon-shopping-cart"></i>${fileList.filePoint}</a>
-			 <a class="comment" href="" title="下载次数" target="_blank" ><i class="glyphicon glyphicon-download-alt"></i>${fileList.res01}</a>
-			 <a class="comment" href="" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>${fileList.res03}</a>
+			<time class="time"><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${messageList.cjsj}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
 		</p>
-		<p class="note" style="width:20px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${fileList.fileDescript}</p>
-	 <c:if test="${user.userId ==fileList.userId &&fileList.res02!=1 }">
-	<a href="javaScript:deleteFile('${fileList.fileId }')">删除</a>
-	 </c:if>
-	 <c:if test="${user.userId ==fileList.userId &&fileList.res02==1 && isAdmin==null}">
-	    审核通过
-	 </c:if>
+		<p class="note" style="width:20px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${messageList.messageContains}</p>
+	<a href="javaScript:deleteMessage('${messageList.messageId}')">删除</a>
+	 
 	</article>
  </c:forEach>
   <div style="margin-left:20px" class="pagination">${page}</div>

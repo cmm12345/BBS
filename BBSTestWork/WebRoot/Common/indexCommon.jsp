@@ -30,15 +30,91 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			      }
        window.wxc.xcConfirm(str, "custom", option); 
    }
+   //删帖
+   function deleteNote(noteId){
+     var option = {
+		title: "提示信息",
+		btn: parseInt("0011",2),
+		onOk: function(){
+			 $.ajax({
+			         type:"GET",
+			         async:false,
+			         url:"${pageContext.request.contextPath}/note/userDelete.do",
+			         data:{noteId:noteId},
+			         success:function(){
+			             window.wxc.xcConfirm("删除成功！", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+			            window.noteListIframe.window.query();
+		                         }
+		                      });
+		                 }
+		            });
+			             
+			          }
+			      }
+			      	window.wxc.xcConfirm("确定删除该帖子吗？", "custom", option); 
+			      	}
+//删除文件
+   function deleteFile(fileId){
+     var option = {
+		title: "提示信息",
+		btn: parseInt("0011",2),
+		onOk: function(){
+			 $.ajax({
+			         type:"GET",
+			         async:false,
+			         url:"${pageContext.request.contextPath}/file/delete.do",
+			         data:{fileId:fileId},
+			         success:function(){
+			             window.wxc.xcConfirm("删除成功！", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+			            window.noteListIframe.window.query();
+		                         }
+		                      });
+		                 }
+		            });
+			             
+			          }
+			      }
+			      	window.wxc.xcConfirm("确定删除该文件吗？", "custom", option); 
+			      	}	
+//删除系统消息
+function deleteMessage(messageId){
+var userString='${user.userId}';
+     var option = {
+		title: "提示信息",
+		btn: parseInt("0011",2),
+		onOk: function(){
+			 $.ajax({
+			         type:"GET",
+			         async:false,
+			         url:"${pageContext.request.contextPath}/system/deleteMessage.do",
+			         data:{messageId:messageId,userString:userString},
+			         success:function(){
+			             window.wxc.xcConfirm("删除成功！", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+			            window.noteListIframe.window.query();
+		                         }
+		                      });
+		                 }
+		            });
+			             
+			          }
+			      }
+			      	window.wxc.xcConfirm("确定删除该消息吗？", "custom", option); 
+			      	}	
+	//查看帖子详情		      			      	
    function findNoteByIdFunction(noteId){
    var userString='${user.userId}';
       $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId+"&userString="+userString);
    }
+   //查看文件详情
    function findFileByIdFunction(fileId){
    var userString='${user.userId}';
       $("#noteListIframe").attr("src","${pageContext.request.contextPath}/file/findFileById.do?fileId="+fileId+"&userString="+userString);
    }
-   
+   //查看系统消息
+   function findMessageByIdFunction(messageId,res03){
+   var userString='${user.userId}';
+      $("#noteListIframe").attr("src","${pageContext.request.contextPath}/system/findMessageById.do?messageId="+messageId+"&userString="+userString+"&res03="+res03);
+   }
    //搜索
    function searchList(str){
        var searchContains=$("#searchContains").val();

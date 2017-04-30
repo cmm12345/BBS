@@ -195,24 +195,34 @@ public class BbsUserController {
 	 * @return
 	 */
 	@RequestMapping("/updatePassword")
-	public String updatePassword(BbsUser bbsUser,HttpServletRequest request,HttpSession session,String newPassword){
-		    String passwordString=UserCommonTools.getMD5String(bbsUser.getUserPassword());
-			 bbsUser=bbsUserService.findById(bbsUser.getUserId());
-			if(!bbsUser.getUserPassword().equals(passwordString)){
-				request.setAttribute("message", "密码不正确");
-				return "/userView/updatePassword";
-			}else{
-				bbsUser.setUserPassword(UserCommonTools.getMD5String(newPassword));
-				bbsUserService.update(bbsUser);
-				refreshUser(bbsUser.getUserId());
-				request.setAttribute("message", "修改成功");
-			 return "/userView/userCenter";
-				
+	public String updatePassword(BbsUser bbsUser,HttpServletRequest request,HttpSession session,String newPassword,String state){
+		    
+			BbsUser bbsUser2=bbsUserService.findById(bbsUser.getUserId());
+		   if(!"find".equals(state)){
+			   String passwordString=UserCommonTools.getMD5String(bbsUser.getUserPassword());
+			   if(!bbsUser2.getUserPassword().equals(passwordString)){
+					request.setAttribute("message", "密码不正确");
+					 return "/userView/updatePassword";
+				}else{
+					bbsUser2.setUserPassword(UserCommonTools.getMD5String(newPassword));
+					bbsUserService.update(bbsUser2);
+					refreshUser(bbsUser2.getUserId());
+					request.setAttribute("message", "修改成功");
+				    return "/userView/userCenter";
+				}
+			 }else{
+				 bbsUser2.setUserPassword(UserCommonTools.getMD5String(newPassword));
+				bbsUserService.update(bbsUser2);
+				refreshUser(bbsUser2.getUserId());
+				request.setAttribute("message", "修改密码成功");
+				request.setAttribute("state", state);
+			    return "/userView/userCenter";
 			}
 	}
 	/**
 	 * 成为会员或续费
 	 */
+	@SuppressWarnings("static-access")
 	@RequestMapping("/changeVip")
 	public String  changeVip(BbsUser user,HttpServletRequest request,String str){
 		BbsUser bbsUser=bbsUserService.findById(user.getUserId());
@@ -308,6 +318,37 @@ public class BbsUserController {
 		   
 		
 	}
+	/**
+	 * 找回密码
+	 * @param id
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/findPassword")
+	public String findPassword(BbsUser user,HttpServletRequest request,Model model,HttpSession session,String loginNumberOrLxdh){
+		   user.setUserLoginnumber(loginNumberOrLxdh);
+		   user.setDelFlag("0");
+		   BbsUser bbsUser=bbsUserService.getUserByNumber(user);
+		   String str="";
+		   if(bbsUser!=null){
+		      if(!bbsUser.getQuestionOneAnswer().equals(user.getQuestionOneAnswer())||!bbsUser.getQuestionTwoAnswer().equals(user.getQuestionTwoAnswer())||!bbsUser.getQuestionThreeAnswer().equals(user.getQuestionThreeAnswer())){
+		    	  str="对不起，您输入的问题答案不正确" ;
+		       }else{
+		    	   str="恭喜您的密码找回成功！请马上修改密码";
+		    	   request.setAttribute("userId",bbsUser.getUserId());
+		    	   request.setAttribute("userPassword",bbsUser.getUserPassword());
+		    	   request.setAttribute("userLoginNumber",bbsUser.getUserLoginnumber());
+		    	   request.setAttribute("questionOneAnswer",bbsUser.getQuestionOneAnswer());
+		    	   request.setAttribute("questionTwoAnswer",bbsUser.getQuestionTwoAnswer());
+		    	   request.setAttribute("questionThreeAnswer",bbsUser.getQuestionThreeAnswer());
+		       }
+           }else{
+			  str="对不起，账号不存在" ;
+		   }
+		   request.setAttribute("message",str);
+		return "userView/login";
+	}
+	
 	
 	/**
 	 * 根据账号查询单个用户

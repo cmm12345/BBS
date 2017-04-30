@@ -21,11 +21,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-	     if('${message}'!=''){
+	if('${message}'!=''){
+	     if('${message}'!='恭喜您的密码找回成功！请马上修改密码'){
 	      window.parent.alertFunction('${message}');
-	      <%session.removeAttribute("message");%>
+	     }
+	     if('${message}'=='恭喜您的密码找回成功！请马上修改密码'){
+	     window.parent.updatePasswordFunction('${message}','${userId}','${userPassword}','${userLoginNumber}','${questionOneAnswer}','${questionTwoAnswer}','${questionThreeAnswer}');
 	     } 
+	     }
 	});
+	
 	/**
 	*登录校验
 	*/
@@ -35,6 +40,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   return false;
 	   }
 	  $("#loginForm").submit();
+	}
+	function findPassword(){
+	window.location.href="${pageContext.request.contextPath}/userView/findPassword.jsp";
 	}
 </script>
     </head>
@@ -48,7 +56,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <img  onclick="this.src='image.jsp?'+Date.parse(''+(new Date()));" title="换一张试试" name="randImage" 
 							id="randImage" src="${pageContext.request.contextPath}/userView/image.jsp" border="1" 
 							/><br>
-                <button type="button" onclick="loginCheck()">登录</button>
+                <button type="button" onclick="loginCheck()">登录</button><a href="javaScript:findPassword()">忘记密码？去找回</a>
             </form>
             <div class="connect">
                 <p></p>

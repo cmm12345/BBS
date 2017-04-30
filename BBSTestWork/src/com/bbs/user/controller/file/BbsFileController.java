@@ -55,12 +55,16 @@ public class BbsFileController {
 	 */
 	@RequestMapping("/findFileList")
 	public String getAllUser(HttpServletRequest request,HttpServletResponse response,BbsFile bbsFile,String isAdmin){
-		if(StringUtils.isEmpty(isAdmin)){
+		if("isAdmin".equals(isAdmin)){
 		bbsFile.setRes02("1");
 		}
+		if("isHead".equals(isAdmin)){
+			bbsFile.setRes04("1");
+			}
 		Page<BbsFile> findAll = bbsFileService.findAll(new Page<BbsFile>(request, response), bbsFile);
 		request.setAttribute("page", findAll);
-		if(StringUtils.isEmpty(isAdmin)){
+		request.setAttribute("isAdmin", isAdmin);
+		if(StringUtils.isEmpty(isAdmin)||"isHead".equals(isAdmin)){
 		   return "/Common/filePageListIframe";
 		}else{
 		   return "/admin/fileList";

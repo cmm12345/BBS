@@ -44,16 +44,16 @@
   <where>
             a.USER_ID=t.USER_ID and a.DEL_FLAG=${0}
    <if test="smallSectionId != null and smallSectionId != ''">
-		    AND  SMALL_SECTION_ID = #{smallSectionId}
+		    AND  a.SMALL_SECTION_ID = #{smallSectionId}
     </if>
     <if test="bigSectionId != null and bigSectionId != ''">
-		    AND BIG_SECTION_ID = #{bigSectionId}
+		    AND a.BIG_SECTION_ID = #{bigSectionId}
     </if>
     <if test="userId != null and userId != ''">
-		    AND USER_ID = #{userId}
+		    AND a.USER_ID = #{userId}
     </if>
     <if test="res01 != null and res01 != ''">
-	 AND (NOTE_NAME LIKE '%'||#{res01}||'%' or NOTE_CONTAINS LIKE '%'||#{res01}||'%' or NOTE_DATE LIKE '%'||#{res01}||'%' or NOTE_BZ LIKE '%'||#{res01}||'%')
+	 AND (a.NOTE_NAME LIKE '%'||#{res01}||'%' or a.NOTE_CONTAINS LIKE '%'||#{res01}||'%' or a.NOTE_DATE LIKE '%'||#{res01}||'%' or a.NOTE_BZ LIKE '%'||#{res01}||'%')
     </if>
   </where>    
     <choose>

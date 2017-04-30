@@ -187,6 +187,18 @@ public class BbsNoteController {
 		}
 		
 	}
+	
+	/**
+	 * 修改,设置热度贴
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/userDelete")
+	public void  userDelete(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote){
+		BbsNote bbsNote2=bbsNoteService.findNoteById(bbsNote);
+		bbsNote2.setDelFlag("1");
+		bbsNoteService.update(bbsNote2);
+	}
 	/**
 	 * 回帖
 	 * @param request

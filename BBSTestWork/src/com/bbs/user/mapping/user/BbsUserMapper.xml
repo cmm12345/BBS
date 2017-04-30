@@ -44,8 +44,10 @@
 		FROM T_BBS_USER 
 		<where>
 		  DEL_FLAG=#{delFlag}
-		   <if test="userPassword != null and userPassword != '' and userLoginnumber != null and userLoginnumber != ''">
+		   <if test="userPassword != null and userPassword != ''" >
 		   and  USER_PASSWORD = #{userPassword}
+		   </if>
+		    <if test="userLoginnumber != null and userLoginnumber != ''">
 		   and ( USER_LOGINNUMBER = #{userLoginnumber} or USER_LXDH= #{userLoginnumber} )
 		   </if>
 		</where>	

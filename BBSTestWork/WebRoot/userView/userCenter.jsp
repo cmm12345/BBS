@@ -46,6 +46,9 @@ input, label, select, option, textarea, button, fieldset, legend { font-family: 
       if('${message}'=='修改成功'){
          window.parent.alertFunction("修改成功");
       }
+      if('${state}'=='find'){
+         window.parent.updatePasswordSucccess();
+      }
 	});
         function saveCheck(){
            //验证密码与重复密码
