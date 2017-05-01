@@ -41,4 +41,7 @@ public  class BbsFileServiceImpl  implements BbsFileService {
 	public List<BbsFile> findHotFileList(BbsFile bbsFile){
 		return bbsFileMapper.findHotFileList(bbsFile);
 	}
+	public BbsFile findCensus(){
+		return bbsFileMapper.findCensus();
+	}
 }

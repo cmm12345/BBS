@@ -11,4 +11,5 @@ public interface BbsFileMapper {
     List<BbsFile> selectFileList(BbsFile record);
     int updateByPrimaryKeySelective(BbsFile record);
     List<BbsFile> findHotFileList(BbsFile record);
+    BbsFile findCensus();
 }

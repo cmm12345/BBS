@@ -12,4 +12,5 @@ public interface BbsNoteMapper {
     List<BbsNote> selectNoteList(BbsNote record);
     List<BbsNote> findList(BbsNote record);
     List<BbsNote> findHotList(BbsNote record);
+    BbsNote findCensus();
 }

@@ -15,4 +15,5 @@ public interface BbsNoteService {
     List<BbsNote> findList(BbsNote bbsNote);
     List<BbsNote> findHotList(BbsNote bbsNote);
     BbsNote findNoteById(BbsNote bbsNote);
+    BbsNote findCensus();
 }

@@ -22,11 +22,18 @@
     FILE_ID, USER_ID, FILE_NAME, FILE_URL, FILE_DESCRIPT, FILE_TYPE, CJSJ, FILE_POINT, 
     DEL_FLAG, RES01, RES02, RES03, RES04, RES05, RES06
   </sql>
+  
   <select id="selectByPrimaryKey" resultType="BbsFile">
     select 
     <include refid="Base_Column_List" />
     from T_BBS_FILE
     where FILE_ID = #{fileId,jdbcType=VARCHAR} AND DEL_FLAG=${0}
+  </select>
+  
+   <select id="findCensus" resultType="BbsFile">
+    select 
+    nvl(count(*),'0') res04
+    from T_BBS_FILE t where t.DEL_FLAG = ${0} and t.res02=${1}  AND FILE_TYPE=${1}
   </select>
   
   <select id="findHotFileList" resultType="BbsFile">

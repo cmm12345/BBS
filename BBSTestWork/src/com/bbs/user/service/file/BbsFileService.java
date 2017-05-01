@@ -15,4 +15,5 @@ public interface BbsFileService {
 	Page<BbsFile> findAll(Page<BbsFile> page,BbsFile bbsFile);
 	List<BbsFile> findHotFileList(BbsFile bbsFile);
 	BbsFile getFileById(BbsFile bbsFile);
+	BbsFile findCensus();
 }

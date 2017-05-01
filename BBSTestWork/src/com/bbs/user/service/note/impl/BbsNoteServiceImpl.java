@@ -48,4 +48,7 @@ public  class BbsNoteServiceImpl  implements BbsNoteService {
 		bbsNote=bbsNoteMapper.selectByPrimaryKey(bbsNote);
 		return bbsNote;
 	}
+	public BbsNote findCensus(){
+		return bbsNoteMapper.findCensus();
+	}
 }

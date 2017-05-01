@@ -70,6 +70,15 @@
     <include refid="Base_Column_List" />
     from T_BBS_NOTE
   </select>
+  
+   <select id="findCensus" resultType="BbsNote">
+    select 
+    nvl(count(*),'0') res01
+    from T_BBS_NOTE t where t.DEL_FLAG = ${0}
+  </select>
+  
+  
+  
   <select id="findHotList" resultType="BbsNote">
    select <include refid="Base_Column_List" /> 
    from(
