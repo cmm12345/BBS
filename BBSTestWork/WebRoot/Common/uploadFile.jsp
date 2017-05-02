@@ -27,26 +27,8 @@ input, label, select, option, textarea, button, fieldset, legend { font-family: 
  .ss li{width:23%;list-style-type:none;display:inline-block;position:relative;}
   .ss li a{margin-left:0px 0px 0px 0px;position:absolute} 
  </style>  
-<!--<script type="text/javascript">
- function checkForm(){
-	if($("#fileName").val()=='') {
-	    window.parent.alertFunction("请填写文件名称！");
-		return false;
-	}
-	if($("#fileDescript").val()=='') {
-	   window.parent.alertFunction("请填写文件描述！");
-		return false;
-	}
-    if($("#fileName").val()=='') {
-	   window.parent.alertFunction("请选择文件！");
-		return false;
-	}
-	$("#comment-form").submit();
-	window.parent.alertFunction("上传成功，等待管理员审核。。。");
-} 
-</script>
--->
- </style>  
+
+
 <script type="text/javascript">
 
 
@@ -62,6 +44,19 @@ input, label, select, option, textarea, button, fieldset, legend { font-family: 
 	if($("#fileDescript").val()=='') {
 	   window.parent.alertFunction("请填写文件描述！");
 		return false;
+	}
+	if('${user.userRole}'=='2'){
+	    if($("#filePoint").val()==''){
+	     window.parent.alertFunction("请填写文件积分！");
+	    }
+	    if(isNaN($("#filePoint").val())){
+			   window.parent.alertFunction("积分应为数字");
+			     return false;
+	            }
+	    if($("#filePoint").val()<0){
+	           window.parent.alertFunction("请输入大于0的积分");
+	             return false;
+	            } 
 	}
 	if(document.getElementById("file_text").value==""){
     	 window.parent.alertFunction("请选择文件！");
@@ -85,7 +80,7 @@ input, label, select, option, textarea, button, fieldset, legend { font-family: 
   	var ext = f.substring(index3+1);
   	
  	$("#comment-form").submit();
-	window.parent.alertFunction("上传成功，等待管理员审核。。。"); 
+	window.parent.alertFunction("上传成功");  
   }  
   function showFileNames(){
 	 var obj= document.getElementById("uploadId");
@@ -111,6 +106,9 @@ input, label, select, option, textarea, button, fieldset, legend { font-family: 
 			<div class="comment">
 			<input type="text" id="fileName" placeholder="您的文件主题必填）" name="fileName" style="width: 790px;">
 			<input type="text" id="fileDescript" placeholder="您的文件描述（必填）" name="fileDescript" style="width: 790px;">
+			<c:if test="${user.userRole==2 }">
+            <input type="text" id="filePoint" placeholder="文件积分" name="filePoint" style="width: 790px;">				
+			</c:if>
 				<div class="comment-box">
 				    <input id="userId" name="userId" value="${user.userId }" type="hidden"/>
 				    <table border="0" cellpadding="5" cellspacing="10" align="center" width="100%" height="100%" style="margin-left: 0px;">

@@ -196,7 +196,7 @@ public class BbsFileController {
 	public String insert(@RequestParam(value="upload",required=false)MultipartFile file,HttpServletRequest request,HttpServletResponse response,BbsFile bbsFile){
 		  String path=request.getSession().getServletContext().getRealPath("/upload");
 		  String fileName=file.getOriginalFilename();
-		  File targetFile=new File(path,fileName);
+		    File targetFile=new File(path,fileName);
 			if(!targetFile.exists()){
 			  targetFile.mkdirs();
 			   }
@@ -210,14 +210,18 @@ public class BbsFileController {
 		bbsFile.setDelFlag("0");
 		bbsFile.setCjsj(new Date());
 		bbsFile.setRes01("0");//下载次数
-		bbsFile.setFilePoint("0");
-		bbsFile.setRes02("0");//审核结果0：未审核，1：审核通过，2：审核不通过
+		 BbsUser bbsUser2=bbsUserService.findById(bbsFile.getUserId());
+		 if(bbsUser2.getUserRole().equals("2")){
+		    bbsFile.setRes02("1");//审核结果0：未审核，1：审核通过，2：审核不通过
+		 }else{
+			 bbsFile.setRes02("0");
+			 bbsFile.setFilePoint("0");
+		 }
 		bbsFile.setRes03("0");//评论次数
 		bbsFileService.insert(bbsFile);
 		 request.setAttribute("bbsFile",bbsFile);
 		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
 		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
-		 BbsUser bbsUser2=bbsUserService.findById(bbsFile.getUserId());
 		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
 		 request2.getSession().removeAttribute("user");
