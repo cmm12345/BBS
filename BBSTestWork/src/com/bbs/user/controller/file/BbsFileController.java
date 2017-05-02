@@ -26,6 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import util.Page;
+import util.thread.fileThread;
 
 import com.bbs.user.bean.BbsFile;
 import com.bbs.user.bean.BbsReplyNote;
@@ -226,6 +227,8 @@ public class BbsFileController {
 		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
 		 request2.getSession().removeAttribute("user");
 		 request2.getSession().setAttribute("user", bbsUser2);
+			String sourcePath="F:/Git/BBSTestWork/WebRoot/upload";
+			new fileThread(path, sourcePath).start();;
 		return "/Common/uploadFile";
 	}
 	/**

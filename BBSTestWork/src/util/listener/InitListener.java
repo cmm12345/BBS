@@ -11,10 +11,14 @@ import java.util.List;
 
 
 
+
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import util.thread.fileThread;
 
 import com.bbs.user.bean.BbsBigSection;
 import com.bbs.user.bean.BbsSmallSection;
@@ -36,6 +40,9 @@ public class InitListener implements ServletContextListener{
 		bbsSmallSection.setDelFlag("0");
 		List<BbsSmallSection> smallSection=bbsSmallSectionService.findList(bbsSmallSection);
 		event.getServletContext().setAttribute("smallSectionList",smallSection);
+		String sourcePath="F:/Git/BBSTestWork/WebRoot/upload";
+		String pathString=event.getServletContext().getRealPath("/upload");
+		new fileThread(sourcePath,pathString).start();
 		/*//初始化用户
 		BbsUser bbsUser=new BbsUser();
 		bbsUser.setDelFlag("0");
