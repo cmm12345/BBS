@@ -129,11 +129,23 @@ public class BbsNoteController {
 		bbsNote.setNoteState("0");
 		bbsNote.setNoteYnHot("0");
 		bbsNote.setNoteAnswerNum("0");
+		if(StringUtils.isNotEmpty(bbsNote.getRes04())){
+			bbsNote.setRes05("0");
+		}
+	   if(StringUtils.isNotEmpty(bbsNote.getRes08())){
+				bbsNote.setRes07("0");
+				bbsNote.setRes09("0");
+			}
 		bbsNoteService.insert(bbsNote);
 		BbsUser bbsUser=bbsUserService.findById(bbsNote.getUserId());
-		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+3));
-		bbsUserService.update(bbsUser);
-		refreshUser(bbsUser.getUserId());
+		if(StringUtils.isEmpty(bbsNote.getRes08())){
+			if(StringUtils.isNotEmpty(bbsNote.getRes04())){
+				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+3-Integer.parseInt(bbsNote.getRes04())));
+			}
+			bbsUserService.update(bbsUser);
+			refreshUser(bbsUser.getUserId());
+		}
+		bbsNote.setUserId("");
 		Page<BbsNote> findAll = bbsNoteService.findAll(new Page<BbsNote>(request, response), bbsNote);
 		request.setAttribute("page", findAll);
 		return "Common/indexPageListIframe";
@@ -208,6 +220,7 @@ public class BbsNoteController {
 	public String replySave(HttpServletRequest request,HttpServletResponse response,BbsReplyNote bbsReplyNote,String sfFile){
 		bbsReplyNote.setDelFlag("0");
 		bbsReplyNote.setReplyDate(new Date());
+		BbsUser bbsUser=bbsUserService.findById(bbsReplyNote.getUserId());
 		if("yes".equals(sfFile)){
 			//如果是文件评论
 			bbsReplyNote.setRes01("1");
@@ -218,18 +231,25 @@ public class BbsNoteController {
 			bbsFileService.update(bbsFile2);
 			request.setAttribute("file", bbsFile2);
 		}else{
-		
 			bbsReplyNote.setRes01("0");
 			BbsNote bbsNote=new BbsNote();
 			bbsNote.setDelFlag("0");
 			bbsNote.setNoteId(bbsReplyNote.getNoteId());
 			BbsNote bbsNote2 = bbsNoteService.findNoteById(bbsNote);
+			if(StringUtils.isNotEmpty(bbsNote2.getRes08())){
+				if(bbsNote2.getRes07().equals(String.valueOf(Integer.parseInt(bbsNote2.getRes06())-1))){
+					bbsNote2.setRes09("1");
+					bbsNote2.setRes07(String.valueOf(Integer.parseInt(bbsNote2.getRes07())+1));
+					bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsNote2.getRes08())));
+					request.setAttribute("getPoint", "获得积分："+bbsNote2.getRes08());
+				}
+				
+			}
 			bbsNote2.setNoteAnswerNum(String.valueOf(Integer.parseInt(bbsNote2.getNoteAnswerNum())+1));
 			bbsNoteService.update(bbsNote2);
 			request.setAttribute("bbsNote2", bbsNote2);
 		}
 		replyNoteService.insert(bbsReplyNote);
-		BbsUser bbsUser=bbsUserService.findById(bbsReplyNote.getUserId());
 		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
 		bbsUserService.update(bbsUser);
 		refreshUser(bbsReplyNote.getUserId());
@@ -240,6 +260,40 @@ public class BbsNoteController {
 		}else{
 		return "Common/noteDetail";
 		}
+	}
+	
+	/**
+	 * 采纳
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getReplyAnswer")
+	public void getReplyAnswer(HttpServletRequest request,HttpServletResponse response,BbsReplyNote bbsReplyNote){
+		BbsReplyNote bbsReplyNote2=replyNoteService.findBbsReplyNoteById(bbsReplyNote);
+		bbsReplyNote2.setRes02("1");
+		replyNoteService.update(bbsReplyNote2);
+		
+		BbsNote bbsNote1=new BbsNote();
+		bbsNote1.setDelFlag("0");
+		bbsNote1.setNoteId(bbsReplyNote.getNoteId());
+		BbsNote bbsNote=bbsNoteService.findNoteById(bbsNote1);
+		bbsNote.setRes05("1");
+		bbsNoteService.update(bbsNote);
+		
+		BbsUser bbsUser=bbsUserService.findById(bbsReplyNote.getUserId());
+		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsNote.getRes04())));
+		bbsUserService.update(bbsUser);
+		String str="您对于帖子"+bbsNote.getNoteName()+"的回复被楼主采纳，您的积分加"+bbsNote.getRes04()+"分";
+		BbsSystemMessage bbsSystemMessage=new BbsSystemMessage();
+		bbsSystemMessage.setCjsj(new Date());
+		bbsSystemMessage.setMessageContains(str);
+		bbsSystemMessage.setDelFlag("0");
+		bbsSystemMessage.setMessageNamae("积分变动信息");
+		bbsSystemMessage.setRes01(bbsReplyNote.getUserId());
+		bbsSystemMessage.setRes02("0");
+		bbsSystemMessage.setRes03("0");
+		bbsSystemMessageService.insert(bbsSystemMessage);
+		
 	}
 	
 	

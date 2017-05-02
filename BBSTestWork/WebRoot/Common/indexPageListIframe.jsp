@@ -85,12 +85,13 @@ function page(n,s){
   <div class="content">
   <c:forEach items="${page.list }" var="hotNoteList">
   <article class="excerpt " style="">
-         <c:if test="${hotNoteList.noteYnHot==0 }">
-		<header><a class="cat" href="#" title="Blog主题" >Blog主题<i></i></a>
-		</c:if>
-		 <c:if test="${hotNoteList.noteYnHot==1 }">
-		<header><a class="cat" href="#" title="Blog主题" ><font color="red">Blog主题</font><i></i></a>
-		</c:if>
+         
+		<header><a class="cat" href="#" title="Blog主题" >
+		<c:if test="${hotNoteList.noteYnHot==0 }">Blog主题</c:if>
+		 <c:if test="${hotNoteList.noteYnHot==1 }"><font color="red">Blog主题</font></c:if>
+		<c:if test="${hotNoteList.res04!=null }"><font color="red">(悬赏)</font></c:if>
+		<c:if test="${hotNoteList.res08!=null }"><font color="red">(红包帖)</font></c:if>
+		<i></i></a>
 			<h2><a href="javaScript:checkLogin('${hotNoteList.noteId }')" title="${hotNoteList.noteName }" target="_blank" >${hotNoteList.noteName }</a>
 			</h2>
 		</header>

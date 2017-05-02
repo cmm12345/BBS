@@ -24,7 +24,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 
 $(document).ready(function() {
-  
+  if('${getPoint}'!=''){
+  window.parent.alertFunction("恭喜您"+'${getPoint}');
+  }
 
 });
 //发帖
@@ -86,6 +88,19 @@ function deleteReply(replyId,noteId){
         });
 
 }
+
+//采纳
+function getReply(noteId,replyId,userId){
+     $.ajax({
+               type:"GET",
+               async:false,
+               url:"${pageContext.request.contextPath}/note/getReplyAnswer.do",
+               data:{replyId:replyId,noteId:noteId,userId:userId},
+               success:function(){
+               checkLogin(noteId);
+         }
+        });
+}
 </script>
 </head>
   
@@ -94,7 +109,12 @@ function deleteReply(replyId,noteId){
 <div class="content-wrap">
 <div class="content">
   <header class="article-header">
-	<h1 class="article-title">${bbsNote2.noteName}</h1>
+	<h1 class="article-title">${bbsNote2.noteName}
+	<c:if test="${bbsNote2.res04!=null }"><font color="red">(悬赏${bbsNote2.res04}分)</font></c:if>
+	<c:if test="${bbsNote2.res08!=null }"><font color="red">(红包帖)</font></c:if>
+	<c:if test="${bbsNote2.res09==1 }"><font color="red">(已领取)</font></c:if>
+	<c:if test="${bbsNote2.res05 ==1 }"><font color="red">楼主已采纳</font></c:if>
+	</h1>
 	<div class="article-meta"> <span class="item article-meta-time">
 	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=""><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${bbsNote2.noteDate}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
 	  </span> 
@@ -117,10 +137,12 @@ function deleteReply(replyId,noteId){
   <article class="article-content">
   	<c:if test="${bbsNote2.userId==user.userId||replyNoteList.userId==user.userId}">
   	<span id="isDelete"><a href="javascript:deleteReply('${replyNoteList.replyId}','${bbsNote2.noteId}')">删除</a></span>
+  	<c:if test="${replyNoteList.res02==1 }"> <span>已采纳</span></c:if>
+  	<c:if test="${replyNoteList.res02==null && bbsNote2.userId==user.userId &&bbsNote2.res05==0}"> <span><a href="javaScript:getReply('${bbsNote2.noteId}','${replyNoteList.replyId}','${replyNoteList.userId}')">采纳</a></span></c:if>
   	</c:if>
-  	
   	<time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=""><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${replyNoteList.replyDate}" pattern="yyyy-MM-dd HH:mm:ss"/> <p>由${replyNoteList.res01 }回复:</p>
-  	<p>${replyNoteList.replyContains }</p></time>
+  	<p>${replyNoteList.replyContains }</p>
+  	</time>
   </article>
   <hr>
   </c:forEach>

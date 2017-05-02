@@ -32,8 +32,6 @@ import util.dialect.Dialect;
 
 /**
  * SQL工具类
- * @author poplar.yfyang / thinkgem
- * @version 2013-8-28
  */
 public class SQLHelper {
 	

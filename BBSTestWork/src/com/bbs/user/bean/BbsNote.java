@@ -45,6 +45,11 @@ public class BbsNote extends BaseEntity<BbsNote>{
     private String res04;
 
     private String res05;
+    private String res06;
+    private String res07;
+    private String res08;
+    private String res09;
+    private String res10;
 
     public String getNoteId() {
         return noteId;
@@ -189,4 +194,45 @@ public class BbsNote extends BaseEntity<BbsNote>{
     public void setRes05(String res05) {
         this.res05 = res05 == null ? null : res05.trim();
     }
+
+	public String getRes06() {
+		return res06;
+	}
+
+	public void setRes06(String res06) {
+		this.res06 = res06;
+	}
+
+	public String getRes07() {
+		return res07;
+	}
+
+	public void setRes07(String res07) {
+		this.res07 = res07;
+	}
+
+	public String getRes08() {
+		return res08;
+	}
+
+	public void setRes08(String res08) {
+		this.res08 = res08;
+	}
+
+	public String getRes09() {
+		return res09;
+	}
+
+	public void setRes09(String res09) {
+		this.res09 = res09;
+	}
+
+	public String getRes10() {
+		return res10;
+	}
+
+	public void setRes10(String res10) {
+		this.res10 = res10;
+	}
+    
 }

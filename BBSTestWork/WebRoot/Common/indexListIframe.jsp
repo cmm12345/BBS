@@ -37,16 +37,6 @@ function checkLogin(noteId){
 </head>
   
 <body>
-<%--<div class="content">
-   <div id="focusslide" class="carousel slide" data-ride="carousel">
-	<div class="carousel-inner" role="listbox">
-	  <div class="item active">
-	  <a href="#" target="_blank" title="资料论坛" >
-	  <img src="${pageContext.request.contextPath}/images/361768.jpg" alt="资料论坛" class="img-responsive"></a>
-	  </div>
-	</div> --%>
-
-
 <div class="content-wrap">
 <div class="content">
   <div id="focusslide" class="carousel slide" data-ride="carousel">
@@ -57,21 +47,26 @@ function checkLogin(noteId){
 	<div class="carousel-inner" role="listbox">
 	  <div class="item active">
 	  <a href="#" target="_blank" title="网络博客" >
-	  <img src="${pageContext.request.contextPath}/images/361768.jpg" alt="木庄网络博客源码" class="img-responsive"></a>
+	  <img src="${pageContext.request.contextPath}/images/361768.jpg" alt="网络博客" class="img-responsive"></a>
 	  </div>
 	  <div class="item">
 	  <a href="#" target="_blank" title="" >
-	  <img src="${pageContext.request.contextPath}/images/801866.jpg" alt="专业网站建设" class="img-responsive"></a>
+	  <img src="${pageContext.request.contextPath}/images/801866.jpg" alt="网络博客" class="img-responsive"></a>
 	  </div>
 	</div>
 	<a class="left carousel-control" href="#focusslide" role="button" data-slide="prev" rel="nofollow"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <span class="sr-only">上一个</span> </a> <a class="right carousel-control" href="#focusslide" role="button" data-slide="next" rel="nofollow"> <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <span class="sr-only">下一个</span> </a> </div>
 
-  <div class="title">
-	<h3>最新发布</h3>
+  <div class="title"><br>
+	<h3>最新发布</h3><br><br>
   </div>
   <c:forEach items="${hotNoteList }" var="hotNoteList">
   <article class="excerpt excerpt-1" style="">
-		<header><a class="cat" href="#" title="Blog主题" >Blog主题<i></i></a>
+		<header><a class="cat" href="#" title="Blog主题" >
+		<c:if test="${hotNoteList.noteYnHot==0 }">Blog主题</c:if>
+		 <c:if test="${hotNoteList.noteYnHot==1 }"><font color="red">Blog主题</font></c:if>
+		<c:if test="${hotNoteList.res04!=null }"><font color="red">(悬赏)</font></c:if>
+		<c:if test="${hotNoteList.res08!=null }"><font color="red">(红包帖)</font></c:if>
+		<i></i></a>
 			<h2><a href="javaScript:checkLogin('${hotNoteList.noteId }')" title="${hotNoteList.noteName }" target="_blank" >${hotNoteList.noteName }</a>
 			</h2>
 		</header>

@@ -8,10 +8,6 @@ import util.dialect.Dialect;
 
 /**
  * DB2的分页数据库方言实现
- *
- * @author poplar.yfyang
- * @version 1.0 2010-10-10 下午12:31
- * @since JDK 1.5
  */
 public class DB2Dialect implements Dialect {
     @Override
@@ -45,11 +41,6 @@ public class DB2Dialect implements Dialect {
 
     /**
      * 将sql变成分页sql语句,提供将offset及limit使用占位符号(placeholder)替换.
-     * <pre>
-     * 如mysql
-     * dialect.getLimitString("select * from user", 12, ":offset",0,":limit") 将返回
-     * select * from user limit :offset,:limit
-     * </pre>
      *
      * @param sql               实际SQL语句
      * @param offset            分页开始纪录条数

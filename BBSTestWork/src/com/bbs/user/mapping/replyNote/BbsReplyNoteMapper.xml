@@ -42,7 +42,17 @@
         </if>
     </where>
   </select>
-  
+   <select id="findBbsReplyNoteById" resultType="BbsReplyNote" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from T_BBS_REPLY_NOTE
+    <where> 
+    DEL_FLAG= ${0}
+        <if test="replyId != null and replyId != ''">
+		    AND  REPLY_ID = #{replyId}
+        </if>
+    </where>
+  </select>
   
   
   <insert id="insert" parameterType="com.bbs.user.bean.BbsReplyNote" >

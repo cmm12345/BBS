@@ -224,7 +224,7 @@ public class BbsUserController {
 	 */
 	@SuppressWarnings("static-access")
 	@RequestMapping("/changeVip")
-	public String  changeVip(BbsUser user,HttpServletRequest request,String str){
+	public String  changeVip(BbsUser user,HttpServletRequest request,String str,String payTypeStr,String moneyStr){
 		BbsUser bbsUser=bbsUserService.findById(user.getUserId());
 		Calendar cal=Calendar.getInstance();
 		if("1".equals(bbsUser.getUserYnVip())){
@@ -236,6 +236,9 @@ public class BbsUserController {
 			}
 		}else{
 		    cal.add(Calendar.MONTH,Integer.parseInt(str));// 目前時間加str個月   
+		}
+		if(payTypeStr.equals("4")){
+			bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())-Integer.parseInt(moneyStr)));
 		}
 		bbsUser.setUserYnVip("1");
 		bbsUser.setUserYnVipEnddate(cal.getTime());

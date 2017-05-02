@@ -6,10 +6,6 @@ package util.dialect.db;
 import util.dialect.Dialect;
 
 /**
- * Oracle的方言实现
- * @author poplar.yfyang
- * @version 1.0 2010-10-10 下午12:31
- * @since JDK 1.5
  */
 public class OracleDialect implements Dialect {
     @Override

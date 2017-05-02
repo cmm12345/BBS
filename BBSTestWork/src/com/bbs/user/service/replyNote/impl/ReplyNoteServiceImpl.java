@@ -32,4 +32,7 @@ public  class ReplyNoteServiceImpl  implements ReplyNoteService {
 		List<BbsReplyNote> list=bbsReplyNoteMapper.findList(bbsReplyNote);
 		return list;
 	}
+	public BbsReplyNote findBbsReplyNoteById(BbsReplyNote bbsReplyNote){
+          return 	bbsReplyNoteMapper.findBbsReplyNoteById(bbsReplyNote);	
+	}
 }

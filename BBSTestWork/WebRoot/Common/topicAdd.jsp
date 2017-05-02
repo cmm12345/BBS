@@ -12,7 +12,7 @@
 <script src="${pageContext.request.contextPath}/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
 <title>Insert title here</title>
 <script type="text/javascript">
-function checkForm(){
+function checkForm(str){
 	if($("#noteName").val()=='') {
 	    window.parent.alertFunction("请填写帖子主题！");
 		return false;
@@ -21,9 +21,62 @@ function checkForm(){
 	   window.parent.alertFunction("请填写帖子内容！");
 		return false;
 	}
-
-	$("#comment-form").submit();
+	if(str=='str'){
+	    if($("#res04").val()==''){
+	     window.parent.alertFunction("请填写悬赏积分！");
+		  return false;
+	    }
+	    if(isNaN($("#res04").val())){
+			   window.parent.alertFunction("积分应为数字");
+			     return false;
+	            }
+	    if($("#res04").val()<0){
+	           window.parent.alertFunction("请输入大于0的积分");
+	             return false;
+	            } 
+	    if(parseInt('${user.userPoint}')<parseInt($("#res04").val())){
+	     window.parent.alertFunction("对不起您的积分不足！");
+		  return false;
+	    }
+	}
+	 $("#comment-form").submit(); 
 	window.parent.alertFunction("发帖成功！积分+3");
+}
+function redNoteForm(str){
+    if($("#noteName").val()=='') {
+	    window.parent.alertFunction("请填写帖子主题！");
+		return false;
+	}
+	if($("#noteContains").val()=='') {
+	   window.parent.alertFunction("请填写帖子内容！");
+		return false;
+	}
+    if($("#res08").val()==''){
+	     window.parent.alertFunction("请填写悬赏积分！");
+		  return false;
+    }
+     if($("#res06").val()==''){
+	     window.parent.alertFunction("请填写奖励楼层！");
+		  return false;
+    }
+	if(isNaN($("#res08").val())){
+			   window.parent.alertFunction("积分应为数字");
+			     return false;
+	}
+    if(isNaN($("#res06").val())){
+			   window.parent.alertFunction("楼层应为数字");
+			     return false;
+	}
+	if($("#res08").val()<0){
+	           window.parent.alertFunction("请输入大于0的积分");
+	             return false;
+	 } 
+	 if($("#res06").val()<0){
+	           window.parent.alertFunction("请输入大于0的楼层");
+	             return false;
+	 } 
+	  $("#comment-form").submit(); 
+	window.parent.alertFunction("发帖成功！");
 }
 </script>
 </head>
@@ -38,16 +91,26 @@ function checkForm(){
 		<form id="comment-form" name="comment-form" action="${pageContext.request.contextPath}/note/save.do" method="POST">
 			<div class="comment">
 			<input type="text" id="noteName" placeholder="您的帖子主题（必填）" name="noteName" style="width: 790px;">
+			<c:if test="${user.userRole!=2 }">
+			<input type="text" id="res04" placeholder="如果是悬赏帖，请输入积分" name="res04" style="width: 790px;">
+			</c:if>
+			<c:if test="${user.userRole==2 }">
+			 <input type="text" id="res08" placeholder="奖励积分" name="res08" style="width: 790px;">
+			 <input type="text" id="res06" placeholder="奖励楼层" name="res06" style="width: 790px;">
+			</c:if>
 				<div class="comment-box">
 				    <input id="userId" name="userId" value="${user.userId }" type="hidden"/>
 					<input id="smallSectionId" name="smallSectionId" value="<%= request.getParameter("smallSectionId")%>" type="hidden"/>
 					<input id="bigSectionId" name="bigSectionId" value="<%= request.getParameter("bigSectionId")%>" type="hidden"/>
-					
 					<textarea placeholder="您的帖子内容（必填）" name="noteContains" id="noteContains" cols="100%" rows="3" tabindex="3"></textarea>
 					<div class="comment-ctrl">
-						<div class="comment-prompt" style="display: none;"> <i class="fa fa-spin fa-circle-o-notch"></i> <span class="comment-prompt-text">评论正在提交中...请稍后</span> </div>
-						<div class="comment-success" style="display: none;"> <i class="fa fa-check"></i> <span class="comment-prompt-text">评论提交成功...</span> </div>
-						<input type="button" value="提交" onclick="checkForm()" name="comment-submit" id="comment-submit" tabindex="4">
+					<c:if test="${user.userRole!=2 }">
+						<input type="button" style="position:relative;margin-left:550px;margin-top:17px" value="发布" onclick="checkForm('')"  id="comment-submit" >
+						<input type="button" style="margin-left:600px" value="发布悬赏帖" onclick="checkForm('str')"  id="comment-submit" >
+					</c:if>
+					<c:if test="${user.userRole==2 }">
+						<input type="button" style="margin-left:600px" value="发布红包帖" onclick="redNoteForm('')"  id="comment-submit" >
+					</c:if>
 					</div>
 				</div>
 			</div>

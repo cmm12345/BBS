@@ -77,33 +77,54 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     $("#vipTable").show();
 	}
 	 //充值vip
-	function changeVip(){
+	function changeVip(userPoint){
 	   var userId='${user.userId}';
 	   var pay= document.getElementsByName("pay");
-	   var str="";	
+	   var payType= document.getElementsByName("payType");
+	   var str="";
+	   var payTypeStr="";	
 	   for(var i=0;i<pay.length;i++){
 			    if(pay[i].checked==true){
                       str=pay[i].value;
 			    }
 	   }
+	   	for(var i=0;i<payType.length;i++){
+			    if(payType[i].checked==true){
+                      payTypeStr=payType[i].value;
+			    }
+	   }
+	   
 	   var ss="";
+	   var moneyStr="";
 	   if(str==0){
 	   ss=1;
+	   moneyStr=10;
 	   }
 	   if(str==1){
 	   ss=2;
+	   moneyStr=20;
 	   }
 	   if(str==2){
 	   ss=3;
+	   moneyStr=30;
 	   }
 	   if(str==3){
 	   ss=6;
+	   moneyStr=50;
 	   }
 	   if(str==4){
 	   ss=12;
+	   moneyStr=100;
 	   }
+	   if(payTypeStr=='4'){
+	      if(parseInt(moneyStr)>parseInt(userPoint)){
+	        window.parent.alertFunction("对不起积分不足！请选择其他支付方式");
+	      return false;
+	      }
 	   
-	   window.location.href="${pageContext.request.contextPath}/user/changeVip.do?userId="+userId+"&str="+ss;
+	   } 
+	   
+	   window.location.href="${pageContext.request.contextPath}/user/changeVip.do?userId="+userId+"&str="+ss+"&payTypeStr="+payTypeStr+"&moneyStr="+moneyStr; 
 	} 
     </script>
     </head>
@@ -130,7 +151,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          <table id="vipTable" style="width:100%;text-align:left;display:none">
             <tbody id="">
                <tr><input type="hidden" name="userId" value="${user.userId }"></tr>
-              <tr> <td width="">充值Vip</td><td><input type="button" class="ss"  value="确定" onclick="changeVip()"></td><td></td><td></td><td></td></tr>
+              <tr> <td width="">充值Vip</td><td><input type="button" class="ss"  value="确定" onclick="changeVip('${user.userPoint}')"></td><td></td><td></td><td></td></tr>
                 <tr><td width="200">1个月<input type="radio" value="0" name="pay" checked="checked"/>(10元)</td>
                 <td width="200">2个月<input type="radio" value="1" name="pay"/>(20元)</td>
                  <td width="200">3个月<input type="radio" value="2" name="pay" />(30元)</td>
@@ -139,10 +160,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                </tr>
                <tr></tr>
                <tr><td>选择支付方式</td></td>
-               <td width="200px"><input type="radio" value="支付宝" name="payType" checked="checked"/><img src="${pageContext.request.contextPath}/payimage/1.png"></td>
-               <td width="200px"><input type="radio" value="北京农商银行" name="payType"/><img src="${pageContext.request.contextPath}/payimage/2.png"></td>
-               <td width="200px"><input type="radio" value="北京银行" name="payType"/><img src="${pageContext.request.contextPath}/payimage/3.png"></td>
+               <td width="200px"><input type="radio" value="1" name="payType" checked="checked"/><img src="${pageContext.request.contextPath}/payimage/1.png"></td>
+               <td width="200px"><input type="radio" value="2" name="payType"/><img src="${pageContext.request.contextPath}/payimage/2.png"></td>
+               <td width="200px"><input type="radio" value="3" name="payType"/><img src="${pageContext.request.contextPath}/payimage/3.png"></td>
               </tr>
+              <tr><td></td> <td width="200px"><input type="radio" value="4" name="payType"/>积分购买</td></tr>
               </tbody>
                </table>  
                

@@ -11,5 +11,5 @@ public interface ReplyNoteService {
 	void insert(BbsReplyNote bbsReplyNote);
 	void update(BbsReplyNote bbsReplyNote);
     List<BbsReplyNote> findList(BbsReplyNote bbsReplyNote);
-    
+    BbsReplyNote findBbsReplyNoteById(BbsReplyNote bbsReplyNote);
 }
