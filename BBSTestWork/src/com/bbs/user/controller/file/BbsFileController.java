@@ -59,9 +59,9 @@ public class BbsFileController {
 		if("isAdmin".equals(isAdmin)){
 		bbsFile.setRes02("1");
 		}
-		if("isHead".equals(isAdmin)){
+	/*	if("isHead".equals(isAdmin)){
 			bbsFile.setRes04("1");
-			}
+			}*/
 		Page<BbsFile> findAll = bbsFileService.findAll(new Page<BbsFile>(request, response), bbsFile);
 		request.setAttribute("page", findAll);
 		request.setAttribute("isAdmin", isAdmin);
@@ -133,13 +133,9 @@ public class BbsFileController {
 		bbsUser.setUserId(userId);
 		bbsUser.setUserPoint(String.valueOf(Integer.parseInt(userPoint)-Integer.parseInt(filePoint)));
 		bbsUserService.update(bbsUser);
+		
 	}
-	bbsUser.setDelFlag("0");
-	BbsUser bbsUser2=bbsUserService.findById(userId);
-	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-	bbsUser.setRes02(sdf.format(bbsUser2.getUserBornDate()));
-	request.getSession().removeAttribute("user");
-	request.getSession().setAttribute("user", bbsUser2);
+	refreshUser(userId);
 	}else{
 		request.setAttribute("message","下载的文件不存在！");
 	}
@@ -154,7 +150,8 @@ public class BbsFileController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public void update(HttpServletRequest request,HttpServletResponse response,BbsFile bbsFile,String toolStyle,String reasonStr){
+	public void update(HttpServletRequest request,HttpServletResponse response,BbsFile bbsFile2,String toolStyle,String reasonStr){
+		BbsFile bbsFile=bbsFileService.getFileById(bbsFile2);
 		String str="";
 		if(toolStyle.equals("update")){
 			BbsUser bbsUser=bbsUserService.findById(bbsFile.getUserId());
@@ -165,11 +162,12 @@ public class BbsFileController {
 				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsFile.getFilePoint())));
 	            str="您上传的文件:"+bbsFile.getFileName()+"被管理员审核通过,您的账户积分增加"+bbsFile.getFilePoint()+"分";
 			}
-		    bbsFile.setRes02("1");
+		    bbsFile.setRes02("1");//审核结果
 		    bbsUserService.update(bbsUser);
 			}
 			if(toolStyle.equals("delete")){
 				bbsFile.setDelFlag("1");
+				str+="您上传的文件:"+bbsFile.getFileName()+"被管理员删除";
 			}
 			if(toolStyle.equals("return")){
 				 str="您上传的文件:"+bbsFile.getFileName()+"被管理员退回,退回原因是"+reasonStr;
@@ -225,14 +223,13 @@ public class BbsFileController {
 		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
 		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
-		 request2.getSession().removeAttribute("user");
-		 request2.getSession().setAttribute("user", bbsUser2);
+		 refreshUser(bbsFile.getUserId());
 			String sourcePath="F:/Git/BBSTestWork/WebRoot/upload";
-			new fileThread(path, sourcePath).start();;
+			new fileThread(path, sourcePath).start();
 		return "/Common/uploadFile";
 	}
 	/**
-	 *删除大版块
+	 *删除文件
 	 * @param request
 	 * @return
 	 */
@@ -242,7 +239,15 @@ public class BbsFileController {
 		bbsFileService.update(bbsFile);
 	}
 	
-	
+	public void refreshUser(String userId){
+		 RequestAttributes ra=RequestContextHolder.getRequestAttributes();
+		 HttpServletRequest request2=((ServletRequestAttributes)ra).getRequest();
+		 BbsUser bbsUser2=bbsUserService.findById(userId);
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		 bbsUser2.setRes02(sdf.format(bbsUser2.getUserBornDate()));
+		 request2.getSession().removeAttribute("user");
+		 request2.getSession().setAttribute("user", bbsUser2);
+	}
 	
 	
 }

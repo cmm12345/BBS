@@ -239,10 +239,10 @@ public class BbsNoteController {
 			if(StringUtils.isNotEmpty(bbsNote2.getRes08())){
 				if(bbsNote2.getRes07().equals(String.valueOf(Integer.parseInt(bbsNote2.getRes06())-1))){
 					bbsNote2.setRes09("1");
-					bbsNote2.setRes07(String.valueOf(Integer.parseInt(bbsNote2.getRes07())+1));
 					bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsNote2.getRes08())));
 					request.setAttribute("getPoint", "获得积分："+bbsNote2.getRes08());
 				}
+				bbsNote2.setRes07(String.valueOf(Integer.parseInt(bbsNote2.getRes07())+1));
 				
 			}
 			bbsNote2.setNoteAnswerNum(String.valueOf(Integer.parseInt(bbsNote2.getNoteAnswerNum())+1));

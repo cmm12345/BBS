@@ -49,6 +49,10 @@ input, label, select, option, textarea, button, fieldset, legend { font-family: 
 			   window.parent.alertFunction("请将信息填写完整！");
 			   return false;
            }
+            if($("#userPassword").val().length<7){
+           window.parent.alertFunction("请输入长度大于6的密码！");
+			   return false;
+           }
            //验证密码与重复密码
            if($("#userPassword").val()!=$("#reUserPassword").val()){
                 window.parent.alertFunction("请输入一致的密码！");

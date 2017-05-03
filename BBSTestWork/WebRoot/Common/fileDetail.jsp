@@ -56,7 +56,7 @@ function downloadFile(filePoint,userId,userPoint,fileUrl,fileId,res01){
    userDate = eval('new Date(' + userDate.replace(/\d+(?=[^]+$)/, 
    function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
 	  var date1=new Date();
-	if(-userDate.getTime()<date1.getTime()){
+	if(-userDate.getTime()>date1.getTime()){
 	str="确定下载吗？您是vip用户将免费下载";
 	}else{
 	str="确定下载吗？将扣除您的积分"+filePoint+"分";

@@ -88,7 +88,7 @@ public class BbsSystemMessageController {
 		bbsSystemMessageService.insert(bbsSystemMessage);
 		BbsSystemMessage bbsSystemMessage2=new BbsSystemMessage();
 		bbsSystemMessage2.setRes02("1");
-		Page<BbsSystemMessage> findAll = bbsSystemMessageService.findAll(new Page<BbsSystemMessage>(request, response), bbsSystemMessage);
+		Page<BbsSystemMessage> findAll = bbsSystemMessageService.findAll(new Page<BbsSystemMessage>(request, response), bbsSystemMessage2);
 		request.setAttribute("page", findAll);
 		return "/admin/systemMessageList";
 	}

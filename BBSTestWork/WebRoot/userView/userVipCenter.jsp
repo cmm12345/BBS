@@ -62,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   userDate = eval('new Date(' + userDate.replace(/\d+(?=[^]+$)/, 
 			   function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
 			    var date1=new Date();
-				if(-userDate.getTime()<date1.getTime()){
+				if(-userDate.getTime()>date1.getTime()){
 				str="<tr><td align='right'>欢迎您尊贵的Vip用户:<a href='javaScript:addVip()'>续费</a></td><td>您的Vip在<fmt:formatDate value='${user.userYnVipEnddate}' pattern='yyyy-MM-dd HH:mm:ss'/>截至</td></tr>";
 				}else{
 				str="<tr><td align='right'>您的Vip已过期，<a href='javaScript:addVip()'>续费Vip用户</a></td><td>您的Vip在<fmt:formatDate value='${user.userYnVipEnddate}' pattern='yyyy-MM-dd HH:mm:ss'/>截至</td></tr>";

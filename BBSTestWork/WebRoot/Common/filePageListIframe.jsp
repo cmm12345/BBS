@@ -68,9 +68,9 @@ $("#searchForm").submit();
 		</header>
 		<p class="meta">
 			<time class="time"><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${fileList.cjsj}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
-			<a class="comment" href="" title="下载积分" target="_blank" ><i class="glyphicon glyphicon-shopping-cart"></i>${fileList.filePoint}</a>
-			 <a class="comment" href="" title="下载次数" target="_blank" ><i class="glyphicon glyphicon-download-alt"></i>${fileList.res01}</a>
-			 <a class="comment" href="" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>${fileList.res03}</a>
+			<a class="comment" href="javaScript:checkLogin('${fileList.fileId }')" title="下载积分" target="_blank" ><i class="glyphicon glyphicon-shopping-cart"></i>${fileList.filePoint}</a>
+			 <a class="comment" href="javaScript:checkLogin('${fileList.fileId }')" title="下载次数" target="_blank" ><i class="glyphicon glyphicon-download-alt"></i>${fileList.res01}</a>
+			 <a class="comment" href="javaScript:checkLogin('${fileList.fileId }')" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>${fileList.res03}</a>
 		</p>
 		<p class="note" style="width:20px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${fileList.fileDescript}</p>
 	 <c:if test="${user.userId ==fileList.userId &&fileList.res02!=1 }">

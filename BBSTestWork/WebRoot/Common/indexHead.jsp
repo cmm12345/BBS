@@ -201,7 +201,7 @@ $(document).ready(function() {
 	<ul class="nav navbar-nav navbar-right" >
 	  <li><a data-cont="首页" title="首页" href="${pageContext.request.contextPath}/index.jsp" >首页</a></li>
 	<c:forEach items="${bigSectionList}" var="bigSectionList">
-	  <li ><a data-cont="${bigSectionList.bigSectionName}"   title="${bigSectionList.bigSectionName}" href="javaScript:findNoteByBigSectionId('${bigSectionList.bigSectionId}')" onmouseover="showContains('${bigSectionList.bigSectionId}')" >${bigSectionList.bigSectionName}</a>
+	  <li ><a data-cont="${bigSectionList.bigSectionName}"   title="${bigSectionList.bigSectionName}" href="" onmouseover="showContains('${bigSectionList.bigSectionId}')" >${bigSectionList.bigSectionName}</a>
 	      <div id="smallSection${bigSectionList.bigSectionId}" onmouseleave="hideContains('${bigSectionList.bigSectionId}')"  style="position:absolute;z-index:999;background:#FFFFFF;display:none;width:100px;height:100%">
 	          <c:forEach items="${smallSectionList}" var="smallSectionList">
 		          <c:if test="${smallSectionList.bigSectionId==bigSectionList.bigSectionId}">

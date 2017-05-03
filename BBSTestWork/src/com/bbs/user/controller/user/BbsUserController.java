@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import util.Page;
 import util.UserCommonTools;
+import util.thread.fileThread;
 
 import com.bbs.user.bean.BbsSystemMessage;
 import com.bbs.user.bean.BbsUser;
@@ -137,6 +138,8 @@ public class BbsUserController {
 			 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
   		   bbsUser.setRes02(sdf.format(bbsUser.getUserBornDate()));
 			session.setAttribute("user", bbsUser);
+			String sourcePath="F:/Git/BBSTestWork/WebRoot/upload";
+			new fileThread(path, sourcePath).start();;
 		 return "/userView/loginSuccess";
 		}else{
 			return "/userView/login";
