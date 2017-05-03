@@ -118,7 +118,7 @@ function getReply(noteId,replyId,userId){
 	<div class="article-meta"> <span class="item article-meta-time">
 	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title=""><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${bbsNote2.noteDate}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
 	  </span> 
-	  <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="网络博客"><i class="glyphicon glyphicon-globe"></i> 网络博客</span>
+	  <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发帖人"><i class="glyphicon glyphicon-user"></i>${bbsNote2.res01}</span>
 	  <c:if test="${bbsNote2.res03=='wdz'}" >
 	  <span  class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="点赞"><a href="javascript:addDzs('${bbsNote2.noteId}','wdz')"<i class="glyphicon glyphicon-eye-open"></i></a><span id="dzs"><font color="blue">${bbsNote2.noteDzs}</font></span></span> 
 	  </c:if>

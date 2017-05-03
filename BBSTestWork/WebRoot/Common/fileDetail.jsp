@@ -79,10 +79,11 @@ function downloadFile(filePoint,userId,userPoint,fileUrl,fileId,res01){
 	<div class="article-meta"> <span class="item article-meta-time">
 	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="上传时间" data-original-title=""><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${file.cjsj}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
 	  </span> 
-	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载积分"><i class="glyphicon glyphicon-shopping-cart"></i>${file.filePoint}</a></span>
-	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载次数"><i class="glyphicon glyphicon-download-alt"></i>${file.res01}</a></span>
-	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> ${file.res03}</span> </div>
-
+	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="上传用户"><i class="glyphicon glyphicon-user"></i> ${file.res05}</span>
+	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载积分"><i class="glyphicon glyphicon-shopping-cart"></i>${file.filePoint}</span>
+	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="下载次数"><i class="glyphicon glyphicon-download-alt"></i>${file.res01}</span>
+	  <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> ${file.res03}</span>
+ </div>
   </header>
   <article class="article-content">
 	${file.fileDescript}

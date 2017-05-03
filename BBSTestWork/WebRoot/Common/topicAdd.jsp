@@ -63,16 +63,16 @@ function redNoteForm(str){
 			   window.parent.alertFunction("积分应为数字");
 			     return false;
 	}
-    if(isNaN($("#res06").val())){
-			   window.parent.alertFunction("楼层应为数字");
+    if(isNaN($("#res10").val())){
+			   window.parent.alertFunction("红包个数应为数字");
 			     return false;
 	}
 	if($("#res08").val()<0){
 	           window.parent.alertFunction("请输入大于0的积分");
 	             return false;
 	 } 
-	 if($("#res06").val()<0){
-	           window.parent.alertFunction("请输入大于0的楼层");
+	 if($("#res10").val()<0){
+	           window.parent.alertFunction("请输入大于0的红包个数");
 	             return false;
 	 } 
 	  $("#comment-form").submit(); 
@@ -96,7 +96,7 @@ function redNoteForm(str){
 			</c:if>
 			<c:if test="${user.userRole==2 }">
 			 <input type="text" id="res08" placeholder="奖励积分" name="res08" style="width: 790px;">
-			 <input type="text" id="res06" placeholder="奖励楼层" name="res06" style="width: 790px;">
+			 <input type="text" id="res10" placeholder="红包个数" name="res10" style="width: 790px;">
 			</c:if>
 				<div class="comment-box">
 				    <input id="userId" name="userId" value="${user.userId }" type="hidden"/>

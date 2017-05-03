@@ -4,6 +4,7 @@ package com.bbs.user.controller.note;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -135,11 +136,20 @@ public class BbsNoteController {
 	   if(StringUtils.isNotEmpty(bbsNote.getRes08())){
 				bbsNote.setRes07("0");
 				bbsNote.setRes09("0");
+				int num=Integer.parseInt(bbsNote.getRes10());//红包个数
+				String str="";
+				 for(int i=0;i<num;i++){
+					//产生随机数
+					 Random ran=new Random();
+					 int n=ran.nextInt(100)+1;
+					str+=","+n+",";
+				}
+				 bbsNote.setRes06(str);
 			}
 		bbsNoteService.insert(bbsNote);
 		BbsUser bbsUser=bbsUserService.findById(bbsNote.getUserId());
-		if(StringUtils.isEmpty(bbsNote.getRes08())){
-			if(StringUtils.isNotEmpty(bbsNote.getRes04())){
+		if(StringUtils.isEmpty(bbsNote.getRes08())){//如果不是红包贴
+			if(StringUtils.isNotEmpty(bbsNote.getRes04())){//如果是悬赏帖
 				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+3-Integer.parseInt(bbsNote.getRes04())));
 			}
 			bbsUserService.update(bbsUser);
@@ -150,6 +160,7 @@ public class BbsNoteController {
 		request.setAttribute("page", findAll);
 		return "Common/indexPageListIframe";
 	}
+	
 	/**
 	 * 修改,设置热度贴
 	 * @param request
@@ -237,14 +248,19 @@ public class BbsNoteController {
 			bbsNote.setNoteId(bbsReplyNote.getNoteId());
 			BbsNote bbsNote2 = bbsNoteService.findNoteById(bbsNote);
 			if(StringUtils.isNotEmpty(bbsNote2.getRes08())){
-				if(bbsNote2.getRes07().equals(String.valueOf(Integer.parseInt(bbsNote2.getRes06())-1))){
-					bbsNote2.setRes09("1");
+			  if(bbsNote2.getRes09().equals("0")){
+				if(bbsNote2.getRes06().contains(","+String.valueOf(Integer.parseInt(bbsNote2.getRes07())+1)+",")){
+					bbsNote2.setRes10(String.valueOf(Integer.parseInt(bbsNote2.getRes10())-1));
 					bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsNote2.getRes08())));
 					request.setAttribute("getPoint", "获得积分："+bbsNote2.getRes08());
 				}
 				bbsNote2.setRes07(String.valueOf(Integer.parseInt(bbsNote2.getRes07())+1));
-				
+				if(bbsNote2.getRes10().equals("0")){
+					bbsNote2.setRes09("1");
+				}
+			  }
 			}
+			
 			bbsNote2.setNoteAnswerNum(String.valueOf(Integer.parseInt(bbsNote2.getNoteAnswerNum())+1));
 			bbsNoteService.update(bbsNote2);
 			request.setAttribute("bbsNote2", bbsNote2);

@@ -22,12 +22,15 @@
     FILE_ID, USER_ID, FILE_NAME, FILE_URL, FILE_DESCRIPT, FILE_TYPE, CJSJ, FILE_POINT, 
     DEL_FLAG, RES01, RES02, RES03, RES04, RES05, RES06
   </sql>
-  
+   <sql id="inner_Column_List" >
+    a.FILE_ID, a.USER_ID, a.FILE_NAME,a.FILE_URL, a.FILE_DESCRIPT, a.FILE_TYPE, a.CJSJ, a.FILE_POINT, 
+    a.DEL_FLAG, a.RES01, a.RES02, a.RES03, a.RES04,t.USER_NAME RES05, a.RES06
+  </sql>
   <select id="selectByPrimaryKey" resultType="BbsFile">
     select 
-    <include refid="Base_Column_List" />
-    from T_BBS_FILE
-    where FILE_ID = #{fileId,jdbcType=VARCHAR} AND DEL_FLAG=${0}
+    <include refid="inner_Column_List" />
+    from T_BBS_FILE a,T_BBS_USER t
+    where a.USER_ID=t.USER_ID AND a.FILE_ID = #{fileId,jdbcType=VARCHAR} AND a.DEL_FLAG=${0}
   </select>
   
    <select id="findCensus" resultType="BbsFile">

@@ -38,9 +38,9 @@
   </sql>
   <select id="selectByPrimaryKey" resultType="BbsNote" >
     select 
-    <include refid="Base_Column_List" />
-    from T_BBS_NOTE
-    where NOTE_ID = #{noteId}
+    <include refid="inner_Column_List" />
+    from T_BBS_NOTE a,T_BBS_USER t
+    where  a.USER_ID=t.USER_ID and a.DEL_FLAG=${0} and NOTE_ID = #{noteId}
   </select>
   <select id="selectNoteList" resultType="BbsNote">
     select 
