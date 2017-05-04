@@ -22,8 +22,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import util.Page;
 
 import com.bbs.user.bean.BbsSmallSection;
+import com.bbs.user.bean.BbsSystemMessage;
 import com.bbs.user.bean.BbsUser;
 import com.bbs.user.service.smallSection.BbsSmallSectionService;
+import com.bbs.user.service.systemMessage.BbsSystemMessageService;
 import com.bbs.user.service.user.BbsUserService;
 
 @Controller
@@ -34,7 +36,8 @@ public class BbsSmallSectionController {
 	private BbsSmallSectionService bbsSmallSectionService;
 	@Autowired
 	private BbsUserService bbsUserService;
-	
+	@Autowired
+	private BbsSystemMessageService bbsSystemMessageService;
 	/**
 	 * 获取所有版块列表
 	 * @param request
@@ -79,7 +82,20 @@ public class BbsSmallSectionController {
 		 BbsUser bbsUser=new BbsUser();
 		if(StringUtils.isNotEmpty(bbsSmallSection.getSmallSectionId())){
 			bbsSmallSectionService.update(bbsSmallSection);
-			if(!bbsSmallSection.getUserid().equals(bbsSmallSection.getRes01())){
+			BbsSmallSection bbsSmallSection3=new BbsSmallSection();
+			bbsSmallSection3.setSmallSectionId(bbsSmallSection.getSmallSectionId());
+			 BbsSmallSection bbsSmallSection2=bbsSmallSectionService.selectSmallSectionById(bbsSmallSection3);
+			  String str="您被管理员设置为版块"+bbsSmallSection2.getSmallSectionName()+"的版主";
+				BbsSystemMessage bbsSystemMessage=new BbsSystemMessage();
+				bbsSystemMessage.setCjsj(new Date());
+				bbsSystemMessage.setMessageContains(str);
+				bbsSystemMessage.setDelFlag("0");
+				bbsSystemMessage.setMessageNamae("账号变动信息");
+				bbsSystemMessage.setRes01(bbsSmallSection2.getUserid());
+				bbsSystemMessage.setRes02("0");
+				bbsSystemMessage.setRes03("0");
+				bbsSystemMessageService.insert(bbsSystemMessage);
+			if(!bbsSmallSection.getUserid().equals(bbsSmallSection.getRes01())){//原用户Id
 				BbsUser bbsUser2=new BbsUser();
 					bbsUser.setUserRole("1");
 					bbsUser.setUserId(bbsSmallSection.getUserid());
@@ -87,8 +103,16 @@ public class BbsSmallSectionController {
 					bbsUser2.setUserId(bbsSmallSection.getRes01());
 					bbsUserService.update(bbsUser);
 					bbsUserService.update(bbsUser2);
-					refreshUser(bbsSmallSection.getUserid());
-					refreshUser(bbsSmallSection.getRes01());
+					String str1="您被管理员取消为版块"+bbsSmallSection2.getSmallSectionName()+"的版主";
+					BbsSystemMessage bbsSystemMessage1=new BbsSystemMessage();
+					bbsSystemMessage1.setCjsj(new Date());
+					bbsSystemMessage1.setMessageContains(str1);
+					bbsSystemMessage1.setDelFlag("0");
+					bbsSystemMessage1.setMessageNamae("账号变动信息");
+					bbsSystemMessage1.setRes01(bbsSmallSection2.getRes01());
+					bbsSystemMessage1.setRes02("0");
+					bbsSystemMessage1.setRes03("0");
+					bbsSystemMessageService.insert(bbsSystemMessage1);
 			}
 		}else{
 			  bbsSmallSection.setCjsj(new Date());

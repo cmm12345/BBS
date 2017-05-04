@@ -159,10 +159,11 @@ public class BbsFileController {
 				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
 				str="您上传的文件:"+bbsFile.getFileName()+"被管理员审核通过,您的账户积分增加2分";	
 			}else{
-				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsFile.getFilePoint())));
-	            str="您上传的文件:"+bbsFile.getFileName()+"被管理员审核通过,您的账户积分增加"+bbsFile.getFilePoint()+"分";
+				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(bbsFile2.getFilePoint())));
+	            str="您上传的文件:"+bbsFile.getFileName()+"被管理员审核通过,您的账户积分增加"+bbsFile2.getFilePoint()+"分";
 			}
 		    bbsFile.setRes02("1");//审核结果
+		    bbsFile.setFilePoint(bbsFile2.getFilePoint());
 		    bbsUserService.update(bbsUser);
 			}
 			if(toolStyle.equals("delete")){

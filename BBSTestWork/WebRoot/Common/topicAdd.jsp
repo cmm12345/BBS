@@ -38,6 +38,8 @@ function checkForm(str){
 	     window.parent.alertFunction("对不起您的积分不足！");
 		  return false;
 	    }
+	}else{
+	$("#res04").val('');
 	}
 	 $("#comment-form").submit(); 
 	window.parent.alertFunction("发帖成功！积分+3");

@@ -21,12 +21,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="${pageContext.request.contextPath}/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
 <script src="${pageContext.request.contextPath}/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-function checkLogin(noteId){
+function checkLogin(noteId,res13){
   if('${user.userName}'==''){
      window.parent.alertFunction("请先登录!");
      return false;
   }
-   window.parent.findNoteByIdFunction(noteId);
+   window.parent.findNoteByIdFunction(noteId,res13);
 
 
 }
@@ -66,14 +66,16 @@ function checkLogin(noteId){
 		 <c:if test="${hotNoteList.noteYnHot==1 }"><font color="red">Blog主题</font></c:if>
 		<c:if test="${hotNoteList.res04!=null }"><font color="red">(悬赏)</font></c:if>
 		<c:if test="${hotNoteList.res08!=null }"><font color="red">(红包帖)</font></c:if>
+		<c:if test="${hotNoteList.res11==1 }"><font color="red">(积分贴)</font></c:if>
 		<i></i></a>
-			<h2><a href="javaScript:checkLogin('${hotNoteList.noteId }')" title="${hotNoteList.noteName }" target="_blank" >${hotNoteList.noteName }</a>
+			<h2><a href="javaScript:checkLogin('${hotNoteList.noteId }','${hotNoteList.res13 }')" title="${hotNoteList.noteName }" target="_blank" >${hotNoteList.noteName }</a>
 			</h2>
 		</header>
 		<p class="meta">
 			<time class="time"><i class="glyphicon glyphicon-time"></i><fmt:formatDate value="${hotNoteList.noteDate}" pattern="yyyy-MM-dd HH:mm:ss"/></time>
-			<span class="views"><a href="javaScript:checkLogin('${hotNoteList.noteId }')"><i class="glyphicon glyphicon-eye-open"></i></a> ${hotNoteList.noteDzs}</span>
-			 <a class="comment" href="javaScript:checkLogin('${hotNoteList.noteId }')" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>${hotNoteList.noteAnswerNum}</a>
+			<span class="views"><a href="javaScript:checkLogin('${hotNoteList.noteId }','${hotNoteList.res13 }')"><i class="glyphicon glyphicon-eye-open"></i></a> ${hotNoteList.noteDzs}</span>
+			 <a class="comment" href="javaScript:checkLogin('${hotNoteList.noteId }','${hotNoteList.res13 }')" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>${hotNoteList.noteAnswerNum}</a>
+			 <c:if test="${hotNoteList.res11==1 }"> <i class="glyphicon glyphicon-shopping-cart"></i>${hotNoteList.res13}</c:if>
 		</p>
 		<p class="note">${hotNoteList.noteContains}</p>
 	</article>

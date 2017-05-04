@@ -25,16 +25,19 @@
        <result column="RES08" property="res08" jdbcType="VARCHAR" />
         <result column="RES09" property="res09" jdbcType="VARCHAR" />
          <result column="RES10" property="res10" jdbcType="VARCHAR" />
+           <result column="RES11" property="res11" jdbcType="VARCHAR" />
+             <result column="RES12" property="res12" jdbcType="VARCHAR" />
+               <result column="RES13" property="res13" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     NOTE_ID, USER_ID, NOTE_NAME, BIG_SECTION_ID, SMALL_SECTION_ID, NOTE_CONTAINS, NOTE_DATE, 
     NOTE_STATE, NOTE_BZ, NOTE_DZS, NOTE_ANSWER_NUM, NOTE_YN_HOT, DEL_FLAG, RES01, RES02, 
-    RES03, RES04, RES05,RES06,RES07,RES08,RES09,RES10
+    RES03, RES04, RES05,RES06,RES07,RES08,RES09,RES10,RES11,RES12,RES13
   </sql>
    <sql id="inner_Column_List" >
     a.NOTE_ID, a.USER_ID, a.NOTE_NAME, a.BIG_SECTION_ID, a.SMALL_SECTION_ID, a.NOTE_CONTAINS, a.NOTE_DATE, 
     a.NOTE_STATE, a.NOTE_BZ, a.NOTE_DZS, a.NOTE_ANSWER_NUM, a.NOTE_YN_HOT,a.DEL_FLAG,t.USER_NAME RES01, a.RES02, 
-    a.RES03, a.RES04, a.RES05,a.RES06,a.RES07,a.RES08,a.RES09,a.RES10
+    a.RES03, a.RES04, a.RES05,a.RES06,a.RES07,a.RES08,a.RES09,a.RES10,a.RES11,a.RES12,a.RES13
   </sql>
   <select id="selectByPrimaryKey" resultType="BbsNote" >
     select 
@@ -98,7 +101,7 @@
       NOTE_DATE, NOTE_STATE, NOTE_BZ, 
       NOTE_DZS, NOTE_ANSWER_NUM, NOTE_YN_HOT, 
       DEL_FLAG, RES01, RES02, 
-      RES03, RES04, RES05, RES06, RES07, RES08, RES09, RES10
+      RES03, RES04, RES05, RES06, RES07, RES08, RES09, RES10,RES11,RES12,RES13
       )
     values (#{noteId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{noteName,jdbcType=VARCHAR}, 
       #{bigSectionId,jdbcType=VARCHAR}, #{smallSectionId,jdbcType=VARCHAR}, #{noteContains,jdbcType=VARCHAR}, 
@@ -106,7 +109,7 @@
       #{noteDzs,jdbcType=VARCHAR}, #{noteAnswerNum,jdbcType=VARCHAR}, #{noteYnHot,jdbcType=VARCHAR}, 
       #{delFlag,jdbcType=VARCHAR}, #{res01,jdbcType=VARCHAR}, #{res02,jdbcType=VARCHAR}, 
       #{res03,jdbcType=VARCHAR}, #{res04,jdbcType=VARCHAR}, #{res05,jdbcType=VARCHAR}, #{res06,jdbcType=VARCHAR},
-      #{res07,jdbcType=VARCHAR}, #{res08,jdbcType=VARCHAR}, #{res09,jdbcType=VARCHAR}, #{res10,jdbcType=VARCHAR}
+      #{res07,jdbcType=VARCHAR}, #{res08,jdbcType=VARCHAR}, #{res09,jdbcType=VARCHAR}, #{res10,jdbcType=VARCHAR}, #{res11,jdbcType=VARCHAR}, #{res12,jdbcType=VARCHAR}, #{res13,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -178,6 +181,15 @@
       </if>
       <if test="res10 != null" >
         RES10 = #{res10,jdbcType=VARCHAR},
+      </if>
+       <if test="res11 != null" >
+        RES11 = #{res11,jdbcType=VARCHAR},
+      </if>
+       <if test="res12 != null" >
+        RES12 = #{res12,jdbcType=VARCHAR},
+      </if>
+       <if test="res13 != null" >
+        RES13 = #{res13,jdbcType=VARCHAR},
       </if>
     </set>
     where NOTE_ID = #{noteId,jdbcType=VARCHAR}

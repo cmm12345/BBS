@@ -84,7 +84,7 @@
     <include refid="Base_Column_List" />
     from T_BBS_SMALL_SECTION
     <where>
-		    DEL_FLAG=#{delFlag}
+		    DEL_FLAG=${0}
 		   <if test="smallSectionId != null and smallSectionId != ''">
 		    AND  SMAll_SECTION_ID = #{smallSectionId}
 		   </if>

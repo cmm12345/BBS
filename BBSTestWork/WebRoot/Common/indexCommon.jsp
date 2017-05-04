@@ -101,9 +101,34 @@ var userString='${user.userId}';
 			      	window.wxc.xcConfirm("确定删除该消息吗？", "custom", option); 
 			      	}	
 	//查看帖子详情		      			      	
-   function findNoteByIdFunction(noteId){
-   var userString='${user.userId}';
-      $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId+"&userString="+userString);
+   function findNoteByIdFunction(noteId,res13){
+   var userId='${user.userId}';
+            $.ajax({
+			         type:"GET",
+			         async:false,
+			         url:"${pageContext.request.contextPath}/note/findNoteByIdAndUserId.do",
+			         data:{noteId:noteId,userId:userId},
+			         success:function(data){
+			              if(data=="canSee"){
+                            $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId+"&userString="+userId); 
+			              }else{
+			                 var option = {
+									title: "提示信息",
+									btn: parseInt("0011",2),
+									onOk: function(){
+									var userPoint='${user.userPoint}';
+									if(parseInt(userPoint)<parseInt(res13)){
+									alertFunction("积分不足！");
+									return false;
+									}
+						            $("#noteListIframe").attr("src","${pageContext.request.contextPath}/note/findNoteById.do?noteId="+noteId+"&userString="+userId+"&sfBuy=yes");             
+										          }
+					  					      }
+			      	                   window.wxc.xcConfirm("确定购买该帖子吗？", "custom", option); 
+			              }
+		                         }
+		                      });
+   
    }
    //查看文件详情
    function findFileByIdFunction(fileId){

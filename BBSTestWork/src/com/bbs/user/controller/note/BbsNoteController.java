@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -94,13 +95,25 @@ public class BbsNoteController {
 	 * @return
 	 */
 	@RequestMapping("/findNoteById")
-	public String findNoteById(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String userString,String state){
+	public String findNoteById(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote,String userString,String state,String sfBuy){
 		BbsNote bbsNote2 = bbsNoteService.findNoteById(bbsNote);
 		String str="wdz";
 		if(StringUtils.isNotEmpty(bbsNote2.getRes02())){
 			if(bbsNote2.getRes02().contains(","+userString+",")){
 				str="ydz";
 			}
+		}
+		if(StringUtils.isNotEmpty(sfBuy)){
+			if(StringUtils.isNotEmpty(bbsNote2.getRes12())){
+			   bbsNote2.setRes12(bbsNote2.getRes12()+","+userString+",");
+			}else{
+			   bbsNote2.setRes12(","+userString+",");
+			}
+			BbsUser bbsUser=bbsUserService.findById(userString);
+			bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())-Integer.parseInt(bbsNote2.getRes13())));
+			bbsUserService.update(bbsUser);
+			refreshUser(userString);
+			bbsNoteService.update(bbsNote2);
 		}
 		bbsNote2.setRes03(str);
 		BbsReplyNote bbsReplyNote=new BbsReplyNote();
@@ -117,6 +130,30 @@ public class BbsNoteController {
 		return "Common/noteDetail";
 		}
 	}
+	
+	/**
+	 * 查看用户是否需要购买
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/findNoteByIdAndUserId")
+	public String findNoteByIdAndUserId(HttpServletRequest request,HttpServletResponse response,BbsNote bbsNote){
+		BbsNote bbsNote2 = bbsNoteService.findNoteById(bbsNote);
+		String messageString="";
+		if(bbsNote2.getRes11().equals("0")){
+			messageString="canSee";
+		}else{
+			if(bbsNote2.getRes12().contains(","+bbsNote.getUserId()+",")){
+				messageString="canSee";
+			}else{
+				messageString="canNotSee";
+			}
+		}
+		return messageString;
+	}
+	
+	
 	/**
 	 * 发帖
 	 * @param request
@@ -130,10 +167,8 @@ public class BbsNoteController {
 		bbsNote.setNoteState("0");
 		bbsNote.setNoteYnHot("0");
 		bbsNote.setNoteAnswerNum("0");
-		if(StringUtils.isNotEmpty(bbsNote.getRes04())){
-			bbsNote.setRes05("0");
-		}
-	   if(StringUtils.isNotEmpty(bbsNote.getRes08())){
+		bbsNote.setRes11("0");
+	   if(StringUtils.isNotEmpty(bbsNote.getRes08())){//如果是红包贴
 				bbsNote.setRes07("0");
 				bbsNote.setRes09("0");
 				int num=Integer.parseInt(bbsNote.getRes10());//红包个数
@@ -146,15 +181,19 @@ public class BbsNoteController {
 				}
 				 bbsNote.setRes06(str);
 			}
-		bbsNoteService.insert(bbsNote);
+		
 		BbsUser bbsUser=bbsUserService.findById(bbsNote.getUserId());
 		if(StringUtils.isEmpty(bbsNote.getRes08())){//如果不是红包贴
 			if(StringUtils.isNotEmpty(bbsNote.getRes04())){//如果是悬赏帖
+				bbsNote.setRes05("0");//是否采纳设置为0
 				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+3-Integer.parseInt(bbsNote.getRes04())));
+			}else{
+				bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+3));
 			}
 			bbsUserService.update(bbsUser);
 			refreshUser(bbsUser.getUserId());
 		}
+		bbsNoteService.insert(bbsNote);
 		bbsNote.setUserId("");
 		Page<BbsNote> findAll = bbsNoteService.findAll(new Page<BbsNote>(request, response), bbsNote);
 		request.setAttribute("page", findAll);
@@ -181,7 +220,6 @@ public class BbsNoteController {
 			}
 			bbsUserService.update(bbsUser);
 			str="您的帖子被管理员删除，删除原因是"+reasonStr+"您的积分被扣除2分";
-			refreshUser(bbsUser.getUserId());
 		}
 		if(toolStyle.equals("setNoteHot")){
 			bbsNote2.setNoteYnHot("1");
@@ -190,10 +228,24 @@ public class BbsNoteController {
 	        bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+2));
 			bbsUserService.update(bbsUser);
 			str="您的帖子被管理员设为热度贴,您的积分被加2分";
-			refreshUser(bbsUser.getUserId());
 		}
 		if(toolStyle.equals("returnNoteHot")){
 			bbsNote2.setNoteYnHot("0");
+			bbsNoteService.update(bbsNote2);
+		}
+		if(toolStyle.equals("setPointNote")){
+			bbsNote2.setRes11("1");
+			bbsNote2.setRes12(","+bbsNote2.getUserId()+",");
+			bbsNote2.setRes13(reasonStr);
+			str="恭喜您的帖子:"+bbsNote2.getNoteName()+"被管理员设置为积分贴，您的积分加"+reasonStr+"分";
+			BbsUser bbsUser=bbsUserService.findById(bbsNote2.getUserId());
+			bbsUser.setUserPoint(String.valueOf(Integer.parseInt(bbsUser.getUserPoint())+Integer.parseInt(reasonStr)));
+			bbsUserService.update(bbsUser);
+			bbsNoteService.update(bbsNote2);
+		}
+		if(toolStyle.equals("returnPointNote")){
+			bbsNote2.setRes11("0");
+			str="您的帖子:"+bbsNote2.getNoteName()+"被管理员取消积分贴";
 			bbsNoteService.update(bbsNote2);
 		}
 		if(StringUtils.isNotEmpty(str)){
@@ -205,7 +257,6 @@ public class BbsNoteController {
 			bbsSystemMessage.setRes01(bbsNote2.getUserId());
 			bbsSystemMessage.setRes02("0");
 			bbsSystemMessage.setRes03("0");
-		
 		bbsSystemMessageService.insert(bbsSystemMessage);
 		}
 		

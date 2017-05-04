@@ -34,7 +34,44 @@
 		       });
          
    }
-   
+      //积分贴
+   function setPointNote(noteId,str,noteName){
+   var toolStyle="";
+   if(str=='1'){
+       toolStyle="setPointNote";
+        if($("#reasonStr"+noteId).val()==''){
+       window.wxc.xcConfirm("请填写备注积分!", window.wxc.xcConfirm.typeEnum.info);
+       return false;
+       }else{
+       if(isNaN($("#reasonStr"+noteId).val())){
+       window.wxc.xcConfirm("积分应为数字!", window.wxc.xcConfirm.typeEnum.info);
+			     return false;
+	            }
+	    if($("#reasonStr"+noteId).val()<1){
+	    window.wxc.xcConfirm("请输入大于0的积分!", window.wxc.xcConfirm.typeEnum.info);
+	             return false;
+	            } 
+       }
+   }
+   if(str=='0'){
+       toolStyle="returnPointNote";
+      
+   }
+   var reasonStr=$("#reasonStr"+noteId).val();
+          $.ajax({
+		        type:"GET",
+		        async:false,
+		        url:"${pageContext.request.contextPath}/note/update.do",
+		        data:{noteId:noteId,toolStyle:toolStyle,noteName:noteName,reasonStr:reasonStr},
+		        success:function(){
+		           window.wxc.xcConfirm("设置成功！", window.wxc.xcConfirm.typeEnum.success,{onOk:function(v){
+							             query();
+	                         }
+	                      });
+		             }
+		       });
+         
+   }
     //删除
    function deleteNote(noteId,noteName){
    var str="delete";
@@ -92,7 +129,8 @@
 		  <div>
 		    <table class="table" width="1100px" align="center"  style="text-align: center;">
 			       <thead>
-			       <tr><td colspan="9"> 
+			       <tr><c:if test="${user.userRole==2 }">   <td colspan="10"> </c:if>
+			       <c:if test="${user.userRole!=2 }">   <td colspan="9"> </c:if>
 			                <form id="searchForm"  action="${pageContext.request.contextPath}/note/findNoteList.do?isAdmin=isAdmin" method="post" class="" style="margin-bottom: 0px;">
 												<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 												<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
@@ -110,7 +148,8 @@
 						    <th>点赞数</th>
 						    <th>评论数</th>
 						    <th>是否热度贴</th>
-						    <th>删除原因</th>
+						    <c:if test="${user.userRole==2}"><th>是否积分帖</th></c:if>
+						    <th>备注</th>
 						    <th>操作</th>
 				   </tr>
 			       </thead>
@@ -131,6 +170,12 @@
 								<input type="button" onclick="setHotNote('${noteList.noteId}','1','${noteList.noteId}')" value="设为热度贴">
 								</c:if>
 								</td>
+								<c:if test="${noteList.res11==0 && user.userRole==2}">
+								<td><input type="button" onclick="setPointNote('${noteList.noteId}','1','${noteList.noteId}')" value="设为积分帖"></td>
+								</c:if>
+								<c:if test="${noteList.res11==1 && user.userRole==2}">
+								<td><input type="button" onclick="setPointNote('${noteList.noteId}','0','${noteList.noteId}')" value="取消积分帖"></td>
+								</c:if>
 								<td><input class="inputStyle" type="text" id="reasonStr${noteList.noteId}"></td>
 								<td>
 								<input type="button" onclick="deleteNote('${noteList.noteId}','${noteList.noteName}')" value="删除">
